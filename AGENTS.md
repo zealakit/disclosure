@@ -17,6 +17,7 @@ This repo is a **pnpm monorepo** of headless disclosure primitives (`Collapsible
 | Examples | `examples/{react,vue,svelte,nextjs}/` |
 | Cover / assets | `assets/images/` |
 | Docs | Root + per-package `README.md`, `README_VI.md`, `README_CN.md` |
+| Dependency UI | `monitor/` (`pnpm monitor`) |
 
 ## Commands
 
@@ -34,6 +35,8 @@ pnpm dev:nextjs
 
 pnpm publish:check
 pnpm publish:react   # or publish:vue / publish:svelte / publish:all
+
+pnpm monitor         # local dependency UI at http://127.0.0.1:4177
 ```
 
 ## Docs

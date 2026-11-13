@@ -77,7 +77,7 @@ function printHelp(): void {
   pnpm publish:all
 
 Or:
-  node --experimental-strip-types scripts/publish.ts <check|react|vue|svelte|all>
+  node --strip-types scripts/publish.ts <check|react|vue|svelte|all>
 
 check   Run pre-publish validation for all packages (no publish)
 react   Validate, build, and publish @zealakit/disclosure-react

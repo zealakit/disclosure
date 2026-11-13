@@ -51,6 +51,16 @@ pnpm dev:svelte
 pnpm dev:nextjs
 ```
 
+## Dependency monitoring
+
+Local UI for root + `packages/*` dependency versions (`examples/` excluded):
+
+```bash
+pnpm monitor
+```
+
+Open http://127.0.0.1:4177 — see [monitor/README.md](https://github.com/zealakit/disclosure/blob/main/monitor/README.md).
+
 ## AI Agent Skills
 
 Framework-specific instructions for AI coding agents:

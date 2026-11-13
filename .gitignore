@@ -24,3 +24,7 @@ examples/*/dist
 
 # Test / coverage
 coverage
+
+# Dependency monitor
+monitor/reports/*
+!monitor/reports/.gitkeep

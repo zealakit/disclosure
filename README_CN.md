@@ -51,6 +51,16 @@ pnpm dev:svelte
 pnpm dev:nextjs
 ```
 
+## Dependency monitoring
+
+本地 UI，用于查看 root 与 `packages/*` 的依赖版本（排除 `examples/`）：
+
+```bash
+pnpm monitor
+```
+
+打开 http://127.0.0.1:4177 — 详见 [monitor/README.md](https://github.com/zealakit/disclosure/blob/main/monitor/README.md)。
+
 ## AI Agent Skills
 
 面向 AI coding agent 的分框架使用说明：
