@@ -5,7 +5,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@zealakit/collapsible-react";
+} from "@zealakit/disclosure-react";
 
 export function BasicAccordion() {
   return (

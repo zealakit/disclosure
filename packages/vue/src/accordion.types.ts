@@ -1,4 +1,11 @@
-export type AccordionSingleProps = {
+import type { CollapsibleAnimationProps } from "./animation";
+
+export type {
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
+} from "./animation";
+
+export type AccordionSingleProps = CollapsibleAnimationProps & {
   type?: "single";
   value?: string | null;
   defaultValue?: string | null;
@@ -7,15 +14,13 @@ export type AccordionSingleProps = {
    * @default false
    */
   collapsible?: boolean;
-  animated?: boolean;
   disabled?: boolean;
 };
 
-export type AccordionMultipleProps = {
+export type AccordionMultipleProps = CollapsibleAnimationProps & {
   type: "multiple";
   value?: string[];
   defaultValue?: string[];
-  animated?: boolean;
   disabled?: boolean;
 };
 

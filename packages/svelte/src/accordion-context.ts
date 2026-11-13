@@ -1,8 +1,12 @@
 import { getContext, setContext } from "svelte";
+import type { AnimationTimingFunction } from "./animation.js";
 
 export type AccordionContextValue = {
   get type(): "single" | "multiple";
   get animated(): boolean;
+  get animationTimingFunction(): AnimationTimingFunction;
+  get animationDuration(): number;
+  get animationDelay(): number;
   get disabled(): boolean;
   get collapsible(): boolean;
   isItemOpen: (value: string) => boolean;

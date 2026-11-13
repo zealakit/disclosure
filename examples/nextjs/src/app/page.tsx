@@ -7,7 +7,7 @@ import { NestedCollapsible } from "./components/nested-collapsible";
 export default function Page() {
   return (
     <main className="page">
-      <h1>@zealakit/collapsible-react · Next.js</h1>
+      <h1>@zealakit/disclosure-react · Next.js</h1>
       <p className="lede">
         App Router integration example. This page and layout are Server
         Components. Interactive Collapsible demos are dedicated Client

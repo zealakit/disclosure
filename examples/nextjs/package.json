@@ -1,6 +1,6 @@
 {
-  "name": "@zealakit/collapsible-nextjs-example",
-  "version": "1.0.0-beta.1",
+  "name": "@zealakit/disclosure-nextjs-example",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@zealakit/collapsible-react": "workspace:*",
+    "@zealakit/disclosure-react": "workspace:*",
     "next": "^16.4.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

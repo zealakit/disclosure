@@ -1,7 +1,7 @@
 {
-  "name": "@zealakit/collapsible-svelte",
-  "version": "1.0.0-beta.1",
-  "description": "Headless Collapsible primitives for Svelte",
+  "name": "@zealakit/disclosure-svelte",
+  "version": "1.0.0",
+  "description": "Accessible, zero-dependency headless disclosure primitives for Svelte",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,

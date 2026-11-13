@@ -10,6 +10,12 @@ import {
   watch,
 } from "vue";
 import {
+  DEFAULT_ANIMATION_DELAY_MS,
+  DEFAULT_ANIMATION_DURATION_MS,
+  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  resolveAnimationConfig,
+} from "./animation";
+import {
   CollapsibleContextKey,
   type CollapsibleContextValue,
 } from "./collapsible-context";
@@ -24,6 +30,9 @@ const props = withDefaults(defineProps<CollapsibleProps>(), {
   defaultOpen: false,
   disabled: false,
   animated: true,
+  animationTimingFunction: DEFAULT_ANIMATION_TIMING_FUNCTION,
+  animationDuration: DEFAULT_ANIMATION_DURATION_MS,
+  animationDelay: DEFAULT_ANIMATION_DELAY_MS,
 });
 
 const emit = defineEmits<{
@@ -42,10 +51,22 @@ const resolvedOpen = computed(() =>
   isControlled() ? Boolean(props.open) : uncontrolledOpen.value,
 );
 
+const animation = computed(() =>
+  resolveAnimationConfig({
+    animated: props.animated,
+    animationTimingFunction: props.animationTimingFunction,
+    animationDuration: props.animationDuration,
+    animationDelay: props.animationDelay,
+  }),
+);
+
 const context = reactive<CollapsibleContextValue>({
   open: resolvedOpen.value,
   disabled: props.disabled,
-  animated: props.animated,
+  animated: animation.value.animated,
+  animationTimingFunction: animation.value.animationTimingFunction,
+  animationDuration: animation.value.animationDuration,
+  animationDelay: animation.value.animationDelay,
   contentId: `collapsible-content-${reactId}`,
   triggerId: `collapsible-trigger-${reactId}`,
   setOpen(next: boolean) {
@@ -73,10 +94,14 @@ watch(
 );
 
 watch(
-  () => props.animated,
+  animation,
   (value) => {
-    context.animated = value;
+    context.animated = value.animated;
+    context.animationTimingFunction = value.animationTimingFunction;
+    context.animationDuration = value.animationDuration;
+    context.animationDelay = value.animationDelay;
   },
+  { immediate: true },
 );
 
 provide(CollapsibleContextKey, context);

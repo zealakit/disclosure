@@ -1,4 +1,15 @@
-import { useCallback, useEffect, useId, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+} from "react";
+import {
+  getCollapsibleAnimationStyle,
+  resolveAnimationConfig,
+} from "./animation";
 import {
   CollapsibleContext,
   useCollapsibleContext,
@@ -15,6 +26,8 @@ export type {
   CollapsibleContentProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
 } from "./collapsible-types";
 
 function CollapsibleRoot({
@@ -23,12 +36,21 @@ function CollapsibleRoot({
   onOpenChange,
   disabled = false,
   animated = true,
+  animationTimingFunction,
+  animationDuration,
+  animationDelay,
   children,
   ...props
 }: CollapsibleProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : uncontrolledOpen;
+  const animation = resolveAnimationConfig({
+    animated,
+    animationTimingFunction,
+    animationDuration,
+    animationDelay,
+  });
 
   const reactId = useId();
   const triggerId = `collapsible-trigger-${reactId}`;
@@ -46,7 +68,17 @@ function CollapsibleRoot({
 
   return (
     <CollapsibleContext.Provider
-      value={{ open, disabled, animated, contentId, triggerId, setOpen }}
+      value={{
+        open,
+        disabled,
+        animated: animation.animated,
+        animationTimingFunction: animation.animationTimingFunction,
+        animationDuration: animation.animationDuration,
+        animationDelay: animation.animationDelay,
+        contentId,
+        triggerId,
+        setOpen,
+      }}
     >
       <div
         {...props}
@@ -104,9 +136,20 @@ function CollapsibleTrigger({
 function CollapsibleContent({
   forceMount = false,
   children,
+  className,
+  style,
+  id,
+  onTransitionEnd,
   ...props
 }: CollapsibleContentProps) {
-  const { open, animated, contentId } = useCollapsibleContext();
+  const {
+    open,
+    animated,
+    animationTimingFunction,
+    animationDuration,
+    animationDelay,
+    contentId,
+  } = useCollapsibleContext();
   const presence = usePresence(open, { animated, forceMount });
 
   useEffect(() => {
@@ -118,19 +161,35 @@ function CollapsibleContent({
   }
 
   const state = presence.present ? "open" : "closed";
+  const animationStyle = getCollapsibleAnimationStyle({
+    animationTimingFunction,
+    animationDuration,
+    animationDelay,
+  }) as CSSProperties;
 
   return (
     <div
-      {...props}
-      id={props.id ?? contentId}
+      id={id ?? contentId}
       data-slot="collapsible-content"
       data-state={state}
       data-animated={presence.animated ? "" : undefined}
       hidden={!presence.present && !presence.animated}
       inert={!open ? true : undefined}
-      onTransitionEnd={presence.onTransitionEnd}
+      style={animationStyle}
+      onTransitionEnd={(event) => {
+        presence.onTransitionEnd(event);
+        onTransitionEnd?.(event);
+      }}
     >
-      <div data-collapsible-content-wrapper="">{children}</div>
+      <div
+        data-collapsible-content-wrapper=""
+        data-state={state}
+        className={className}
+        style={style}
+        {...props}
+      >
+        {children}
+      </div>
     </div>
   );
 }

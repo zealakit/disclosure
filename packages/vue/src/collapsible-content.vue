@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, toRef, useAttrs } from "vue";
+import { getCollapsibleAnimationStyle } from "./animation";
 import { CollapsibleContextKey } from "./collapsible-context";
 import { ensureCollapsibleStyles } from "./collapsible-styles";
 import type { CollapsibleContentProps } from "./collapsible.types";
@@ -32,28 +33,43 @@ onMounted(() => {
   ensureCollapsibleStyles();
 });
 
-const restAttrs = computed(() => {
-  const { class: _class, ...rest } = attrs;
-  return rest;
+const panelAttrs = computed(() => {
+  const { id: _id, class: className, style, ...rest } = attrs;
+  return {
+    class: className,
+    style,
+    ...rest,
+  };
 });
 
 const state = computed(() => (presence.present.value ? "open" : "closed"));
+
+const animationStyle = computed(() =>
+  getCollapsibleAnimationStyle({
+    animationTimingFunction: context.animationTimingFunction,
+    animationDuration: context.animationDuration,
+    animationDelay: context.animationDelay,
+  }),
+);
 </script>
 
 <template>
   <div
     v-if="presence.mounted.value"
-    v-bind="restAttrs"
     :id="(attrs.id as string | undefined) ?? context.contentId"
     data-slot="collapsible-content"
     :data-state="state"
     :data-animated="presence.animated.value ? '' : undefined"
     :hidden="!presence.present.value && !presence.animated.value"
     :inert="!context.open ? true : undefined"
-    :class="attrs.class"
+    :style="animationStyle"
     @transitionend="presence.onTransitionEnd"
   >
-    <div data-collapsible-content-wrapper="">
+    <div
+      data-collapsible-content-wrapper=""
+      :data-state="state"
+      v-bind="panelAttrs"
+    >
       <slot />
     </div>
   </div>

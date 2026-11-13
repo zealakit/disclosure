@@ -1,5 +1,11 @@
 <script lang="ts">
 import { untrack } from "svelte";
+import {
+  DEFAULT_ANIMATION_DELAY_MS,
+  DEFAULT_ANIMATION_DURATION_MS,
+  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  type AnimationTimingFunction,
+} from "./animation.js";
 import { setCollapsibleContext } from "./collapsible-context.js";
 
 type Props = {
@@ -8,6 +14,9 @@ type Props = {
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
   animated?: boolean;
+  animationTimingFunction?: AnimationTimingFunction;
+  animationDuration?: number;
+  animationDelay?: number;
   children?: import("svelte").Snippet;
   class?: string;
   [key: string]: unknown;
@@ -19,6 +28,9 @@ let {
   onOpenChange,
   disabled = false,
   animated = true,
+  animationTimingFunction = DEFAULT_ANIMATION_TIMING_FUNCTION,
+  animationDuration = DEFAULT_ANIMATION_DURATION_MS,
+  animationDelay = DEFAULT_ANIMATION_DELAY_MS,
   children,
   class: className,
   ...rest
@@ -52,6 +64,15 @@ setCollapsibleContext({
   },
   get animated() {
     return animated;
+  },
+  get animationTimingFunction() {
+    return animationTimingFunction;
+  },
+  get animationDuration() {
+    return animationDuration;
+  },
+  get animationDelay() {
+    return animationDelay;
   },
   contentId,
   triggerId,

@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
@@ -22,6 +23,10 @@ import type {
   AccordionSingleProps,
   AccordionTriggerProps,
 } from "./accordion-types";
+import {
+  getCollapsibleAnimationStyle,
+  resolveAnimationConfig,
+} from "./animation";
 import { ensureCollapsibleStyles } from "./collapsible-styles";
 import { usePresence } from "./use-presence";
 
@@ -32,11 +37,19 @@ export type {
   AccordionProps,
   AccordionSingleProps,
   AccordionTriggerProps,
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
 } from "./accordion-types";
 
 function AccordionRoot(props: AccordionProps) {
   const type = props.type ?? "single";
-  const animated = props.animated ?? true;
+  const animation = resolveAnimationConfig({
+    animated: props.animated,
+    animationTimingFunction: props.animationTimingFunction,
+    animationDuration: props.animationDuration,
+    animationDelay: props.animationDelay,
+  });
+  const animated = animation.animated;
   const disabled = props.disabled ?? false;
   const collapsible =
     type === "single"
@@ -157,6 +170,9 @@ function AccordionRoot(props: AccordionProps) {
     () => ({
       type,
       animated,
+      animationTimingFunction: animation.animationTimingFunction,
+      animationDuration: animation.animationDuration,
+      animationDelay: animation.animationDelay,
       disabled,
       collapsible,
       isItemOpen,
@@ -168,6 +184,9 @@ function AccordionRoot(props: AccordionProps) {
     [
       type,
       animated,
+      animation.animationTimingFunction,
+      animation.animationDuration,
+      animation.animationDelay,
       disabled,
       collapsible,
       isItemOpen,
@@ -184,6 +203,9 @@ function AccordionRoot(props: AccordionProps) {
     defaultValue: _defaultValue,
     onValueChange: _onValueChange,
     animated: _animated,
+    animationTimingFunction: _animationTimingFunction,
+    animationDuration: _animationDuration,
+    animationDelay: _animationDelay,
     disabled: _disabled,
     children,
     ...rest
@@ -326,6 +348,10 @@ function AccordionTrigger({
 function AccordionContent({
   forceMount = false,
   children,
+  className,
+  style,
+  id,
+  onTransitionEnd,
   ...props
 }: AccordionContentProps) {
   const accordion = useAccordionContext();
@@ -344,20 +370,36 @@ function AccordionContent({
   }
 
   const state = presence.present ? "open" : "closed";
+  const animationStyle = getCollapsibleAnimationStyle({
+    animationTimingFunction: accordion.animationTimingFunction,
+    animationDuration: accordion.animationDuration,
+    animationDelay: accordion.animationDelay,
+  }) as CSSProperties;
 
   return (
     <section
-      {...props}
-      id={props.id ?? item.contentId}
+      id={id ?? item.contentId}
       aria-labelledby={item.triggerId}
       data-slot="accordion-content"
       data-state={state}
       data-animated={presence.animated ? "" : undefined}
       hidden={!presence.present && !presence.animated}
       inert={!item.open ? true : undefined}
-      onTransitionEnd={presence.onTransitionEnd}
+      style={animationStyle}
+      onTransitionEnd={(event) => {
+        presence.onTransitionEnd(event);
+        onTransitionEnd?.(event);
+      }}
     >
-      <div data-collapsible-content-wrapper="">{children}</div>
+      <div
+        data-collapsible-content-wrapper=""
+        data-state={state}
+        className={className}
+        style={style}
+        {...props}
+      >
+        {children}
+      </div>
     </section>
   );
 }

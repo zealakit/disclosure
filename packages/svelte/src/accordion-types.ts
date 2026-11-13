@@ -1,9 +1,11 @@
-type AccordionSharedProps = {
-  /**
-   * Whether items use the built-in height animation.
-   * @default true
-   */
-  animated?: boolean;
+import type { CollapsibleAnimationProps } from "./animation.js";
+
+export type {
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
+} from "./animation.js";
+
+type AccordionSharedProps = CollapsibleAnimationProps & {
   /**
    * Whether the entire accordion ignores user interaction.
    * @default false

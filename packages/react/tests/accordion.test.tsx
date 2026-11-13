@@ -38,7 +38,7 @@ function SingleFixture({
   );
 }
 
-describe("@zealakit/collapsible-react Accordion", () => {
+describe("@zealakit/disclosure-react Accordion", () => {
   test("single mode opens one item and keeps it open when collapsible is false", () => {
     render(<SingleFixture />);
 

@@ -1,4 +1,11 @@
-export type CollapsibleProps = {
+import type { CollapsibleAnimationProps } from "./animation.js";
+
+export type {
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
+} from "./animation.js";
+
+export type CollapsibleProps = CollapsibleAnimationProps & {
   /**
    * Whether the collapsible is initially open (uncontrolled).
    * @default false
@@ -17,11 +24,6 @@ export type CollapsibleProps = {
    * @default false
    */
   disabled?: boolean;
-  /**
-   * Whether expand/collapse uses the built-in height animation.
-   * @default true
-   */
-  animated?: boolean;
   /**
    * Additional attributes forwarded to the root element.
    */

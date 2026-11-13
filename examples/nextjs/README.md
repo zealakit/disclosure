@@ -1,6 +1,6 @@
 # Next.js App Router example
 
-Demonstrates `@zealakit/collapsible-react` with:
+Demonstrates `@zealakit/disclosure-react` with:
 
 - App Router
 - React Server Components
@@ -14,14 +14,14 @@ From the monorepo root:
 ```bash
 pnpm install
 pnpm build:react
-pnpm --filter @zealakit/collapsible-nextjs-example dev
+pnpm --filter @zealakit/disclosure-nextjs-example dev
 ```
 
 Production:
 
 ```bash
-pnpm --filter @zealakit/collapsible-nextjs-example build
-pnpm --filter @zealakit/collapsible-nextjs-example start
+pnpm --filter @zealakit/disclosure-nextjs-example build
+pnpm --filter @zealakit/disclosure-nextjs-example start
 ```
 
 ## Client boundary
@@ -30,4 +30,4 @@ pnpm --filter @zealakit/collapsible-nextjs-example start
 
 Only the interactive demos under `src/app/components/` use `"use client"`. Import those Client Components from Server Components as usual.
 
-`@zealakit/collapsible-react` does not declare `"use client"`. Your application decides where the client boundary starts.
+`@zealakit/disclosure-react` does not declare `"use client"`. Your application decides where the client boundary starts.

@@ -1,6 +1,6 @@
 {
-  "name": "@zealakit/collapsible-vue-example",
-  "version": "1.0.0-beta.1",
+  "name": "@zealakit/disclosure-vue-example",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@zealakit/collapsible-vue": "workspace:*",
+    "@zealakit/disclosure-vue": "workspace:*",
     "vue": "^3.5.22"
   },
   "devDependencies": {

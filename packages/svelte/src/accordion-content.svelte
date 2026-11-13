@@ -4,6 +4,7 @@ import {
   getAccordionContext,
   getAccordionItemContext,
 } from "./accordion-context.js";
+import { getCollapsibleAnimationStyleText } from "./animation.js";
 import { ensureCollapsibleStyles } from "./collapsible-styles.js";
 import { createPresence } from "./use-presence.svelte.js";
 
@@ -12,6 +13,7 @@ type Props = {
   children?: import("svelte").Snippet;
   class?: string;
   id?: string;
+  style?: string | null;
   ontransitionend?: (event: TransitionEvent) => void;
   [key: string]: unknown;
 };
@@ -21,6 +23,7 @@ let {
   children,
   class: className,
   id,
+  style,
   ontransitionend,
   ...rest
 }: Props = $props();
@@ -32,6 +35,14 @@ const presence = createPresence({
   animated: () => accordion.animated,
   forceMount: () => forceMount,
 });
+
+const animationStyle = $derived(
+  getCollapsibleAnimationStyleText({
+    animationTimingFunction: accordion.animationTimingFunction,
+    animationDuration: accordion.animationDuration,
+    animationDelay: accordion.animationDelay,
+  }),
+);
 
 onMount(() => {
   ensureCollapsibleStyles();
@@ -45,18 +56,23 @@ function handleTransitionEnd(event: TransitionEvent) {
 
 {#if presence.mounted}
   <section
-    {...rest}
     id={id ?? item.contentId}
-    class={className}
     aria-labelledby={item.triggerId}
     data-slot="accordion-content"
     data-state={presence.present ? "open" : "closed"}
     data-animated={presence.animated ? "" : undefined}
     hidden={!presence.present && !presence.animated}
     inert={!item.open ? true : undefined}
+    style={animationStyle}
     ontransitionend={handleTransitionEnd}
   >
-    <div data-collapsible-content-wrapper="">
+    <div
+      {...rest}
+      class={className}
+      {style}
+      data-collapsible-content-wrapper=""
+      data-state={presence.present ? "open" : "closed"}
+    >
       {@render children?.()}
     </div>
   </section>

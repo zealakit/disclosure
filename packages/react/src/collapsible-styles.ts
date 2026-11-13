@@ -4,16 +4,19 @@ const STYLES = `
 [data-slot="collapsible-content"][data-animated],
 [data-slot="accordion-content"][data-animated] {
   display: grid;
+  overflow: hidden;
   transition: grid-template-rows var(--collapsible-animation-duration, 200ms)
-    var(--collapsible-animation-easing, ease);
+    var(--collapsible-animation-easing, ease-in-out)
+    var(--collapsible-animation-delay, 0ms);
 }
 [data-slot="collapsible-content"][data-animated][data-state="closed"],
 [data-slot="accordion-content"][data-animated][data-state="closed"] {
-  grid-template-rows: 0fr;
+  /* minmax(0, …) forces a zero lower bound; bare 0fr can keep a content min size */
+  grid-template-rows: minmax(0, 0fr);
 }
 [data-slot="collapsible-content"][data-animated][data-state="open"],
 [data-slot="accordion-content"][data-animated][data-state="open"] {
-  grid-template-rows: 1fr;
+  grid-template-rows: minmax(0, 1fr);
 }
 [data-slot="collapsible-content"][data-animated] > [data-collapsible-content-wrapper],
 [data-slot="accordion-content"][data-animated] > [data-collapsible-content-wrapper] {
@@ -24,6 +27,7 @@ const STYLES = `
   [data-slot="collapsible-content"][data-animated],
   [data-slot="accordion-content"][data-animated] {
     transition-duration: 0s;
+    transition-delay: 0s;
   }
 }
 `;

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "@zealakit/collapsible-react · Next.js",
+  title: "@zealakit/disclosure-react · Next.js",
   description:
     "App Router integration example for headless Collapsible with RSC boundaries",
 };

@@ -12,6 +12,15 @@ export type {
   AccordionSingleProps,
   AccordionTriggerProps,
 } from "./accordion-types";
+export type {
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
+} from "./animation";
+export {
+  DEFAULT_ANIMATION_DELAY_MS,
+  DEFAULT_ANIMATION_DURATION_MS,
+  DEFAULT_ANIMATION_TIMING_FUNCTION,
+} from "./animation";
 export {
   Collapsible,
   CollapsibleContent,

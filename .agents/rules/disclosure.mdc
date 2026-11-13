@@ -1,0 +1,12 @@
+---
+description: Disclosure monorepo conventions — package boundaries, a11y, docs sync
+alwaysApply: true
+---
+
+# Disclosure conventions
+
+- Keep React / Vue / Svelte packages **independent** (no shared runtime). Align public APIs when behavior is shared.
+- Headless only: no colors, icons, or layout opinions in packages.
+- Prefer `data-slot` / `data-state` hooks for styling; put chrome on the content wrapper, not the animated viewport.
+- When changing public API or usage, update `README.md`, `README_VI.md`, and `README_CN.md` together.
+- Use Biome for lint (`pnpm lint` / `pnpm lint:fix`).

@@ -1,111 +1,43 @@
-# Zealakit Collapsible
+# Disclosure
 
-Headless Collapsible and Accordion primitives for **React**, **Vue**, and **Svelte**.
+[English](https://github.com/zealakit/disclosure/blob/main/README.md) | [Tiếng Việt](https://github.com/zealakit/disclosure/blob/main/README_VI.md) | [中文](https://github.com/zealakit/disclosure/blob/main/README_CN.md)
 
-Inspired by the API design philosophy of [Base UI](https://base-ui.com/react/components/collapsible): compound composition, controlled/uncontrolled state, and accessibility first — without shipping colors, icons, or layout. Height expand/collapse animation is built in and enabled by default.
+![Disclosure cover](https://github.com/zealakit/disclosure/blob/main/assets/images/disclosure-cover.jpg?raw=true)
 
-## Headless philosophy
+Headless disclosure primitives for modern UI frameworks.
 
-These packages provide interaction behavior and accessibility only:
+**Disclosure** ships two independent primitives:
 
-- No predefined styling
-- No CSS dependencies
-- No icons or visual layout
-- No mandatory animations
-- Style with your own CSS, Tailwind, CSS Modules, or design system
+- **Collapsible** — a single open/closed panel
+- **Accordion** — grouped panels with single or multiple selection
 
-Use `data-slot` and `data-state` attributes as styling hooks.
+Behavior and accessibility only — no colors, icons, or layout. Height animation is built in and enabled by default. Style with your own CSS via `data-slot` and `data-state`.
+
+> **Note**
+>
+> Disclosure is not a replacement for a full UI library. Use it when Accordion or Collapsible in your kit is hard to restyle — or when you only need that one primitive and don’t want to pull in a large design system.
 
 ## Packages
 
-| Package | Framework |
-| --- | --- |
-| [`@zealakit/collapsible-react`](./packages/react) | React 18+ |
-| [`@zealakit/collapsible-vue`](./packages/vue) | Vue 3.5+ |
-| [`@zealakit/collapsible-svelte`](./packages/svelte) | Svelte 5 |
+| Package | Framework | Documentation |
+| --- | --- | --- |
+| `@zealakit/disclosure-react` | React 18+ | [packages/react/README.md](https://github.com/zealakit/disclosure/blob/main/packages/react/README.md) |
+| `@zealakit/disclosure-vue` | Vue 3.5+ | [packages/vue/README.md](https://github.com/zealakit/disclosure/blob/main/packages/vue/README.md) |
+| `@zealakit/disclosure-svelte` | Svelte 5 | [packages/svelte/README.md](https://github.com/zealakit/disclosure/blob/main/packages/svelte/README.md) |
 
-Each package is independently installable and publishable. There is no shared runtime package.
+Each package is independently installable. There is no shared runtime package.
+
+Full API, props, and usage guides live in the package docs linked above.
 
 ## Installation
 
+Use your preferred package manager (`npm`, `pnpm`, `yarn`, `bun`, …):
+
 ```bash
-# React
-pnpm add @zealakit/collapsible-react
-
-# Vue
-pnpm add @zealakit/collapsible-vue
-
-# Svelte
-pnpm add @zealakit/collapsible-svelte
+npm i @zealakit/disclosure-react
+npm i @zealakit/disclosure-vue
+npm i @zealakit/disclosure-svelte
 ```
-
-## Basic usage
-
-### React
-
-```tsx
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@zealakit/collapsible-react";
-
-export function Example() {
-  return (
-    <Collapsible defaultOpen={false}>
-      <CollapsibleTrigger>Toggle</CollapsibleTrigger>
-      <CollapsibleContent>Content</CollapsibleContent>
-    </Collapsible>
-  );
-}
-```
-
-Disable animation with `animated={false}`. Customize timing via `--collapsible-animation-duration` and `--collapsible-animation-easing`.
-
-Accordion (single / multiple) is exported from the same packages — see [docs](./docs/react.md).
-
-### Vue
-
-```vue
-<script setup lang="ts">
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@zealakit/collapsible-vue";
-</script>
-
-<template>
-  <Collapsible :default-open="false">
-    <CollapsibleTrigger>Toggle</CollapsibleTrigger>
-    <CollapsibleContent>Content</CollapsibleContent>
-  </Collapsible>
-</template>
-```
-
-### Svelte
-
-```svelte
-<script lang="ts">
-  import {
-    Collapsible,
-    CollapsibleTrigger,
-    CollapsibleContent,
-  } from "@zealakit/collapsible-svelte";
-</script>
-
-<Collapsible defaultOpen={false}>
-  <CollapsibleTrigger>Toggle</CollapsibleTrigger>
-  <CollapsibleContent>Content</CollapsibleContent>
-</Collapsible>
-```
-
-## Documentation
-
-- [React](./docs/react.md)
-- [Vue](./docs/vue.md)
-- [Svelte](./docs/svelte.md)
-- Package READMEs under `packages/*`
 
 ## Examples
 
@@ -119,56 +51,13 @@ pnpm dev:svelte
 pnpm dev:nextjs
 ```
 
-Examples live in `examples/react`, `examples/vue`, `examples/svelte`, and [`examples/nextjs`](./examples/nextjs).
+## AI Agent Skills
 
-### Next.js (App Router)
+Framework-specific instructions for AI coding agents:
 
-Install the React package, then mark interactive leaves with `"use client"`. The library does **not** ship a `"use client"` directive so your app owns the Server/Client boundary.
-
-```tsx
-// app/components/faq.tsx
-"use client";
-
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@zealakit/collapsible-react";
-
-export function Faq() {
-  return (
-    <Collapsible>
-      <CollapsibleTrigger>Toggle</CollapsibleTrigger>
-      <CollapsibleContent>Content</CollapsibleContent>
-    </Collapsible>
-  );
-}
-```
-
-```tsx
-// app/page.tsx — Server Component
-import { Faq } from "./components/faq";
-
-export default function Page() {
-  return (
-    <main>
-      <h1>FAQ</h1>
-      <Faq />
-    </main>
-  );
-}
-```
-
-Server Components can render static copy and import Client Components that contain Collapsible. Hooks and event handlers stay inside the Client Component tree.
-
-## Development
-
-```bash
-pnpm install
-pnpm build
-pnpm test
-pnpm typecheck
-```
+- [Disclosure React Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-react.md)
+- [Disclosure Vue Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vue.md)
+- [Disclosure Svelte Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-svelte.md)
 
 ## License
 

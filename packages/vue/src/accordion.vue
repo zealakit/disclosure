@@ -12,6 +12,12 @@ import {
   type AccordionContextValue,
 } from "./accordion-context";
 import type { AccordionProps } from "./accordion.types";
+import {
+  DEFAULT_ANIMATION_DELAY_MS,
+  DEFAULT_ANIMATION_DURATION_MS,
+  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  resolveAnimationConfig,
+} from "./animation";
 
 defineOptions({
   name: "Accordion",
@@ -21,6 +27,9 @@ defineOptions({
 const props = withDefaults(defineProps<AccordionProps>(), {
   type: "single",
   animated: true,
+  animationTimingFunction: DEFAULT_ANIMATION_TIMING_FUNCTION,
+  animationDuration: DEFAULT_ANIMATION_DURATION_MS,
+  animationDelay: DEFAULT_ANIMATION_DELAY_MS,
   disabled: false,
   collapsible: false,
 });
@@ -71,12 +80,30 @@ const multipleValue = computed(() => {
   return uncontrolledMultiple.value;
 });
 
+const animation = computed(() =>
+  resolveAnimationConfig({
+    animated: props.animated,
+    animationTimingFunction: props.animationTimingFunction,
+    animationDuration: props.animationDuration,
+    animationDelay: props.animationDelay,
+  }),
+);
+
 const context = reactive<AccordionContextValue>({
   get type() {
     return resolvedType.value;
   },
   get animated() {
-    return Boolean(props.animated);
+    return animation.value.animated;
+  },
+  get animationTimingFunction() {
+    return animation.value.animationTimingFunction;
+  },
+  get animationDuration() {
+    return animation.value.animationDuration;
+  },
+  get animationDelay() {
+    return animation.value.animationDelay;
   },
   get disabled() {
     return Boolean(props.disabled);

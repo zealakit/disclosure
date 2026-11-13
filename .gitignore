@@ -19,7 +19,6 @@ examples/*/dist
 .pnpm-store
 
 # IDE
-.vscode/*
 !.vscode/extensions.json
 .idea
 

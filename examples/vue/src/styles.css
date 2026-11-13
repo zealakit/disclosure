@@ -79,29 +79,43 @@ h2 {
 }
 
 .content,
-.styled [data-slot="collapsible-content"] {
+.styled [data-collapsible-content-wrapper] {
   padding: 0.75rem 0.9rem;
   border-left: 3px solid #40916c;
   background: rgb(255 255 255 / 70%);
+}
+
+.content p,
+.content ul {
+  margin: 0 0 0.75rem;
+}
+
+.content p:last-child,
+.content ul:last-child {
+  margin-bottom: 0;
+}
+
+.content ul {
+  padding-left: 1.25rem;
 }
 
 .nested {
   margin-top: 0.75rem;
 }
 
-.styled [data-slot="collapsible-content"] {
+.styled [data-collapsible-content-wrapper] {
   overflow: hidden;
   transition:
     opacity 160ms ease,
     transform 160ms ease;
 }
 
-.styled [data-slot="collapsible-content"][data-state="closed"] {
+.styled [data-collapsible-content-wrapper][data-state="closed"] {
   opacity: 0;
   transform: translateY(-0.25rem);
 }
 
-.styled [data-slot="collapsible-content"][data-state="open"] {
+.styled [data-collapsible-content-wrapper][data-state="open"] {
   opacity: 1;
   transform: translateY(0);
 }

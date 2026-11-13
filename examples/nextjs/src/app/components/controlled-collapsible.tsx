@@ -4,7 +4,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@zealakit/collapsible-react";
+} from "@zealakit/disclosure-react";
 import { useState } from "react";
 
 export function ControlledCollapsible() {

@@ -11,7 +11,7 @@ afterEach(() => {
   cleanup();
 });
 
-describe("@zealakit/collapsible-vue Accordion", () => {
+describe("@zealakit/disclosure-vue Accordion", () => {
   test("single mode opens one item at a time", async () => {
     render({
       components: {

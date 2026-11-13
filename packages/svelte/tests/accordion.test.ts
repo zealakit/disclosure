@@ -17,7 +17,7 @@ afterEach(() => {
   cleanup();
 });
 
-describe("@zealakit/collapsible-svelte Accordion", () => {
+describe("@zealakit/disclosure-svelte Accordion", () => {
   test("single mode opens one item and keeps it open when collapsible is false", async () => {
     render(AccordionSingleFixture);
 

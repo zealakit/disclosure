@@ -1,9 +1,13 @@
 import { getContext, setContext } from "svelte";
+import type { AnimationTimingFunction } from "./animation.js";
 
 export type CollapsibleContextValue = {
   get open(): boolean;
   get disabled(): boolean;
   get animated(): boolean;
+  get animationTimingFunction(): AnimationTimingFunction;
+  get animationDuration(): number;
+  get animationDelay(): number;
   contentId: string;
   triggerId: string;
   setOpen: (open: boolean) => void;

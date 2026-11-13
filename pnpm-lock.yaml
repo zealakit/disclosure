@@ -178,7 +178,7 @@ importers:
 
   examples/nextjs:
     dependencies:
-      '@zealakit/collapsible-react':
+      '@zealakit/disclosure-react':
         specifier: workspace:*
         version: link:../../packages/react
       next:
@@ -206,7 +206,7 @@ importers:
 
   examples/react:
     dependencies:
-      '@zealakit/collapsible-react':
+      '@zealakit/disclosure-react':
         specifier: workspace:*
         version: link:../../packages/react
       react:
@@ -234,7 +234,7 @@ importers:
 
   examples/svelte:
     dependencies:
-      '@zealakit/collapsible-svelte':
+      '@zealakit/disclosure-svelte':
         specifier: workspace:*
         version: link:../../packages/svelte
       svelte:
@@ -256,7 +256,7 @@ importers:
 
   examples/vue:
     dependencies:
-      '@zealakit/collapsible-vue':
+      '@zealakit/disclosure-vue':
         specifier: workspace:*
         version: link:../../packages/vue
       vue:

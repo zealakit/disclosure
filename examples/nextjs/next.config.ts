@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@zealakit/collapsible-react"],
+  transpilePackages: ["@zealakit/disclosure-react"],
   agentRules: false,
 };
 

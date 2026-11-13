@@ -94,8 +94,8 @@ h2 {
   cursor: not-allowed;
 }
 
-[data-slot="collapsible-content"],
-[data-slot="accordion-content"] {
+[data-slot="collapsible-content"] > [data-collapsible-content-wrapper],
+[data-slot="accordion-content"] > [data-collapsible-content-wrapper] {
   padding: 0.75rem 0.9rem;
   border-left: 3px solid #40916c;
   background: rgb(255 255 255 / 70%);

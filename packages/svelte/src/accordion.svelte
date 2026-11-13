@@ -1,5 +1,11 @@
 <script lang="ts">
 import { untrack } from "svelte";
+import {
+  DEFAULT_ANIMATION_DELAY_MS,
+  DEFAULT_ANIMATION_DURATION_MS,
+  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  type AnimationTimingFunction,
+} from "./animation.js";
 import { setAccordionContext } from "./accordion-context.js";
 
 type Props = {
@@ -8,6 +14,9 @@ type Props = {
   defaultValue?: string | string[] | null;
   collapsible?: boolean;
   animated?: boolean;
+  animationTimingFunction?: AnimationTimingFunction;
+  animationDuration?: number;
+  animationDelay?: number;
   disabled?: boolean;
   onValueChange?: (value: never) => void;
   children?: import("svelte").Snippet;
@@ -21,6 +30,9 @@ let {
   defaultValue,
   collapsible = false,
   animated = true,
+  animationTimingFunction = DEFAULT_ANIMATION_TIMING_FUNCTION,
+  animationDuration = DEFAULT_ANIMATION_DURATION_MS,
+  animationDelay = DEFAULT_ANIMATION_DELAY_MS,
   disabled = false,
   onValueChange,
   children,
@@ -106,6 +118,15 @@ setAccordionContext({
   },
   get animated() {
     return animated;
+  },
+  get animationTimingFunction() {
+    return animationTimingFunction;
+  },
+  get animationDuration() {
+    return animationDuration;
+  },
+  get animationDelay() {
+    return animationDelay;
   },
   get disabled() {
     return disabled;

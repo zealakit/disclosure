@@ -3,13 +3,14 @@ import type {
   HTMLAttributes,
   ReactNode,
 } from "react";
+import type { CollapsibleAnimationProps } from "./animation";
 
-type AccordionSharedProps = {
-  /**
-   * Whether items use the built-in height animation.
-   * @default true
-   */
-  animated?: boolean;
+export type {
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
+} from "./animation";
+
+type AccordionSharedProps = CollapsibleAnimationProps & {
   /**
    * Whether the entire accordion ignores user interaction.
    * @default false

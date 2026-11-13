@@ -7,7 +7,9 @@ import {
 } from "@testing-library/svelte";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import AnimatedFixture from "./fixtures/animated.svelte";
+import AnimationConfigFixture from "./fixtures/animation-config.svelte";
 import BasicFixture from "./fixtures/basic.svelte";
+import ContentChromeFixture from "./fixtures/content-chrome.svelte";
 import ControlledFixture from "./fixtures/controlled.svelte";
 import DisabledFixture from "./fixtures/disabled.svelte";
 import ForceMountFixture from "./fixtures/force-mount.svelte";
@@ -19,7 +21,7 @@ afterEach(() => {
   cleanup();
 });
 
-describe("@zealakit/collapsible-svelte", () => {
+describe("@zealakit/disclosure-svelte", () => {
   test("starts closed by default", () => {
     render(BasicFixture);
     const trigger = screen.getByRole("button", { name: "Toggle" });
@@ -164,5 +166,74 @@ describe("@zealakit/collapsible-svelte", () => {
     expect(
       document.querySelectorAll("#zealakit-collapsible-styles"),
     ).toHaveLength(1);
+  });
+
+  test("applies animation configuration CSS variables", () => {
+    render(AnimationConfigFixture, {
+      props: {
+        animationTimingFunction: "linear",
+        animationDuration: 320,
+        animationDelay: 40,
+      },
+    });
+
+    const content = screen
+      .getByText("Panel")
+      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+    expect(content.getAttribute("style") ?? "").toContain(
+      "--collapsible-animation-easing: linear",
+    );
+    expect(content.getAttribute("style") ?? "").toContain(
+      "--collapsible-animation-duration: 320ms",
+    );
+    expect(content.getAttribute("style") ?? "").toContain(
+      "--collapsible-animation-delay: 40ms",
+    );
+  });
+
+  test("applies consumer chrome to the clipped content wrapper", async () => {
+    render(ContentChromeFixture);
+    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
+    await waitFor(() => {
+      expect(screen.getByText("Panel")).toBeInTheDocument();
+    });
+
+    const viewport = screen
+      .getByText("Panel")
+      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+    const wrapper = viewport.querySelector(
+      "[data-collapsible-content-wrapper]",
+    ) as HTMLElement;
+
+    expect(viewport).toHaveAttribute("data-animated");
+    expect(viewport.className).not.toContain("panel-chrome");
+    expect(wrapper.className).toContain("panel-chrome");
+    expect(wrapper.getAttribute("style") ?? "").toContain("border-left");
+  });
+
+  test("ignores stale close transition after reopen", async () => {
+    render(AnimatedFixture);
+    const trigger = screen.getByRole("button", { name: "Toggle" });
+    await fireEvent.click(trigger);
+    await waitFor(() => {
+      expect(screen.getByText("Panel")).toBeInTheDocument();
+    });
+
+    const viewport = screen
+      .getByText("Panel")
+      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+
+    await fireEvent.click(trigger);
+    expect(viewport).toHaveAttribute("data-state", "closed");
+
+    await fireEvent.click(trigger);
+    await waitFor(() => {
+      expect(viewport).toHaveAttribute("data-state", "open");
+    });
+
+    await fireEvent.transitionEnd(viewport, {
+      propertyName: "grid-template-rows",
+    });
+    expect(screen.getByText("Panel")).toBeInTheDocument();
   });
 });

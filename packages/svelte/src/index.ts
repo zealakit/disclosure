@@ -20,6 +20,15 @@ export type {
   AccordionSingleProps,
   AccordionTriggerProps,
 } from "./accordion-types.js";
+export type {
+  AnimationTimingFunction,
+  CollapsibleAnimationProps,
+} from "./animation.js";
+export {
+  DEFAULT_ANIMATION_DELAY_MS,
+  DEFAULT_ANIMATION_DURATION_MS,
+  DEFAULT_ANIMATION_TIMING_FUNCTION,
+} from "./animation.js";
 export { default as Collapsible } from "./collapsible.svelte";
 export { default as CollapsibleTrigger } from "./collapsible-trigger.svelte";
 export { default as CollapsibleContent } from "./collapsible-content.svelte";

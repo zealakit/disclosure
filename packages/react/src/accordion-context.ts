@@ -1,8 +1,12 @@
 import { createContext, useContext, type RefObject } from "react";
+import type { AnimationTimingFunction } from "./animation";
 
 export type AccordionContextValue = {
   type: "single" | "multiple";
   animated: boolean;
+  animationTimingFunction: AnimationTimingFunction;
+  animationDuration: number;
+  animationDelay: number;
   disabled: boolean;
   collapsible: boolean;
   isItemOpen: (value: string) => boolean;

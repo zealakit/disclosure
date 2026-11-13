@@ -1,6 +1,6 @@
 {
-  "name": "@zealakit/collapsible-svelte-example",
-  "version": "1.0.0-beta.1",
+  "name": "@zealakit/disclosure-svelte-example",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "@zealakit/collapsible-svelte": "workspace:*",
+    "@zealakit/disclosure-svelte": "workspace:*",
     "svelte": "^5.41.0"
   },
   "devDependencies": {

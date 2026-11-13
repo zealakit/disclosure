@@ -1,7 +1,7 @@
 {
-  "name": "@zealakit/collapsible-vue",
-  "version": "1.0.0-beta.1",
-  "description": "Headless Collapsible primitives for Vue",
+  "name": "@zealakit/disclosure-vue",
+  "version": "1.0.0",
+  "description": "Accessible, zero-dependency headless disclosure primitives for Vue",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
