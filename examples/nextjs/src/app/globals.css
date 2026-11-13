@@ -1,0 +1,116 @@
+:root {
+  color-scheme: light;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  line-height: 1.5;
+  color: #14213d;
+  background:
+    radial-gradient(circle at top left, #d8f3dc 0, transparent 40%),
+    linear-gradient(180deg, #f8faf8 0%, #eef2ef 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+h1 {
+  font-family: "IBM Plex Serif", Georgia, serif;
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  margin: 0 0 2rem;
+  color: #44546a;
+}
+
+.note {
+  margin: 0 0 2rem;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #2d6a4f;
+  background: rgb(255 255 255 / 70%);
+  color: #44546a;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+h2 {
+  font-size: 1rem;
+  margin: 0 0 0.35rem;
+}
+
+.section-copy {
+  margin: 0 0 0.75rem;
+  color: #44546a;
+  font-size: 0.95rem;
+}
+
+.demo {
+  display: grid;
+  gap: 0.5rem;
+}
+
+[data-slot="accordion-heading"] {
+  margin: 0;
+  font: inherit;
+}
+
+[data-slot="collapsible-trigger"],
+[data-slot="accordion-trigger"] {
+  appearance: none;
+  border: 1px solid #9eb7a8;
+  background: #fff;
+  color: inherit;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  width: 100%;
+}
+
+[data-slot="collapsible-trigger"][data-state="open"],
+[data-slot="accordion-trigger"][data-state="open"] {
+  border-color: #2d6a4f;
+  background: #d8f3dc;
+}
+
+[data-slot="collapsible-trigger"][disabled],
+[data-slot="collapsible-trigger"][data-disabled],
+[data-slot="accordion-trigger"][disabled],
+[data-slot="accordion-trigger"][data-disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+[data-slot="collapsible-content"] > [data-collapsible-content-wrapper],
+[data-slot="accordion-content"] > [data-collapsible-content-wrapper] {
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid #40916c;
+  background: rgb(255 255 255 / 70%);
+}
+
+.nested {
+  margin-top: 0.75rem;
+}
+
+.state-line {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+code {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.9em;
+}

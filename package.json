@@ -1,0 +1,39 @@
+{
+  "name": "disclosure",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Accessible, zero-dependency headless disclosure primitives for modern UIs.",
+  "license": "MIT",
+  "packageManager": "pnpm@12.18.0",
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' run build",
+    "build:react": "pnpm --filter @zealakit/disclosure-react run build",
+    "build:vue": "pnpm --filter @zealakit/disclosure-vue run build",
+    "build:svelte": "pnpm --filter @zealakit/disclosure-svelte run build",
+    "build:vanilla": "pnpm --filter @zealakit/disclosure-vanilla run build",
+    "dev:react": "pnpm --filter @zealakit/disclosure-react-example run dev",
+    "dev:vue": "pnpm --filter @zealakit/disclosure-vue-example run dev",
+    "dev:svelte": "pnpm --filter @zealakit/disclosure-svelte-example run dev",
+    "dev:vanilla": "pnpm --filter @zealakit/disclosure-vanilla-example run dev",
+    "dev:nextjs": "pnpm --filter @zealakit/disclosure-nextjs-example run dev",
+    "test": "pnpm -r --filter './packages/*' run test",
+    "typecheck": "pnpm -r --filter './packages/*' run typecheck",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "clean": "pnpm -r exec rm -rf dist .svelte-kit && rm -rf node_modules",
+    "npm:publish:check": "node --strip-types scripts/npm-publish.ts check",
+    "npm:publish:react": "node --strip-types scripts/npm-publish.ts react",
+    "npm:publish:vue": "node --strip-types scripts/npm-publish.ts vue",
+    "npm:publish:svelte": "node --strip-types scripts/npm-publish.ts svelte",
+    "npm:publish:vanilla": "node --strip-types scripts/npm-publish.ts vanilla",
+    "npm:publish:all": "node --strip-types scripts/npm-publish.ts all",
+    "monitor": "node --strip-types monitor/server.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.11",
+    "@types/node": "^24.19.0",
+    "typescript": "^5.9.3"
+  }
+}

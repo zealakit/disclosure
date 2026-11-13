@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@zealakit/disclosure-vanilla</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <h1>@zealakit/disclosure-vanilla</h1>
+      <p class="lede">
+        Headless Collapsible and Accordion for static HTML. Markup uses
+        <code>data-*</code> attributes; call
+        <code>createDisclosure()</code> once to wire behavior.
+      </p>
+
+      <section>
+        <h2>1. Basic Collapsible</h2>
+        <div class="demo" data-disclosure>
+          <button type="button" class="trigger" data-disclosure-trigger>
+            Recovery keys
+          </button>
+          <div class="content" data-disclosure-content>
+            alien-bean-pasta · wild-irish-burrito · horse-battery-staple
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Multiple independent Collapsibles</h2>
+        <div class="demo stack">
+          <div data-disclosure>
+            <button type="button" class="trigger" data-disclosure-trigger>
+              First panel
+            </button>
+            <div class="content" data-disclosure-content>
+              Independent from the second panel.
+            </div>
+          </div>
+          <div data-disclosure>
+            <button type="button" class="trigger" data-disclosure-trigger>
+              Second panel
+            </button>
+            <div class="content" data-disclosure-content>
+              Independent from the first panel.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>3. Disabled Collapsible</h2>
+        <div class="demo" data-disclosure data-disabled>
+          <button type="button" class="trigger" data-disclosure-trigger>
+            Disabled trigger
+          </button>
+          <div class="content" data-disclosure-content>
+            You should not see this after clicking.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>4. Single Accordion</h2>
+        <div
+          class="demo"
+          data-accordion
+          data-accordion-type="single"
+          data-collapsible
+        >
+          <section data-accordion-item data-value="general">
+            <h3>
+              <button type="button" class="trigger" data-accordion-trigger>
+                General
+              </button>
+            </h3>
+            <div class="content" data-accordion-content>
+              Single mode with <code>data-collapsible</code> lets you close the
+              open item.
+            </div>
+          </section>
+          <section data-accordion-item data-value="advanced">
+            <h3>
+              <button type="button" class="trigger" data-accordion-trigger>
+                Advanced
+              </button>
+            </h3>
+            <div class="content" data-accordion-content>
+              Opening Advanced closes General.
+            </div>
+          </section>
+          <section data-accordion-item data-value="locked" data-disabled>
+            <h3>
+              <button type="button" class="trigger" data-accordion-trigger>
+                Locked
+              </button>
+            </h3>
+            <div class="content" data-accordion-content>
+              Disabled items do not open.
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section>
+        <h2>5. Multiple Accordion</h2>
+        <div
+          class="demo"
+          data-accordion
+          data-accordion-type="multiple"
+          data-default-value="alpha beta"
+        >
+          <section data-accordion-item data-value="alpha">
+            <h3>
+              <button type="button" class="trigger" data-accordion-trigger>
+                Alpha
+              </button>
+            </h3>
+            <div class="content" data-accordion-content>
+              Starts open via <code>data-default-value</code>.
+            </div>
+          </section>
+          <section data-accordion-item data-value="beta">
+            <h3>
+              <button type="button" class="trigger" data-accordion-trigger>
+                Beta
+              </button>
+            </h3>
+            <div class="content" data-accordion-content>
+              Also starts open; both can stay expanded.
+            </div>
+          </section>
+          <section data-accordion-item data-value="gamma">
+            <h3>
+              <button type="button" class="trigger" data-accordion-trigger>
+                Gamma
+              </button>
+            </h3>
+            <div class="content" data-accordion-content>
+              Toggle independently of Alpha and Beta.
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section>
+        <h2>6. Animation configuration</h2>
+        <div class="demo stack">
+          <div
+            data-disclosure
+            data-animation-timing-function="linear"
+          >
+            <button type="button" class="trigger" data-disclosure-trigger>
+              Linear easing
+            </button>
+            <div class="content" data-disclosure-content>
+              <code>data-animation-timing-function="linear"</code>
+            </div>
+          </div>
+          <div data-disclosure data-animation-duration="400">
+            <button type="button" class="trigger" data-disclosure-trigger>
+              Custom duration (400ms)
+            </button>
+            <div class="content" data-disclosure-content>
+              <code>data-animation-duration="400"</code>
+            </div>
+          </div>
+          <div data-disclosure data-animated="false">
+            <button type="button" class="trigger" data-disclosure-trigger>
+              Instant (no animation)
+            </button>
+            <div class="content" data-disclosure-content>
+              <code>data-animated="false"</code>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

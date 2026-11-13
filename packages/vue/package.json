@@ -1,0 +1,47 @@
+{
+  "name": "@zealakit/disclosure-vue",
+  "version": "1.0.0",
+  "description": "Accessible, zero-dependency headless disclosure primitives for Vue",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist && rslib build",
+    "dev": "rslib build --watch",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@rsbuild/plugin-vue": "^1.2.0",
+    "@rslib/core": "^0.16.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/vue": "^8.1.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^20.0.10",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
+    "vue": "^3.5.22",
+    "vue-tsc": "^3.1.1"
+  }
+}

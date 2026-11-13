@@ -1,0 +1,50 @@
+{
+  "name": "@zealakit/disclosure-vanilla",
+  "version": "1.0.0",
+  "description": "Headless disclosure primitives for vanilla JavaScript and static HTML.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "browser": "./dist/index.js",
+  "unpkg": "./dist/index.global.min.js",
+  "jsdelivr": "./dist/index.global.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./global": {
+      "default": "./dist/index.global.min.js"
+    },
+    "./global.js": "./dist/index.global.js",
+    "./global.min.js": "./dist/index.global.min.js",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && rslib build",
+    "dev": "rslib build --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "pack:check": "npm pack --dry-run"
+  },
+  "devDependencies": {
+    "@rslib/core": "^0.16.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "happy-dom": "^20.0.10",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

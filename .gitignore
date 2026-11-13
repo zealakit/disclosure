@@ -1,0 +1,30 @@
+# Local
+.DS_Store
+*.local
+*.log*
+
+# Dependencies / build
+node_modules
+dist/
+**/dist/
+.svelte-kit/
+**/.svelte-kit/
+storybook-static
+examples/*/dist
+**/.next/
+**/node_modules/.vite/
+
+# Turborepo / caches
+.turbo
+.pnpm-store
+
+# IDE
+!.vscode/extensions.json
+.idea
+
+# Test / coverage
+coverage
+
+# Dependency monitor
+monitor/reports/*
+!monitor/reports/.gitkeep
