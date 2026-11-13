@@ -2,9 +2,29 @@
   "name": "disclosure",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "description": "Accessible, zero-dependency headless disclosure primitives for modern UIs.",
+  "keywords": [
+    "disclosure",
+    "collapsible",
+    "accordion",
+    "headless",
+    "accessibility",
+    "a11y",
+    "ui",
+    "zealakit",
+    "monorepo",
+    "react",
+    "vue",
+    "svelte",
+    "vanilla"
+  ],
+  "author": "nqhed - Huy Ed. Nguyen",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zealakit/disclosure.git"
+  },
+  "type": "module",
   "packageManager": "pnpm@12.18.0",
   "scripts": {
     "build": "pnpm -r --filter './packages/*' run build",

@@ -2,6 +2,24 @@
   "name": "@zealakit/disclosure-react-example",
   "version": "1.0.0",
   "private": true,
+  "keywords": [
+    "disclosure",
+    "collapsible",
+    "accordion",
+    "headless",
+    "accessibility",
+    "a11y",
+    "ui",
+    "zealakit",
+    "react",
+    "example"
+  ],
+  "author": "nqhed - Huy Ed. Nguyen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zealakit/disclosure.git",
+    "directory": "examples/react"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

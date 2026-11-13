@@ -2,7 +2,25 @@
   "name": "@zealakit/disclosure-react",
   "version": "1.0.0",
   "description": "Accessible, zero-dependency headless disclosure primitives for React",
+  "keywords": [
+    "disclosure",
+    "collapsible",
+    "accordion",
+    "headless",
+    "accessibility",
+    "a11y",
+    "ui",
+    "zealakit",
+    "react",
+    "react-component"
+  ],
+  "author": "nqhed - Huy Ed. Nguyen",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zealakit/disclosure.git",
+    "directory": "packages/react"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [

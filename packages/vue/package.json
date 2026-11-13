@@ -2,7 +2,26 @@
   "name": "@zealakit/disclosure-vue",
   "version": "1.0.0",
   "description": "Accessible, zero-dependency headless disclosure primitives for Vue",
+  "keywords": [
+    "disclosure",
+    "collapsible",
+    "accordion",
+    "headless",
+    "accessibility",
+    "a11y",
+    "ui",
+    "zealakit",
+    "vue",
+    "vue3",
+    "vue-component"
+  ],
+  "author": "nqhed - Huy Ed. Nguyen",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zealakit/disclosure.git",
+    "directory": "packages/vue"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [

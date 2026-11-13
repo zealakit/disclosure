@@ -2,6 +2,24 @@
   "name": "@zealakit/disclosure-vanilla-example",
   "version": "0.0.0",
   "private": true,
+  "keywords": [
+    "disclosure",
+    "collapsible",
+    "accordion",
+    "headless",
+    "accessibility",
+    "a11y",
+    "ui",
+    "zealakit",
+    "vanilla",
+    "example"
+  ],
+  "author": "nqhed - Huy Ed. Nguyen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zealakit/disclosure.git",
+    "directory": "examples/vanilla"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
