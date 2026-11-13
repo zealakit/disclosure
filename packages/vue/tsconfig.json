@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "rootDir": ".",
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
+  },
+  "include": [
+    "src",
+    "tests",
+    "rslib.config.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "env.d.ts"
+  ]
+}
