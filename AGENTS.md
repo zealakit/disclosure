@@ -1,6 +1,6 @@
 # Agent instructions (Disclosure)
 
-This repo is a **pnpm monorepo** of headless disclosure primitives (`Collapsible`, `Accordion`) for React, Vue, and Svelte. There is **no shared runtime package** — each framework package is independent.
+This repo is a **pnpm monorepo** of headless disclosure primitives (`Collapsible`, `Accordion`) for React, Vue, Svelte, and Vanilla JS. There is **no shared runtime package** — each package is independent.
 
 ## Always follow
 
@@ -14,7 +14,8 @@ This repo is a **pnpm monorepo** of headless disclosure primitives (`Collapsible
 | React package | `packages/react/` (`@zealakit/disclosure-react`) |
 | Vue package | `packages/vue/` (`@zealakit/disclosure-vue`) |
 | Svelte package | `packages/svelte/` (`@zealakit/disclosure-svelte`) |
-| Examples | `examples/{react,vue,svelte,nextjs}/` |
+| Vanilla package | `packages/vanilla/` (`@zealakit/disclosure-vanilla`) |
+| Examples | `examples/{react,vue,svelte,vanilla,nextjs}/` |
 | Cover / assets | `assets/images/` |
 | Docs | Root + per-package `README.md`, `README_VI.md`, `README_CN.md` |
 | Dependency UI | `monitor/` (`pnpm monitor`) |
@@ -31,10 +32,11 @@ pnpm lint
 pnpm dev:react
 pnpm dev:vue
 pnpm dev:svelte
+pnpm dev:vanilla
 pnpm dev:nextjs
 
-pnpm publish:check
-pnpm publish:react   # or publish:vue / publish:svelte / publish:all
+pnpm npm:publish:check
+pnpm npm:publish:react   # or npm:publish:vue / npm:publish:svelte / npm:publish:vanilla / npm:publish:all
 
 pnpm monitor         # local dependency UI at http://127.0.0.1:4177
 ```

@@ -1,9 +1,9 @@
 /**
  * Manual npm publish for Disclosure framework packages.
  *
- *   pnpm publish:check
- *   pnpm publish:react | publish:vue | publish:svelte
- *   pnpm publish:all
+ *   pnpm npm:publish:check
+ *   pnpm npm:publish:react | npm:publish:vue | npm:publish:svelte | npm:publish:vanilla
+ *   pnpm npm:publish:all
  */
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -15,7 +15,7 @@ const PROJECT_ROOT = path.resolve(
   "..",
 );
 
-type FrameworkId = "react" | "vue" | "svelte";
+type FrameworkId = "react" | "vue" | "svelte" | "vanilla";
 type Command = "check" | FrameworkId | "all";
 
 type PackageJson = {
@@ -64,26 +64,34 @@ const FRAMEWORKS: Array<{
     dirName: "svelte",
     expectedName: "@zealakit/disclosure-svelte",
   },
+  {
+    id: "vanilla",
+    label: "Vanilla",
+    dirName: "vanilla",
+    expectedName: "@zealakit/disclosure-vanilla",
+  },
 ];
 
 const VERSION_RE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
 
 function printHelp(): void {
   console.log(`Usage:
-  pnpm publish:check
-  pnpm publish:react
-  pnpm publish:vue
-  pnpm publish:svelte
-  pnpm publish:all
+  pnpm npm:publish:check
+  pnpm npm:publish:react
+  pnpm npm:publish:vue
+  pnpm npm:publish:svelte
+  pnpm npm:publish:vanilla
+  pnpm npm:publish:all
 
 Or:
-  node --strip-types scripts/publish.ts <check|react|vue|svelte|all>
+  node --strip-types scripts/npm-publish.ts <check|react|vue|svelte|vanilla|all>
 
-check   Run pre-publish validation for all packages (no publish)
-react   Validate, build, and publish @zealakit/disclosure-react
-vue     Validate, build, and publish @zealakit/disclosure-vue
-svelte  Validate, build, and publish @zealakit/disclosure-svelte
-all     Publish react → vue → svelte sequentially (stops on first failure)
+check    Run pre-publish validation for all packages (no publish)
+react    Validate, build, and publish @zealakit/disclosure-react
+vue      Validate, build, and publish @zealakit/disclosure-vue
+svelte   Validate, build, and publish @zealakit/disclosure-svelte
+vanilla  Validate, build, and publish @zealakit/disclosure-vanilla
+all      Publish react → vue → svelte → vanilla sequentially (stops on first failure)
 `);
 }
 
@@ -98,6 +106,7 @@ function parseCommand(argv: string[]): Command {
     command === "react" ||
     command === "vue" ||
     command === "svelte" ||
+    command === "vanilla" ||
     command === "all"
   ) {
     return command;
@@ -106,7 +115,7 @@ function parseCommand(argv: string[]): Command {
   fail(
     command
       ? `Unknown command "${command}".`
-      : "Missing command. Pass check, react, vue, svelte, or all.",
+      : "Missing command. Pass check, react, vue, svelte, vanilla, or all.",
   );
 }
 
@@ -273,6 +282,9 @@ function checkVersionAvailability(pkg: PackageConfig): void {
 
 function assertBuiltEntryPoints(pkg: PackageConfig): void {
   const required = ["dist/index.js", "dist/index.d.ts"];
+  if (pkg.id === "vanilla") {
+    required.push("dist/index.global.js", "dist/index.global.min.js");
+  }
   for (const relativePath of required) {
     const absolutePath = path.join(pkg.packageDir, relativePath);
     if (!fs.existsSync(absolutePath)) {

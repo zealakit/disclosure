@@ -47,9 +47,7 @@ let uncontrolledSingle = $state<string | null>(
 );
 let uncontrolledMultiple = $state<string[]>(
   untrack(() =>
-    type === "multiple" && Array.isArray(defaultValue)
-      ? [...defaultValue]
-      : [],
+    type === "multiple" && Array.isArray(defaultValue) ? [...defaultValue] : [],
   ),
 );
 

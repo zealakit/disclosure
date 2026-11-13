@@ -1,15 +1,15 @@
 <script lang="ts">
-  import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-  } from "@zealakit/disclosure-svelte";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@zealakit/disclosure-svelte";
 
-  let controlledOpen = $state(false);
+let controlledOpen = $state(false);
 </script>
 
 <main class="page">

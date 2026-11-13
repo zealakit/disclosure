@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../src";
@@ -104,9 +110,9 @@ describe("@zealakit/disclosure-react", () => {
       </Collapsible>,
     );
 
-    const content = screen.getByText("Panel").closest(
-      '[data-slot="collapsible-content"]',
-    );
+    const content = screen
+      .getByText("Panel")
+      .closest('[data-slot="collapsible-content"]');
     expect(content).toBeInTheDocument();
     expect(content).toHaveAttribute("hidden");
     expect(content).toHaveAttribute("data-state", "closed");
@@ -241,10 +247,13 @@ describe("@zealakit/disclosure-react", () => {
     );
 
     await waitFor(() => {
-      expect(document.getElementById("zealakit-collapsible-styles")).not.toBeNull();
+      expect(
+        document.getElementById("zealakit-collapsible-styles"),
+      ).not.toBeNull();
     });
 
-    const css = document.getElementById("zealakit-collapsible-styles")?.textContent ?? "";
+    const css =
+      document.getElementById("zealakit-collapsible-styles")?.textContent ?? "";
     expect(css).toContain("minmax(0, 0fr)");
     expect(css).toContain("minmax(0, 1fr)");
     expect(css).toContain("overflow: hidden");

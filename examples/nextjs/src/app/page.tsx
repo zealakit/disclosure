@@ -15,8 +15,9 @@ export default function Page() {
       </p>
 
       <p className="note">
-        The library does not ship a <code>&quot;use client&quot;</code> directive.
-        Mark the leaf components that call hooks or handle events in your app.
+        The library does not ship a <code>&quot;use client&quot;</code>{" "}
+        directive. Mark the leaf components that call hooks or handle events in
+        your app.
       </p>
 
       <section>
@@ -31,8 +32,8 @@ export default function Page() {
       <section>
         <h2>2. Controlled</h2>
         <p className="section-copy">
-          Client state stays outside the Collapsible via{" "}
-          <code>open</code> / <code>onOpenChange</code>.
+          Client state stays outside the Collapsible via <code>open</code> /{" "}
+          <code>onOpenChange</code>.
         </p>
         <ControlledCollapsible />
       </section>

@@ -1,11 +1,13 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/vue";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/vue";
 import { defineComponent, ref } from "vue";
 import { afterEach, describe, expect, test, vi } from "vitest";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../src";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../src";
 
 afterEach(() => {
   cleanup();
@@ -193,15 +195,15 @@ describe("@zealakit/disclosure-vue", () => {
     const content = screen
       .getByText("Panel")
       .closest('[data-slot="collapsible-content"]') as HTMLElement;
-    expect(content.style.getPropertyValue("--collapsible-animation-easing")).toBe(
-      "linear",
-    );
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-easing"),
+    ).toBe("linear");
     expect(
       content.style.getPropertyValue("--collapsible-animation-duration"),
     ).toBe("320ms");
-    expect(content.style.getPropertyValue("--collapsible-animation-delay")).toBe(
-      "40ms",
-    );
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-delay"),
+    ).toBe("40ms");
   });
 
   test("ignores stale close transition after reopen", async () => {

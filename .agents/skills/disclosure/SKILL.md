@@ -2,9 +2,9 @@
 name: disclosure
 description: >-
   Disclosure monorepo architecture: headless Collapsible/Accordion packages for
-  React, Vue, and Svelte. Use when editing packages/, examples/, READMEs, or
-  asking where files belong, how animation/presence works, or how to keep
-  framework packages aligned.
+  React, Vue, Svelte, and Vanilla JS. Use when editing packages/, examples/,
+  READMEs, or asking where files belong, how animation/presence works, or how to
+  keep packages aligned.
 ---
 
 # Disclosure
@@ -26,8 +26,9 @@ This repo ships **framework-specific** headless primitives. Agents must keep API
 | `packages/react/` | `@zealakit/disclosure-react` | No `"use client"` in the package — apps add it |
 | `packages/vue/` | `@zealakit/disclosure-vue` | Vue 3.5+ |
 | `packages/svelte/` | `@zealakit/disclosure-svelte` | Svelte 5 |
+| `packages/vanilla/` | `@zealakit/disclosure-vanilla` | Declarative `data-*` + `createDisclosure()`; ESM + IIFE CDN (`ZealakitDisclosure`); no framework peers |
 
-Do **not** add a shared runtime package. Mirror API changes across frameworks when behavior is shared (props like animation timing/duration/delay, `forceMount`, presence lifecycle).
+Do **not** add a shared runtime package. Mirror behavior across packages when it is shared (animation timing/duration/delay, `forceMount`, presence lifecycle, a11y). Vanilla uses HTML attributes instead of framework props — keep the contract aligned, not the implementation.
 
 ## Typical source layout (per package)
 

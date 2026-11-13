@@ -1,8 +1,4 @@
-import type {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  ReactNode,
-} from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import type { CollapsibleAnimationProps } from "./animation";
 
 export type {
@@ -48,10 +44,9 @@ export type AccordionItemProps = HTMLAttributes<HTMLDivElement> & {
   children?: ReactNode;
 };
 
-export type AccordionTriggerProps =
-  ButtonHTMLAttributes<HTMLButtonElement> & {
-    children?: ReactNode;
-  };
+export type AccordionTriggerProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  children?: ReactNode;
+};
 
 export type AccordionContentProps = HTMLAttributes<HTMLElement> & {
   forceMount?: boolean;

@@ -24,9 +24,7 @@ const reactId = useId();
 const triggerEl = ref<HTMLButtonElement | null>(null);
 
 const open = computed(() => accordion.isItemOpen(props.value));
-const disabled = computed(() =>
-  Boolean(accordion.disabled || props.disabled),
-);
+const disabled = computed(() => Boolean(accordion.disabled || props.disabled));
 
 const itemContext: AccordionItemContextValue = {
   get value() {

@@ -110,9 +110,7 @@ const context = reactive<AccordionContextValue>({
   },
   get collapsible() {
     return resolvedType.value === "single"
-      ? Boolean(
-          (props as { collapsible?: boolean }).collapsible,
-        )
+      ? Boolean((props as { collapsible?: boolean }).collapsible)
       : false;
   },
   isItemOpen(itemValue: string) {

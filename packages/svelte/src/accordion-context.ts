@@ -41,7 +41,9 @@ export function getAccordionContext(): AccordionContextValue {
   return context;
 }
 
-export function setAccordionItemContext(value: AccordionItemContextValue): void {
+export function setAccordionItemContext(
+  value: AccordionItemContextValue,
+): void {
   setContext(ACCORDION_ITEM_CONTEXT, value);
 }
 

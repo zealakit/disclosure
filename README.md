@@ -24,6 +24,7 @@ Behavior and accessibility only — no colors, icons, or layout. Height animatio
 | `@zealakit/disclosure-react` | React 18+ | [packages/react/README.md](https://github.com/zealakit/disclosure/blob/main/packages/react/README.md) |
 | `@zealakit/disclosure-vue` | Vue 3.5+ | [packages/vue/README.md](https://github.com/zealakit/disclosure/blob/main/packages/vue/README.md) |
 | `@zealakit/disclosure-svelte` | Svelte 5 | [packages/svelte/README.md](https://github.com/zealakit/disclosure/blob/main/packages/svelte/README.md) |
+| `@zealakit/disclosure-vanilla` | Vanilla JS / static HTML | [packages/vanilla/README.md](https://github.com/zealakit/disclosure/blob/main/packages/vanilla/README.md) |
 
 Each package is independently installable. There is no shared runtime package.
 
@@ -37,6 +38,7 @@ Use your preferred package manager (`npm`, `pnpm`, `yarn`, `bun`, …):
 npm i @zealakit/disclosure-react
 npm i @zealakit/disclosure-vue
 npm i @zealakit/disclosure-svelte
+npm i @zealakit/disclosure-vanilla
 ```
 
 ## Examples
@@ -48,6 +50,7 @@ pnpm build
 pnpm dev:react
 pnpm dev:vue
 pnpm dev:svelte
+pnpm dev:vanilla
 pnpm dev:nextjs
 ```
 
@@ -68,6 +71,7 @@ Framework-specific instructions for AI coding agents:
 - [Disclosure React Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-react.md)
 - [Disclosure Vue Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vue.md)
 - [Disclosure Svelte Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-svelte.md)
+- [Disclosure Vanilla Skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vanilla.md)
 
 ## License
 

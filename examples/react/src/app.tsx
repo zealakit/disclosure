@@ -168,8 +168,8 @@ export function App() {
             <p>
               Disclosure measures and animates the full content height, even
               when the panel is taller than a single line. Use this example to
-              verify expand and collapse feel continuous from the first frame
-              to a true zero height.
+              verify expand and collapse feel continuous from the first frame to
+              a true zero height.
             </p>
             <p>
               The height transition should keep borders, padding, and
@@ -178,9 +178,15 @@ export function App() {
               chrome flashing at the end of the exit animation.
             </p>
             <ul>
-              <li>Open and close repeatedly while watching the final frames.</li>
-              <li>Confirm nested text, lists, and spacing collapse together.</li>
-              <li>Check that reopening restores the full panel without jump.</li>
+              <li>
+                Open and close repeatedly while watching the final frames.
+              </li>
+              <li>
+                Confirm nested text, lists, and spacing collapse together.
+              </li>
+              <li>
+                Check that reopening restores the full panel without jump.
+              </li>
               <li>
                 Prefer styling padding and borders on the content panel, not the
                 animated viewport itself.

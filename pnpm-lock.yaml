@@ -254,6 +254,19 @@ importers:
         specifier: ^7.1.12
         version: 7.3.8(@types/node@24.19.2)(jiti@2.7.0)
 
+  examples/vanilla:
+    dependencies:
+      '@zealakit/disclosure-vanilla':
+        specifier: workspace:*
+        version: link:../../packages/vanilla
+    devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.1.12
+        version: 7.3.8(@types/node@24.19.2)(jiti@2.7.0)
+
   examples/vue:
     dependencies:
       '@zealakit/disclosure-vue':
@@ -344,6 +357,27 @@ importers:
       svelte-check:
         specifier: ^4.3.3
         version: 4.7.8(picomatch@4.0.7)(svelte@5.57.3)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@24.19.2)(happy-dom@20.14.6)(jiti@2.7.0)(supports-color@7.2.0)
+
+  packages/vanilla:
+    devDependencies:
+      '@rslib/core':
+        specifier: ^0.16.1
+        version: 0.16.1(typescript@5.9.3)
+      '@testing-library/dom':
+        specifier: ^10.4.1
+        version: 10.4.2
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      happy-dom:
+        specifier: ^20.0.10
+        version: 20.14.6
       typescript:
         specifier: ^5.9.3
         version: 5.9.3

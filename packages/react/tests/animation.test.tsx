@@ -41,15 +41,15 @@ describe("@zealakit/disclosure-react animation config", () => {
     );
 
     const content = getContent();
-    expect(content.style.getPropertyValue("--collapsible-animation-duration")).toBe(
-      `${DEFAULT_ANIMATION_DURATION_MS}ms`,
-    );
-    expect(content.style.getPropertyValue("--collapsible-animation-easing")).toBe(
-      DEFAULT_ANIMATION_TIMING_FUNCTION,
-    );
-    expect(content.style.getPropertyValue("--collapsible-animation-delay")).toBe(
-      `${DEFAULT_ANIMATION_DELAY_MS}ms`,
-    );
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-duration"),
+    ).toBe(`${DEFAULT_ANIMATION_DURATION_MS}ms`);
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-easing"),
+    ).toBe(DEFAULT_ANIMATION_TIMING_FUNCTION);
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-delay"),
+    ).toBe(`${DEFAULT_ANIMATION_DELAY_MS}ms`);
   });
 
   test("applies linear easing", async () => {
@@ -87,12 +87,12 @@ describe("@zealakit/disclosure-react animation config", () => {
     );
 
     const content = getContent();
-    expect(content.style.getPropertyValue("--collapsible-animation-duration")).toBe(
-      "320ms",
-    );
-    expect(content.style.getPropertyValue("--collapsible-animation-delay")).toBe(
-      "0ms",
-    );
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-duration"),
+    ).toBe("320ms");
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-delay"),
+    ).toBe("0ms");
   });
 
   test("applies non-zero delay", async () => {
@@ -167,11 +167,7 @@ describe("@zealakit/disclosure-react animation config", () => {
     }));
 
     render(
-      <Collapsible
-        defaultOpen
-        animationDuration={500}
-        animationDelay={200}
-      >
+      <Collapsible defaultOpen animationDuration={500} animationDelay={200}>
         <CollapsibleTrigger>Toggle</CollapsibleTrigger>
         <CollapsibleContent>Panel</CollapsibleContent>
       </Collapsible>,
@@ -229,15 +225,15 @@ describe("@zealakit/disclosure-react animation config", () => {
       .getByText("General content")
       .closest('[data-slot="accordion-content"]') as HTMLElement;
 
-    expect(content.style.getPropertyValue("--collapsible-animation-easing")).toBe(
-      "linear",
-    );
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-easing"),
+    ).toBe("linear");
     expect(
       content.style.getPropertyValue("--collapsible-animation-duration"),
     ).toBe("275ms");
-    expect(content.style.getPropertyValue("--collapsible-animation-delay")).toBe(
-      "40ms",
-    );
+    expect(
+      content.style.getPropertyValue("--collapsible-animation-delay"),
+    ).toBe("40ms");
   });
 
   test("rapid toggles remain stable with delay configured", async () => {

@@ -50,10 +50,7 @@ export function createPresence(options: PresenceOptions): Presence {
   });
 
   const onTransitionEnd = (event: TransitionEvent) => {
-    if (
-      event.currentTarget != null &&
-      event.target !== event.currentTarget
-    ) {
+    if (event.currentTarget != null && event.target !== event.currentTarget) {
       return;
     }
     if (event.propertyName && event.propertyName !== "grid-template-rows") {

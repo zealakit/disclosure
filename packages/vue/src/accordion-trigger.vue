@@ -32,11 +32,8 @@ if (!accordion || !item) {
 const isDisabled = computed(() => Boolean(props.disabled ?? item.disabled));
 const isOpen = computed(() => item.open);
 
-const setTriggerRef = (
-  node: Element | ComponentPublicInstance | null,
-) => {
-  const button =
-    node && "tagName" in node ? (node as HTMLButtonElement) : null;
+const setTriggerRef = (node: Element | ComponentPublicInstance | null) => {
+  const button = node && "tagName" in node ? (node as HTMLButtonElement) : null;
   item.triggerEl.value = button;
   accordion.registerTrigger(item.value, isDisabled.value ? null : button);
 };

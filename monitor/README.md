@@ -173,7 +173,7 @@ Update flow:
 | Action | Behavior |
 | --- | --- |
 | **Refresh Data** | `POST /api/refresh` |
-| **Get AI Prompt** | Builds a copyable prompt from selected outdated rows, or all outdated if none selected. Does not modify packages. |
+| **Get AI Prompt** | Builds a copyable prompt from selected outdated rows, or outdated rows in the **current filter view** if none selected. Includes each row’s selected target version. Does not modify packages. |
 | **Update All Outdated** | Opens a **review dialog** (not an immediate upgrade). Targets default to conservative patch/minor. User can change/remove rows, then confirm. |
 
 ### Cards / filters
@@ -195,12 +195,20 @@ Update flow:
 The prompt is generated **client-side** from current monitor data. It asks an external agent to:
 
 1. Inspect the real repository (do not assume the prompt already did)
-2. Check breaking changes, peers, workspace impact, tooling compatibility
+2. Check breaking changes, peers, workspace impact, tooling compatibility (including Vanilla ESM/IIFE CDN artifacts when relevant)
 3. Return structured recommendations: safe / safe with changes / needs investigation / not recommended
+
+Scope rules:
+
+- If checkboxes are selected → selected outdated rows only
+- Else → outdated rows matching the current filters (not necessarily the entire repo)
+- Inventory includes a **Proposed target** column from each row’s target `<select>` (falls back to the conservative default)
+
+Package names in the prompt header are taken from `/api/packages` when available (so adding `packages/vanilla` etc. stays current).
 
 It must **not** auto-apply upgrades. Copy via the dialog’s **Copy Prompt** button.
 
-When porting, edit the prompt template in `index.html` (`buildPrompt`) so repository name, package names, and stack notes match the target project.
+When porting, edit the prompt template in `index.html` (`buildPrompt` / `publishedPackageList`) so repository name, package names, and stack notes match the target project.
 
 ## Security model
 
