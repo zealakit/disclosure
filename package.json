@@ -1,6 +1,6 @@
 {
   "name": "disclosure",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Accessible, zero-dependency headless disclosure primitives for modern UIs.",
   "keywords": [

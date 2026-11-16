@@ -37,7 +37,7 @@ Published artifacts (ESM only):
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2.0.0/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.1.0/+esm";
 
   const disclosure = createDisclosure();
 </script>
@@ -47,26 +47,26 @@ Also works with esm.sh:
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@2.0.0";
+  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@1.1.0";
 
   const disclosure = createDisclosure();
 </script>
 ```
 
-### Migrating from 1.x
+### Migrating from 1.0
 
-The IIFE build (`dist/index.global*.js`, the `ZealakitDisclosure` global and the `unpkg` / `jsdelivr` / `./global*` entries) was removed in 2.0.0. Import the ESM build instead:
+The IIFE build (`dist/index.global*.js`, the `ZealakitDisclosure` global and the `unpkg` / `jsdelivr` / `./global*` entries) was removed in 1.1.0. Import the ESM build instead:
 
 ```html
-<!-- 1.x -->
-<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/dist/index.global.min.js"></script>
+<!-- 1.0.0 -->
+<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/dist/index.global.min.js"></script>
 <script>
   ZealakitDisclosure.createDisclosure();
 </script>
 
-<!-- 2.x -->
+<!-- 1.1.0+ -->
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/+esm";
   createDisclosure();
 </script>
 ```

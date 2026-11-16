@@ -1,6 +1,6 @@
 {
   "name": "@zealakit/disclosure-react",
-  "version": "2.0.0",
+  "version": "1.1.0",
   "description": "Accessible, zero-dependency headless disclosure primitives for React",
   "keywords": [
     "disclosure",

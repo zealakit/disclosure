@@ -37,7 +37,7 @@ npm i @zealakit/disclosure-vanilla
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2.0.0/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.1.0/+esm";
 
   const disclosure = createDisclosure();
 </script>
@@ -47,26 +47,26 @@ npm i @zealakit/disclosure-vanilla
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@2.0.0";
+  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@1.1.0";
 
   const disclosure = createDisclosure();
 </script>
 ```
 
-### Migrating from 1.x
+### Migrating from 1.0
 
-IIFE 构建（`dist/index.global*.js`、`ZealakitDisclosure` 全局变量以及 `unpkg` / `jsdelivr` / `./global*` 入口）已在 2.0.0 移除。请改为导入 ESM 构建：
+IIFE 构建（`dist/index.global*.js`、`ZealakitDisclosure` 全局变量以及 `unpkg` / `jsdelivr` / `./global*` 入口）已在 1.1.0 移除。请改为导入 ESM 构建：
 
 ```html
-<!-- 1.x -->
-<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/dist/index.global.min.js"></script>
+<!-- 1.0.0 -->
+<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/dist/index.global.min.js"></script>
 <script>
   ZealakitDisclosure.createDisclosure();
 </script>
 
-<!-- 2.x -->
+<!-- 1.1.0+ -->
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/+esm";
   createDisclosure();
 </script>
 ```

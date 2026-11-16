@@ -34,17 +34,17 @@ Always **pin a version** in production examples and generated snippets. Never re
 | --- | --- |
 | ESM only | `dist/index.js` (jsDelivr `/+esm`, esm.sh) |
 
-The 1.x IIFE build and `ZealakitDisclosure` global were removed in 2.0.0.
+The 1.0.0 IIFE build and `ZealakitDisclosure` global were removed in 1.1.0.
 
 ```html
 <!-- Native ESM CDN -->
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2.0.0/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.1.0/+esm";
   const disclosure = createDisclosure();
 </script>
 ```
 
-Also valid: `https://esm.sh/@zealakit/disclosure-vanilla@2.0.0`.
+Also valid: `https://esm.sh/@zealakit/disclosure-vanilla@1.1.0`.
 
 ## Import
 
@@ -86,7 +86,7 @@ Avoid these mistakes:
 11. Calling `createDisclosure()` many times instead of one controller + `refresh()`.
 12. Nesting without unique per-accordion `data-value`s when treating separate trees as one group.
 13. Shipping CDN snippets with `@latest` / unpinned URLs — always pin `@x.y.z`.
-14. Using the removed 1.x IIFE global (`ZealakitDisclosure.createDisclosure()`) — import `createDisclosure` from the ESM build instead.
+14. Using the removed 1.0.0 IIFE global (`ZealakitDisclosure.createDisclosure()`) — import `createDisclosure` from the ESM build instead.
 
 ## Initialization
 

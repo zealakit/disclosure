@@ -37,7 +37,7 @@ Artifact được publish (chỉ ESM):
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2.0.0/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.1.0/+esm";
 
   const disclosure = createDisclosure();
 </script>
@@ -47,26 +47,26 @@ Cũng dùng được với esm.sh:
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@2.0.0";
+  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@1.1.0";
 
   const disclosure = createDisclosure();
 </script>
 ```
 
-### Migrating from 1.x
+### Migrating from 1.0
 
-Build IIFE (`dist/index.global*.js`, global `ZealakitDisclosure` và các entry `unpkg` / `jsdelivr` / `./global*`) đã bị gỡ ở 2.0.0. Hãy import bản ESM:
+Build IIFE (`dist/index.global*.js`, global `ZealakitDisclosure` và các entry `unpkg` / `jsdelivr` / `./global*`) đã bị gỡ ở 1.1.0. Hãy import bản ESM:
 
 ```html
-<!-- 1.x -->
-<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/dist/index.global.min.js"></script>
+<!-- 1.0.0 -->
+<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/dist/index.global.min.js"></script>
 <script>
   ZealakitDisclosure.createDisclosure();
 </script>
 
-<!-- 2.x -->
+<!-- 1.1.0+ -->
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/+esm";
   createDisclosure();
 </script>
 ```
