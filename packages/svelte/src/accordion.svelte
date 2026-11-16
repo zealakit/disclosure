@@ -1,9 +1,8 @@
 <script lang="ts">
 import { untrack } from "svelte";
 import {
-  DEFAULT_ANIMATION_DELAY_MS,
-  DEFAULT_ANIMATION_DURATION_MS,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  resolveAnimationSetting,
+  type AnimationSetting,
   type AnimationTimingFunction,
 } from "./animation.js";
 import { setAccordionContext } from "./accordion-context.js";
@@ -13,9 +12,14 @@ type Props = {
   value?: string | string[] | null;
   defaultValue?: string | string[] | null;
   collapsible?: boolean;
+  animation?: AnimationSetting;
+  /** @deprecated Use `animation`. */
   animated?: boolean;
+  /** @deprecated Use `animation`. */
   animationTimingFunction?: AnimationTimingFunction;
+  /** @deprecated Use `animation`. */
   animationDuration?: number;
+  /** @deprecated Use `animation`. */
   animationDelay?: number;
   disabled?: boolean;
   onValueChange?: (value: never) => void;
@@ -29,10 +33,11 @@ let {
   value = $bindable(),
   defaultValue,
   collapsible = false,
-  animated = true,
-  animationTimingFunction = DEFAULT_ANIMATION_TIMING_FUNCTION,
-  animationDuration = DEFAULT_ANIMATION_DURATION_MS,
-  animationDelay = DEFAULT_ANIMATION_DELAY_MS,
+  animation,
+  animated,
+  animationTimingFunction,
+  animationDuration,
+  animationDelay,
   disabled = false,
   onValueChange,
   children,
@@ -52,6 +57,16 @@ let uncontrolledMultiple = $state<string[]>(
 );
 
 const triggers = new Map<string, HTMLButtonElement>();
+
+const resolvedAnimation = $derived(
+  resolveAnimationSetting({
+    animation,
+    animated,
+    animationTimingFunction,
+    animationDuration,
+    animationDelay,
+  }),
+);
 
 const isControlled = $derived(value !== undefined);
 const resolvedCollapsible = $derived(type === "single" ? collapsible : false);
@@ -114,17 +129,20 @@ setAccordionContext({
   get type() {
     return type;
   },
+  get animation() {
+    return resolvedAnimation;
+  },
   get animated() {
-    return animated;
+    return resolvedAnimation.enabled;
   },
   get animationTimingFunction() {
-    return animationTimingFunction;
+    return resolvedAnimation.easing as AnimationTimingFunction;
   },
   get animationDuration() {
-    return animationDuration;
+    return resolvedAnimation.duration;
   },
   get animationDelay() {
-    return animationDelay;
+    return resolvedAnimation.delay;
   },
   get disabled() {
     return disabled;

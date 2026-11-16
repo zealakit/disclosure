@@ -41,6 +41,7 @@
     "typecheck": "pnpm -r --filter './packages/*' run typecheck",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
+    "check:animation": "node scripts/check-animation-parity.mjs",
     "format": "biome format --write .",
     "clean": "pnpm -r exec rm -rf dist .svelte-kit && rm -rf node_modules",
     "npm:publish:check": "node --strip-types scripts/npm-publish.ts check",

@@ -11,6 +11,7 @@ import {
 } from "react";
 import {
   AccordionContext,
+  type AccordionContextValue,
   AccordionItemContext,
   useAccordionContext,
   useAccordionItemContext,
@@ -23,10 +24,7 @@ import type {
   AccordionSingleProps,
   AccordionTriggerProps,
 } from "./accordion-types";
-import {
-  getCollapsibleAnimationStyle,
-  resolveAnimationConfig,
-} from "./animation";
+import { getAnimationStyle, resolveAnimationSetting } from "./animation";
 import { ensureCollapsibleStyles } from "./collapsible-styles";
 import { usePresence } from "./use-presence";
 
@@ -37,19 +35,23 @@ export type {
   AccordionProps,
   AccordionSingleProps,
   AccordionTriggerProps,
+  AnimationConfig,
+  AnimationEasing,
+  AnimationSetting,
   AnimationTimingFunction,
   CollapsibleAnimationProps,
+  ResolvedAnimationConfig,
 } from "./accordion-types";
 
 function AccordionRoot(props: AccordionProps) {
   const type = props.type ?? "single";
-  const animation = resolveAnimationConfig({
+  const animation = resolveAnimationSetting({
+    animation: props.animation,
     animated: props.animated,
     animationTimingFunction: props.animationTimingFunction,
     animationDuration: props.animationDuration,
     animationDelay: props.animationDelay,
   });
-  const animated = animation.animated;
   const disabled = props.disabled ?? false;
   const collapsible =
     type === "single"
@@ -166,13 +168,16 @@ function AccordionRoot(props: AccordionProps) {
     triggersRef.current.get(itemValue)?.focus();
   }, []);
 
+  const { enabled, easing, duration, delay } = animation;
   const contextValue = useMemo(
     () => ({
       type,
-      animated,
-      animationTimingFunction: animation.animationTimingFunction,
-      animationDuration: animation.animationDuration,
-      animationDelay: animation.animationDelay,
+      animation: { enabled, duration, delay, easing },
+      animated: enabled,
+      animationTimingFunction:
+        easing as AccordionContextValue["animationTimingFunction"],
+      animationDuration: duration,
+      animationDelay: delay,
       disabled,
       collapsible,
       isItemOpen,
@@ -183,10 +188,10 @@ function AccordionRoot(props: AccordionProps) {
     }),
     [
       type,
-      animated,
-      animation.animationTimingFunction,
-      animation.animationDuration,
-      animation.animationDelay,
+      enabled,
+      easing,
+      duration,
+      delay,
       disabled,
       collapsible,
       isItemOpen,
@@ -202,6 +207,7 @@ function AccordionRoot(props: AccordionProps) {
     value: _value,
     defaultValue: _defaultValue,
     onValueChange: _onValueChange,
+    animation: _animation,
     animated: _animated,
     animationTimingFunction: _animationTimingFunction,
     animationDuration: _animationDuration,
@@ -357,7 +363,7 @@ function AccordionContent({
   const accordion = useAccordionContext();
   const item = useAccordionItemContext();
   const presence = usePresence(item.open, {
-    animated: accordion.animated,
+    animated: accordion.animation.enabled,
     forceMount,
   });
 
@@ -370,11 +376,9 @@ function AccordionContent({
   }
 
   const state = presence.present ? "open" : "closed";
-  const animationStyle = getCollapsibleAnimationStyle({
-    animationTimingFunction: accordion.animationTimingFunction,
-    animationDuration: accordion.animationDuration,
-    animationDelay: accordion.animationDelay,
-  }) as CSSProperties;
+  const animationStyle = getAnimationStyle(
+    accordion.animation,
+  ) as CSSProperties;
 
   return (
     <section

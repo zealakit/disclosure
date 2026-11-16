@@ -69,25 +69,25 @@ let controlledOpen = $state(false);
   <section>
     <h2>5. Animation configuration</h2>
     <div class="demo">
-      <Collapsible animationTimingFunction="linear">
+      <Collapsible animation={{ easing: "linear" }}>
         <CollapsibleTrigger class="trigger">Linear easing</CollapsibleTrigger>
         <CollapsibleContent class="content">
-          <code>animationTimingFunction="linear"</code>
+          <code>{'animation={{ easing: "linear" }}'}</code>
         </CollapsibleContent>
       </Collapsible>
-      <Collapsible animationDuration={400}>
+      <Collapsible animation={{ duration: 400 }}>
         <CollapsibleTrigger class="trigger">Custom duration (400ms)</CollapsibleTrigger>
         <CollapsibleContent class="content">
-          <code>animationDuration={"{400}"}</code>
+          <code>{"animation={{ duration: 400 }}"}</code>
         </CollapsibleContent>
       </Collapsible>
-      <Collapsible animationDelay={150}>
+      <Collapsible animation={{ delay: 150 }}>
         <CollapsibleTrigger class="trigger">Custom delay (150ms)</CollapsibleTrigger>
         <CollapsibleContent class="content">
-          <code>animationDelay={"{150}"}</code>
+          <code>{"animation={{ delay: 150 }}"}</code>
         </CollapsibleContent>
       </Collapsible>
-      <Collapsible animated={false}>
+      <Collapsible animation={false}>
         <CollapsibleTrigger class="trigger">Animation off</CollapsibleTrigger>
         <CollapsibleContent class="content">No height transition.</CollapsibleContent>
       </Collapsible>
@@ -100,15 +100,13 @@ let controlledOpen = $state(false);
       type="single"
       collapsible
       class="demo"
-      animationTimingFunction="ease-in-out"
-      animationDuration={300}
-      animationDelay={0}
+      animation={{ easing: "ease-in-out", duration: 300, delay: 0 }}
     >
       <AccordionItem value="general">
         <AccordionTrigger class="trigger">General</AccordionTrigger>
         <AccordionContent class="content">
           General settings and preferences. Accordion root owns
-          <code>animationDuration={"{300}"}</code>.
+          <code>{"animation={{ duration: 300 }}"}</code>.
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="advanced">

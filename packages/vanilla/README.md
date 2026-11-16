@@ -97,8 +97,8 @@ Unminified IIFE (debugging): `…/dist/index.global.js`.
 | `createDisclosure({ root })` | Same, options object form |
 | `DisclosureController.destroy()` | Remove listeners and restore content nodes |
 | `DisclosureController.refresh()` | Destroy + re-scan (for dynamically inserted markup) |
-| `DEFAULT_ANIMATION_*` | Same animation defaults as framework packages |
-| `resolveAnimationConfig` / `getCollapsibleAnimationStyle` | Shared animation helpers |
+| `DEFAULT_ANIMATION_DURATION` / `_DELAY` / `_EASING` | Same animation defaults as framework packages |
+| `normalizeAnimationConfig` / `getAnimationStyle` | Shared animation helpers (`resolveAnimationConfig` / `getCollapsibleAnimationStyle` and `DEFAULT_ANIMATION_*_MS` are deprecated aliases) |
 
 ## Collapsible markup
 
@@ -110,10 +110,12 @@ Unminified IIFE (debugging): `…/dist/index.global.js`.
 | `data-default-open` | root | Start expanded (`false` by default) |
 | `data-disabled` | root | Disable interaction |
 | `data-force-mount` | content | Keep content in the DOM while closed |
-| `data-animated` | root | `"false"` disables height animation (default on) |
-| `data-animation-timing-function` | root | `linear` \| `ease-in-out` (default `ease-in-out`) |
+| `data-animation` | root | `"false"` disables height animation; `""` / `"true"` enable it (default on) |
 | `data-animation-duration` | root | Duration ms (default `200`) |
 | `data-animation-delay` | root | Delay ms (default `0`) |
+| `data-animation-easing` | root | `ease-in-out`, `linear`, or any CSS timing function (default `ease-in-out`) |
+
+Deprecated (still read until 2.0.0, warns once in development; the new attribute wins): `data-animated="false"` → `data-animation="false"`, `data-animation-timing-function` → `data-animation-easing`.
 
 Root attributes after init: `data-slot="collapsible"`, `data-state="open" \| "closed"`, `data-disabled` when disabled. Triggers get `aria-expanded` / `aria-controls`.
 
@@ -150,7 +152,7 @@ Keyboard (enabled triggers): `ArrowDown` / `ArrowUp` / `Home` / `End`. Nested ac
 
 ## Animation
 
-Height animation uses CSS `grid-template-rows` (`minmax(0, 0fr)` ↔ `minmax(0, 1fr)`), enabled by default. `prefers-reduced-motion: reduce` disables motion. Content stays mounted through the exit transition, then detaches unless `data-force-mount` is set.
+Height animation uses CSS `grid-template-rows` (`minmax(0, 0fr)` ↔ `minmax(0, 1fr)`), enabled by default (Overlay: off; default duration 200ms vs 160ms; no `type` / `direction`). `prefers-reduced-motion: reduce` disables motion. Content stays mounted through the exit transition, then detaches unless `data-force-mount` is set.
 
 CSS variables on the content viewport:
 

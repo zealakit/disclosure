@@ -1,9 +1,8 @@
 <script lang="ts">
 import { untrack } from "svelte";
 import {
-  DEFAULT_ANIMATION_DELAY_MS,
-  DEFAULT_ANIMATION_DURATION_MS,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  resolveAnimationSetting,
+  type AnimationSetting,
   type AnimationTimingFunction,
 } from "./animation.js";
 import { setCollapsibleContext } from "./collapsible-context.js";
@@ -13,9 +12,14 @@ type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
+  animation?: AnimationSetting;
+  /** @deprecated Use `animation`. */
   animated?: boolean;
+  /** @deprecated Use `animation`. */
   animationTimingFunction?: AnimationTimingFunction;
+  /** @deprecated Use `animation`. */
   animationDuration?: number;
+  /** @deprecated Use `animation`. */
   animationDelay?: number;
   children?: import("svelte").Snippet;
   class?: string;
@@ -27,10 +31,11 @@ let {
   open = $bindable(),
   onOpenChange,
   disabled = false,
-  animated = true,
-  animationTimingFunction = DEFAULT_ANIMATION_TIMING_FUNCTION,
-  animationDuration = DEFAULT_ANIMATION_DURATION_MS,
-  animationDelay = DEFAULT_ANIMATION_DELAY_MS,
+  animation,
+  animated,
+  animationTimingFunction,
+  animationDuration,
+  animationDelay,
   children,
   class: className,
   ...rest
@@ -38,6 +43,16 @@ let {
 
 let uncontrolledOpen = $state(untrack(() => defaultOpen));
 const instanceId = crypto.randomUUID();
+
+const resolvedAnimation = $derived(
+  resolveAnimationSetting({
+    animation,
+    animated,
+    animationTimingFunction,
+    animationDuration,
+    animationDelay,
+  }),
+);
 
 const resolvedOpen = $derived(
   open !== undefined ? Boolean(open) : uncontrolledOpen,
@@ -62,17 +77,20 @@ setCollapsibleContext({
   get disabled() {
     return disabled;
   },
+  get animation() {
+    return resolvedAnimation;
+  },
   get animated() {
-    return animated;
+    return resolvedAnimation.enabled;
   },
   get animationTimingFunction() {
-    return animationTimingFunction;
+    return resolvedAnimation.easing as AnimationTimingFunction;
   },
   get animationDuration() {
-    return animationDuration;
+    return resolvedAnimation.duration;
   },
   get animationDelay() {
-    return animationDelay;
+    return resolvedAnimation.delay;
   },
   contentId,
   triggerId,

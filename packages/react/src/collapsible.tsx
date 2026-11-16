@@ -6,12 +6,10 @@ import {
   type CSSProperties,
   type MouseEvent,
 } from "react";
-import {
-  getCollapsibleAnimationStyle,
-  resolveAnimationConfig,
-} from "./animation";
+import { getAnimationStyle, resolveAnimationSetting } from "./animation";
 import {
   CollapsibleContext,
+  type CollapsibleContextValue,
   useCollapsibleContext,
 } from "./collapsible-context";
 import { ensureCollapsibleStyles } from "./collapsible-styles";
@@ -26,8 +24,12 @@ export type {
   CollapsibleContentProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
+  AnimationConfig,
+  AnimationEasing,
+  AnimationSetting,
   AnimationTimingFunction,
   CollapsibleAnimationProps,
+  ResolvedAnimationConfig,
 } from "./collapsible-types";
 
 function CollapsibleRoot({
@@ -35,7 +37,8 @@ function CollapsibleRoot({
   open: openProp,
   onOpenChange,
   disabled = false,
-  animated = true,
+  animation: animationProp,
+  animated,
   animationTimingFunction,
   animationDuration,
   animationDelay,
@@ -45,7 +48,8 @@ function CollapsibleRoot({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : uncontrolledOpen;
-  const animation = resolveAnimationConfig({
+  const animation = resolveAnimationSetting({
+    animation: animationProp,
     animated,
     animationTimingFunction,
     animationDuration,
@@ -71,10 +75,12 @@ function CollapsibleRoot({
       value={{
         open,
         disabled,
-        animated: animation.animated,
-        animationTimingFunction: animation.animationTimingFunction,
-        animationDuration: animation.animationDuration,
-        animationDelay: animation.animationDelay,
+        animation,
+        animated: animation.enabled,
+        animationTimingFunction:
+          animation.easing as CollapsibleContextValue["animationTimingFunction"],
+        animationDuration: animation.duration,
+        animationDelay: animation.delay,
         contentId,
         triggerId,
         setOpen,
@@ -142,15 +148,11 @@ function CollapsibleContent({
   onTransitionEnd,
   ...props
 }: CollapsibleContentProps) {
-  const {
-    open,
-    animated,
-    animationTimingFunction,
-    animationDuration,
-    animationDelay,
-    contentId,
-  } = useCollapsibleContext();
-  const presence = usePresence(open, { animated, forceMount });
+  const { open, animation, contentId } = useCollapsibleContext();
+  const presence = usePresence(open, {
+    animated: animation.enabled,
+    forceMount,
+  });
 
   useEffect(() => {
     ensureCollapsibleStyles();
@@ -161,11 +163,7 @@ function CollapsibleContent({
   }
 
   const state = presence.present ? "open" : "closed";
-  const animationStyle = getCollapsibleAnimationStyle({
-    animationTimingFunction,
-    animationDuration,
-    animationDelay,
-  }) as CSSProperties;
+  const animationStyle = getAnimationStyle(animation) as CSSProperties;
 
   return (
     <div

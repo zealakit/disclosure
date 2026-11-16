@@ -243,36 +243,41 @@ Supported. Nest a full `Accordion` inside an outer `AccordionContent`. Keep item
 
 ## F. Animation
 
-Height animation is **on by default** (`animated` defaults to `true`).
+Height animation is **on by default**. Configure it with one `animation` prop: `boolean | AnimationConfig`.
 
-| Prop | Type | Default | Unit / notes |
+| Field | Type | Default | Unit / notes |
 | --- | --- | --- | --- |
-| `animated` | `boolean` | `true` | Built-in grid height transition |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | Template: `animation-timing-function` |
-| `animationDuration` | `number` | `200` | **milliseconds** (`:animation-duration`) |
-| `animationDelay` | `number` | `0` | **milliseconds** (`:animation-delay`) |
+| `enabled` | `boolean` | `true` with a config | Set `false` to turn the animation off |
+| `duration` | `number` | `200` | **milliseconds** |
+| `delay` | `number` | `0` | **milliseconds** |
+| `easing` | `string` | `"ease-in-out"` | `ease-in-out`, `linear`, or any CSS timing function |
 
 Set on `Collapsible` or `Accordion` root. Accordion animation is root-owned.
 
 ```vue
-<Collapsible
-  animation-timing-function="linear"
-  :animation-duration="300"
-  :animation-delay="50"
->
+<Collapsible :animation="{ duration: 300, delay: 50, easing: 'linear' }">
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Content</CollapsibleContent>
 </Collapsible>
 ```
 
 ```vue
-<Collapsible :animated="false">
+<Collapsible :animation="false">
   <CollapsibleTrigger>Instant</CollapsibleTrigger>
   <CollapsibleContent>No height transition</CollapsibleContent>
 </Collapsible>
 ```
 
-When `animated` is `false`, duration/delay are ignored. `prefers-reduced-motion` also disables motion.
+When animation is off, duration/delay are ignored. `prefers-reduced-motion` also disables motion.
+
+Deprecated aliases (work until 2.0.0, warn once in development; `animation` wins when both are set):
+
+| Deprecated | Use |
+| --- | --- |
+| `:animated="false"` | `:animation="false"` |
+| `:animation-duration="320"` | `:animation="{ duration: 320 }"` |
+| `:animation-delay="120"` | `:animation="{ delay: 120 }"` |
+| `animation-timing-function="linear"` | `:animation="{ easing: 'linear' }"` |
 
 Do **not** reimplement height animation with custom CSS on the viewport.
 
@@ -320,7 +325,7 @@ Keep library triggers as buttons; give each `AccordionItem` a stable unique `val
 
 1. Using several `Collapsible`s when exclusive open state is required — use `Accordion type="single"`.
 2. Using React-style `open` + `onOpenChange` only — prefer `v-model:open`.
-3. Forgetting kebab-case in templates (`animation-duration`, `force-mount`, `default-value`).
+3. Forgetting kebab-case in templates (`force-mount`, `default-open`, `default-value`).
 4. Reimplementing height animation in CSS.
 5. Styling only the content viewport for borders/padding — style Content `class` / the wrapper.
 6. Unsupported easing strings — only `"linear"` and `"ease-in-out"`.

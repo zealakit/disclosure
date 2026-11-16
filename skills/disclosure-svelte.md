@@ -229,36 +229,41 @@ Supported. Nest a full `Accordion` inside an outer `AccordionContent`. Keep item
 
 ## F. Animation
 
-Height animation is **on by default** (`animated={true}`).
+Height animation is **on by default**. Configure it with one `animation` prop: `boolean | AnimationConfig`.
 
-| Prop | Type | Default | Unit / notes |
+| Field | Type | Default | Unit / notes |
 | --- | --- | --- | --- |
-| `animated` | `boolean` | `true` | Built-in grid height transition |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | Only these two values |
-| `animationDuration` | `number` | `200` | **milliseconds** |
-| `animationDelay` | `number` | `0` | **milliseconds** |
+| `enabled` | `boolean` | `true` with a config | Set `false` to turn the animation off |
+| `duration` | `number` | `200` | **milliseconds** |
+| `delay` | `number` | `0` | **milliseconds** |
+| `easing` | `string` | `"ease-in-out"` | `ease-in-out`, `linear`, or any CSS timing function |
 
-Set on `Collapsible` or `Accordion` root. Accordion animation is root-owned.
+Set on `Collapsible` or `Accordion` root. Accordion animation is root-owned (no per-item overrides).
 
 ```svelte
-<Collapsible
-  animationTimingFunction="linear"
-  animationDuration={300}
-  animationDelay={50}
->
+<Collapsible animation={{ duration: 300, delay: 50, easing: "linear" }}>
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Content</CollapsibleContent>
 </Collapsible>
 ```
 
 ```svelte
-<Collapsible animated={false}>
+<Collapsible animation={false}>
   <CollapsibleTrigger>Instant</CollapsibleTrigger>
   <CollapsibleContent>No height transition</CollapsibleContent>
 </Collapsible>
 ```
 
-When `animated={false}`, duration/delay are ignored. `prefers-reduced-motion` also disables motion.
+When animation is off, duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
+
+Deprecated aliases (work until 2.0.0, warn once in development; `animation` wins when both are set):
+
+| Deprecated | Use |
+| --- | --- |
+| `animated={false}` | `animation={false}` |
+| `animationDuration={320}` | `animation={{ duration: 320 }}` |
+| `animationDelay={120}` | `animation={{ delay: 120 }}` |
+| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
 
 Do **not** reimplement height animation with custom CSS on the viewport.
 

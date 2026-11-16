@@ -9,12 +9,7 @@ import {
   useId,
   watch,
 } from "vue";
-import {
-  DEFAULT_ANIMATION_DELAY_MS,
-  DEFAULT_ANIMATION_DURATION_MS,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
-  resolveAnimationConfig,
-} from "./animation";
+import { resolveAnimationSetting } from "./animation";
 import {
   CollapsibleContextKey,
   type CollapsibleContextValue,
@@ -29,10 +24,11 @@ defineOptions({
 const props = withDefaults(defineProps<CollapsibleProps>(), {
   defaultOpen: false,
   disabled: false,
-  animated: true,
-  animationTimingFunction: DEFAULT_ANIMATION_TIMING_FUNCTION,
-  animationDuration: DEFAULT_ANIMATION_DURATION_MS,
-  animationDelay: DEFAULT_ANIMATION_DELAY_MS,
+  animation: undefined,
+  animated: undefined,
+  animationTimingFunction: undefined,
+  animationDuration: undefined,
+  animationDelay: undefined,
 });
 
 const emit = defineEmits<{
@@ -52,7 +48,8 @@ const resolvedOpen = computed(() =>
 );
 
 const animation = computed(() =>
-  resolveAnimationConfig({
+  resolveAnimationSetting({
+    animation: props.animation,
     animated: props.animated,
     animationTimingFunction: props.animationTimingFunction,
     animationDuration: props.animationDuration,
@@ -63,10 +60,12 @@ const animation = computed(() =>
 const context = reactive<CollapsibleContextValue>({
   open: resolvedOpen.value,
   disabled: props.disabled,
-  animated: animation.value.animated,
-  animationTimingFunction: animation.value.animationTimingFunction,
-  animationDuration: animation.value.animationDuration,
-  animationDelay: animation.value.animationDelay,
+  animation: animation.value,
+  animated: animation.value.enabled,
+  animationTimingFunction: animation.value
+    .easing as CollapsibleContextValue["animationTimingFunction"],
+  animationDuration: animation.value.duration,
+  animationDelay: animation.value.delay,
   contentId: `collapsible-content-${reactId}`,
   triggerId: `collapsible-trigger-${reactId}`,
   setOpen(next: boolean) {
@@ -96,10 +95,12 @@ watch(
 watch(
   animation,
   (value) => {
-    context.animated = value.animated;
-    context.animationTimingFunction = value.animationTimingFunction;
-    context.animationDuration = value.animationDuration;
-    context.animationDelay = value.animationDelay;
+    context.animation = value;
+    context.animated = value.enabled;
+    context.animationTimingFunction =
+      value.easing as CollapsibleContextValue["animationTimingFunction"];
+    context.animationDuration = value.duration;
+    context.animationDelay = value.delay;
   },
   { immediate: true },
 );

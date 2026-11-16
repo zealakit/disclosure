@@ -1,15 +1,11 @@
+import { normalizeAnimationConfig } from "./animation";
 import {
-  getCollapsibleAnimationStyle,
-  resolveAnimationConfig,
-  type AnimationTimingFunction,
-  type CollapsibleAnimationProps,
-} from "./animation";
-import {
+  applyAnimationStyle,
   createPresence,
   ensureContentWrapper,
   nextId,
   parseBooleanAttribute,
-  parseNumberAttribute,
+  readAnimationSetting,
   queryOwned,
   setDataState,
   setDisabledAttr,
@@ -20,19 +16,6 @@ export type CollapsibleInstance = {
   root: HTMLElement;
   destroy: () => void;
 };
-
-function readAnimationProps(root: HTMLElement): CollapsibleAnimationProps {
-  const timing = root.getAttribute("data-animation-timing-function");
-  return {
-    animated: parseBooleanAttribute(root, "data-animated", true),
-    animationTimingFunction:
-      timing === "linear" || timing === "ease-in-out"
-        ? (timing as AnimationTimingFunction)
-        : undefined,
-    animationDuration: parseNumberAttribute(root, "data-animation-duration"),
-    animationDelay: parseNumberAttribute(root, "data-animation-delay"),
-  };
-}
 
 export function initCollapsible(root: HTMLElement): CollapsibleInstance {
   ensureCollapsibleStyles();
@@ -55,7 +38,7 @@ export function initCollapsible(root: HTMLElement): CollapsibleInstance {
     };
   }
 
-  const animation = resolveAnimationConfig(readAnimationProps(root));
+  const animation = normalizeAnimationConfig(readAnimationSetting(root));
   const disabled = parseBooleanAttribute(root, "data-disabled", false);
   const forceMount = parseBooleanAttribute(content, "data-force-mount", false);
   let open = parseBooleanAttribute(root, "data-default-open", false);
@@ -78,23 +61,11 @@ export function initCollapsible(root: HTMLElement): CollapsibleInstance {
   trigger.setAttribute("aria-controls", contentId);
   ensureContentWrapper(content);
 
-  const animationStyle = getCollapsibleAnimationStyle(animation);
-  content.style.setProperty(
-    "--collapsible-animation-duration",
-    animationStyle["--collapsible-animation-duration"],
-  );
-  content.style.setProperty(
-    "--collapsible-animation-easing",
-    animationStyle["--collapsible-animation-easing"],
-  );
-  content.style.setProperty(
-    "--collapsible-animation-delay",
-    animationStyle["--collapsible-animation-delay"],
-  );
+  applyAnimationStyle(content, animation);
 
   const presence = createPresence({
     content,
-    animated: animation.animated,
+    animated: animation.enabled,
     forceMount,
     getOpen: () => open,
   });

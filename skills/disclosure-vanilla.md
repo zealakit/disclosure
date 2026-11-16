@@ -175,14 +175,21 @@ Height animation is **on by default**.
 
 | Attribute | Type | Default |
 | --- | --- | --- |
-| `data-animated` | boolean (`"false"` to disable) | on |
-| `data-animation-timing-function` | `linear` \| `ease-in-out` | `ease-in-out` |
+| `data-animation` | `"false"` disables; `""` / `"true"` enable | on |
 | `data-animation-duration` | number (ms) | `200` |
 | `data-animation-delay` | number (ms) | `0` |
+| `data-animation-easing` | `ease-in-out`, `linear`, or any CSS timing function | `ease-in-out` |
 
 Set on Collapsible or Accordion **root**. Accordion animation is root-owned.
 
-When `data-animated="false"`, duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
+When `data-animation="false"`, duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
+
+Deprecated attributes (still read, warn once in development; the new attribute wins when both are set):
+
+| Deprecated | Use |
+| --- | --- |
+| `data-animated="false"` | `data-animation="false"` |
+| `data-animation-timing-function="linear"` | `data-animation-easing="linear"` |
 
 Do **not** reimplement height animation with custom CSS on the viewport. Style the inner wrapper instead.
 

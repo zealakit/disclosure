@@ -1,11 +1,20 @@
-import type { CollapsibleAnimationProps } from "./animation";
+import type { AnimationSetting, CollapsibleAnimationProps } from "./animation";
 
 export type {
+  AnimationConfig,
+  AnimationEasing,
+  AnimationSetting,
   AnimationTimingFunction,
   CollapsibleAnimationProps,
+  ResolvedAnimationConfig,
 } from "./animation";
 
 export type AccordionSingleProps = CollapsibleAnimationProps & {
+  /**
+   * Expand/collapse animation. `false` disables it; an object customises it.
+   * @default true
+   */
+  animation?: AnimationSetting;
   type?: "single";
   value?: string | null;
   defaultValue?: string | null;
@@ -18,6 +27,11 @@ export type AccordionSingleProps = CollapsibleAnimationProps & {
 };
 
 export type AccordionMultipleProps = CollapsibleAnimationProps & {
+  /**
+   * Expand/collapse animation. `false` disables it; an object customises it.
+   * @default true
+   */
+  animation?: AnimationSetting;
   type: "multiple";
   value?: string[];
   defaultValue?: string[];

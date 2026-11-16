@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, toRef, useAttrs } from "vue";
-import { getCollapsibleAnimationStyle } from "./animation";
+import { getAnimationStyle } from "./animation";
 import { CollapsibleContextKey } from "./collapsible-context";
 import { ensureCollapsibleStyles } from "./collapsible-styles";
 import type { CollapsibleContentProps } from "./collapsible.types";
@@ -25,7 +25,7 @@ if (!context) {
 }
 
 const open = computed(() => context.open);
-const animated = computed(() => context.animated);
+const animated = computed(() => context.animation.enabled);
 const forceMount = toRef(props, "forceMount");
 const presence = usePresence(open, { animated, forceMount });
 
@@ -44,13 +44,7 @@ const panelAttrs = computed(() => {
 
 const state = computed(() => (presence.present.value ? "open" : "closed"));
 
-const animationStyle = computed(() =>
-  getCollapsibleAnimationStyle({
-    animationTimingFunction: context.animationTimingFunction,
-    animationDuration: context.animationDuration,
-    animationDelay: context.animationDelay,
-  }),
-);
+const animationStyle = computed(() => getAnimationStyle(context.animation));
 </script>
 
 <template>

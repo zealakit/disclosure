@@ -71,29 +71,29 @@ const controlledOpen = ref(false);
     <section>
       <h2>5. Animation configuration</h2>
       <div class="demo">
-        <Collapsible animation-timing-function="linear">
+        <Collapsible :animation="{ easing: 'linear' }">
           <CollapsibleTrigger class="trigger">Linear easing</CollapsibleTrigger>
           <CollapsibleContent class="content">
-            <code>animation-timing-function="linear"</code>
+            <code>:animation="{ easing: 'linear' }"</code>
           </CollapsibleContent>
         </Collapsible>
-        <Collapsible :animation-duration="400">
+        <Collapsible :animation="{ duration: 400 }">
           <CollapsibleTrigger class="trigger">
             Custom duration (400ms)
           </CollapsibleTrigger>
           <CollapsibleContent class="content">
-            <code>:animation-duration="400"</code>
+            <code>:animation="{ duration: 400 }"</code>
           </CollapsibleContent>
         </Collapsible>
-        <Collapsible :animation-delay="150">
+        <Collapsible :animation="{ delay: 150 }">
           <CollapsibleTrigger class="trigger">
             Custom delay (150ms)
           </CollapsibleTrigger>
           <CollapsibleContent class="content">
-            <code>:animation-delay="150"</code>
+            <code>:animation="{ delay: 150 }"</code>
           </CollapsibleContent>
         </Collapsible>
-        <Collapsible :animated="false">
+        <Collapsible :animation="false">
           <CollapsibleTrigger class="trigger">Animation off</CollapsibleTrigger>
           <CollapsibleContent class="content">
             No height transition.
@@ -108,15 +108,13 @@ const controlledOpen = ref(false);
         type="single"
         collapsible
         class="demo"
-        animation-timing-function="ease-in-out"
-        :animation-duration="300"
-        :animation-delay="0"
+        :animation="{ easing: 'ease-in-out', duration: 300, delay: 0 }"
       >
         <AccordionItem value="general">
           <AccordionTrigger class="trigger">General</AccordionTrigger>
           <AccordionContent class="content">
             General settings and preferences. Accordion root owns
-            <code>:animation-duration="300"</code>.
+            <code>:animation="{ duration: 300 }"</code>.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="advanced">

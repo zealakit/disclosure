@@ -50,10 +50,7 @@ export function Example() {
 | `open` | `boolean` | — | 受控的展开状态 |
 | `onOpenChange` | `(open: boolean) => void` | — | 展开状态需要变更时调用 |
 | `disabled` | `boolean` | `false` | 禁用整个 collapsible |
-| `animated` | `boolean` | `true` | 启用高度展开/收起动画 |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | 过渡缓动函数 |
-| `animationDuration` | `number` | `200` | 持续时间（毫秒） |
-| `animationDelay` | `number` | `0` | 延迟时间（毫秒） |
+| `animation` | `boolean \| AnimationConfig` | `true` | 高度展开/收起动画。`false` 关闭；传入对象可自定义 |
 | `children` | `ReactNode` | — | 组合子部件（`Trigger`、`Content` 等） |
 | `...div props` | `HTMLAttributes<HTMLDivElement>` | — | 透传给根元素 |
 
@@ -95,9 +92,7 @@ const [open, setOpen] = useState(false);
 
 ```tsx
 <Collapsible
-  animationTimingFunction="linear"
-  animationDuration={300}
-  animationDelay={50}
+  animation={{ duration: 300, delay: 50, easing: "linear" }}
 >
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Content</CollapsibleContent>
@@ -105,13 +100,30 @@ const [open, setOpen] = useState(false);
 ```
 
 ```tsx
-<Collapsible animated={false}>
+<Collapsible animation={false}>
   <CollapsibleTrigger>Instant</CollapsibleTrigger>
   <CollapsibleContent>No height transition</CollapsibleContent>
 </Collapsible>
 ```
 
-当 `animated={false}` 时，展开/收起会立即更新，duration/delay 将被忽略。`prefers-reduced-motion: reduce` 同样会禁用动画。
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | `boolean` | 传入配置时为 `true` | 设为 `false` 关闭动画。 |
+| `duration` | `number` | `200` | 毫秒。 |
+| `delay` | `number` | `0` | 毫秒。 |
+| `easing` | `string` | `"ease-in-out"` | `ease-in-out`、`linear` 或任意 CSS timing function。 |
+| `...` | — | — | 传 `true` 使用默认值，传 `false` 关闭。 |
+
+动画**默认开启**（Overlay 默认关闭），默认时长 200ms（Overlay 为 160ms），且没有 `type` / `direction`：Disclosure 只有一种内置高度过渡。同时传入时以 `animation` 为准，已弃用的 prop 会被忽略。
+
+关闭动画时，展开/收起会立即更新，duration/delay 将被忽略。`prefers-reduced-motion: reduce` 同样会禁用动画。
+
+| 已弃用（2.0.0 前仍可用，开发环境仅警告一次） | 改用 |
+| --- | --- |
+| `animated={false}` | `animation={false}` |
+| `animationDuration={320}` | `animation={{ duration: 320 }}` |
+| `animationDelay={120}` | `animation={{ delay: 120 }}` |
+| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
 
 设置在内容 viewport 上的 CSS 变量：
 
@@ -156,10 +168,7 @@ import {
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `type` | `"single" \| "multiple"` | `"single"` | 选择模式 |
-| `animated` | `boolean` | `true` | 项目面板的高度动画 |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | 所有项目的缓动函数 |
-| `animationDuration` | `number` | `200` | 持续时间（毫秒） |
-| `animationDelay` | `number` | `0` | 延迟时间（毫秒） |
+| `animation` | `boolean \| AnimationConfig` | `true` | 项目面板的高度动画（所有项目共用）。`false` 关闭；传入对象可自定义 |
 | `disabled` | `boolean` | `false` | 禁用整个 accordion |
 | `children` | `ReactNode` | — | `AccordionItem` 子元素 |
 | `...div props` | — | — | 透传给根元素 |
@@ -234,9 +243,7 @@ import {
 <Accordion
   type="single"
   collapsible
-  animationTimingFunction="ease-in-out"
-  animationDuration={300}
-  animationDelay={0}
+  animation={{ duration: 300, easing: "ease-in-out", delay: 0 }}
 >
   ...
 </Accordion>

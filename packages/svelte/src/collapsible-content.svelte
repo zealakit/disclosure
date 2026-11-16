@@ -1,6 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import { getCollapsibleAnimationStyleText } from "./animation.js";
+import { getAnimationStyleText } from "./animation-style.js";
 import { getCollapsibleContext } from "./collapsible-context.js";
 import { ensureCollapsibleStyles } from "./collapsible-styles.js";
 import { createPresence } from "./use-presence.svelte.js";
@@ -28,17 +28,11 @@ let {
 const context = getCollapsibleContext();
 const presence = createPresence({
   open: () => context.open,
-  animated: () => context.animated,
+  animated: () => context.animation.enabled,
   forceMount: () => forceMount,
 });
 
-const animationStyle = $derived(
-  getCollapsibleAnimationStyleText({
-    animationTimingFunction: context.animationTimingFunction,
-    animationDuration: context.animationDuration,
-    animationDelay: context.animationDelay,
-  }),
-);
+const animationStyle = $derived(getAnimationStyleText(context.animation));
 
 onMount(() => {
   ensureCollapsibleStyles();

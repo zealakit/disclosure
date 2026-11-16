@@ -4,7 +4,7 @@ import {
   getAccordionContext,
   getAccordionItemContext,
 } from "./accordion-context.js";
-import { getCollapsibleAnimationStyleText } from "./animation.js";
+import { getAnimationStyleText } from "./animation-style.js";
 import { ensureCollapsibleStyles } from "./collapsible-styles.js";
 import { createPresence } from "./use-presence.svelte.js";
 
@@ -32,17 +32,11 @@ const accordion = getAccordionContext();
 const item = getAccordionItemContext();
 const presence = createPresence({
   open: () => item.open,
-  animated: () => accordion.animated,
+  animated: () => accordion.animation.enabled,
   forceMount: () => forceMount,
 });
 
-const animationStyle = $derived(
-  getCollapsibleAnimationStyleText({
-    animationTimingFunction: accordion.animationTimingFunction,
-    animationDuration: accordion.animationDuration,
-    animationDelay: accordion.animationDelay,
-  }),
-);
+const animationStyle = $derived(getAnimationStyleText(accordion.animation));
 
 onMount(() => {
   ensureCollapsibleStyles();

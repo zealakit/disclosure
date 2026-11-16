@@ -1,3 +1,10 @@
+import {
+  type AnimationConfig,
+  type ResolvedAnimationConfig,
+  type AnimationTimingFunction,
+  getAnimationStyle,
+  warnLegacyAnimationProp,
+} from "./animation";
 import { prefersReducedMotion } from "./styles";
 
 let idCounter = 0;
@@ -35,6 +42,59 @@ export function parseNumberAttribute(
   }
   const value = Number(raw);
   return Number.isFinite(value) ? value : undefined;
+}
+
+/**
+ * Reads the animation config from the root's attributes.
+ *
+ * - `data-animation` (`"false"` disables; `""` / `"true"` enable)
+ * - `data-animation-duration`, `data-animation-delay`, `data-animation-easing`
+ *
+ * Deprecated attributes are still read when the new one is absent:
+ * `data-animated` and `data-animation-timing-function` (`linear` / `ease-in-out`).
+ */
+export function readAnimationSetting(root: Element): AnimationConfig {
+  let enabled: boolean | undefined;
+  if (root.hasAttribute("data-animation")) {
+    enabled = parseBooleanAttribute(root, "data-animation", true);
+  } else if (root.hasAttribute("data-animated")) {
+    warnLegacyAnimationProp("data-animated", 'data-animation="false"');
+    enabled = parseBooleanAttribute(root, "data-animated", true);
+  }
+
+  let easing: AnimationConfig["easing"];
+  const easingAttr = root.getAttribute("data-animation-easing");
+  if (easingAttr) {
+    easing = easingAttr;
+  } else {
+    const timing = root.getAttribute("data-animation-timing-function");
+    if (timing !== null) {
+      warnLegacyAnimationProp(
+        "data-animation-timing-function",
+        "data-animation-easing",
+      );
+    }
+    if (timing === "linear" || timing === "ease-in-out") {
+      easing = timing as AnimationTimingFunction;
+    }
+  }
+
+  return {
+    enabled,
+    duration: parseNumberAttribute(root, "data-animation-duration"),
+    delay: parseNumberAttribute(root, "data-animation-delay"),
+    easing,
+  };
+}
+
+/** Writes the animation CSS variables onto the content element. */
+export function applyAnimationStyle(
+  content: HTMLElement,
+  config: ResolvedAnimationConfig,
+): void {
+  for (const [name, value] of Object.entries(getAnimationStyle(config))) {
+    content.style.setProperty(name, value);
+  }
 }
 
 export function setDataState(element: Element, open: boolean): void {

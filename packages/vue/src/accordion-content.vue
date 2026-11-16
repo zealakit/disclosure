@@ -4,7 +4,7 @@ import {
   AccordionContextKey,
   AccordionItemContextKey,
 } from "./accordion-context";
-import { getCollapsibleAnimationStyle } from "./animation";
+import { getAnimationStyle } from "./animation";
 import { ensureCollapsibleStyles } from "./collapsible-styles";
 import type { AccordionContentProps } from "./accordion.types";
 import { usePresence } from "./use-presence";
@@ -27,7 +27,7 @@ if (!accordion || !item) {
 }
 
 const open = computed(() => item.open);
-const animated = computed(() => accordion.animated);
+const animated = computed(() => accordion.animation.enabled);
 const forceMount = toRef(props, "forceMount");
 const presence = usePresence(open, { animated, forceMount });
 
@@ -46,13 +46,7 @@ const panelAttrs = computed(() => {
 
 const state = computed(() => (presence.present.value ? "open" : "closed"));
 
-const animationStyle = computed(() =>
-  getCollapsibleAnimationStyle({
-    animationTimingFunction: accordion.animationTimingFunction,
-    animationDuration: accordion.animationDuration,
-    animationDelay: accordion.animationDelay,
-  }),
-);
+const animationStyle = computed(() => getAnimationStyle(accordion.animation));
 </script>
 
 <template>

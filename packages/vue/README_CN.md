@@ -49,10 +49,7 @@ import {
 | `defaultOpen` | `boolean` | `false` | 非受控模式下的初始展开状态 |
 | `open` | `boolean` | — | 受控的展开状态（`v-model:open`） |
 | `disabled` | `boolean` | `false` | 禁用整个 collapsible |
-| `animated` | `boolean` | `true` | 启用高度展开/收起动画 |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | 过渡缓动函数 |
-| `animationDuration` | `number` | `200` | 持续时间（毫秒） |
-| `animationDelay` | `number` | `0` | 延迟时间（毫秒） |
+| `animation` | `boolean \| AnimationConfig` | `true` | 高度展开/收起动画。`false` 关闭；传入对象可自定义 |
 
 ### `Collapsible` events
 
@@ -105,9 +102,7 @@ const open = ref(false);
 
 ```vue
 <Collapsible
-  animation-timing-function="linear"
-  :animation-duration="300"
-  :animation-delay="50"
+  :animation="{ duration: 300, delay: 50, easing: 'linear' }"
 >
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Content</CollapsibleContent>
@@ -115,13 +110,30 @@ const open = ref(false);
 ```
 
 ```vue
-<Collapsible :animated="false">
+<Collapsible :animation="false">
   <CollapsibleTrigger>Instant</CollapsibleTrigger>
   <CollapsibleContent>No height transition</CollapsibleContent>
 </Collapsible>
 ```
 
-当 `animated` 为 `false` 时，展开/收起会立即更新，duration/delay 将被忽略。`prefers-reduced-motion` 同样会禁用动画。
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | `boolean` | 传入配置时为 `true` | 设为 `false` 关闭动画。 |
+| `duration` | `number` | `200` | 毫秒。 |
+| `delay` | `number` | `0` | 毫秒。 |
+| `easing` | `string` | `"ease-in-out"` | `ease-in-out`、`linear` 或任意 CSS timing function。 |
+| `...` | — | — | 传 `true` 使用默认值，传 `false` 关闭。 |
+
+动画**默认开启**（Overlay 默认关闭），默认时长 200ms（Overlay 为 160ms），且没有 `type` / `direction`：Disclosure 只有一种内置高度过渡。同时传入时以 `animation` 为准，已弃用的 prop 会被忽略。
+
+关闭动画时，展开/收起会立即更新，duration/delay 将被忽略。`prefers-reduced-motion: reduce` 同样会禁用动画。
+
+| 已弃用（2.0.0 前仍可用，开发环境仅警告一次） | 改用 |
+| --- | --- |
+| `:animated="false"` | `:animation="false"` |
+| `:animation-duration="320"` | `:animation="{ duration: 320 }"` |
+| `:animation-delay="120"` | `:animation="{ delay: 120 }"` |
+| `animation-timing-function="linear"` | `:animation="{ easing: 'linear' }"` |
 
 内容 viewport 上的 CSS 变量：
 
@@ -170,10 +182,7 @@ import {
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `type` | `"single" \| "multiple"` | `"single"` | 选择模式 |
-| `animated` | `boolean` | `true` | 项目面板的高度动画 |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | 所有项目的缓动函数 |
-| `animationDuration` | `number` | `200` | 持续时间（毫秒） |
-| `animationDelay` | `number` | `0` | 延迟时间（毫秒） |
+| `animation` | `boolean \| AnimationConfig` | `true` | 项目面板的高度动画（所有项目共用）。`false` 关闭；传入对象可自定义 |
 | `disabled` | `boolean` | `false` | 禁用整个 accordion |
 
 动画相关 props 由 Accordion 根组件持有，并被所有项目继承。
@@ -246,9 +255,7 @@ import {
 <Accordion
   type="single"
   collapsible
-  animation-timing-function="ease-in-out"
-  :animation-duration="300"
-  :animation-delay="0"
+  :animation="{ duration: 300, easing: 'ease-in-out', delay: 0 }"
 >
   ...
 </Accordion>

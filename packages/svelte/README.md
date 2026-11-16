@@ -48,10 +48,7 @@ Peer dependency: `svelte` (^5).
 | `open` | `boolean` | — | Controlled open state (`bind:open`) |
 | `onOpenChange` | `(open: boolean) => void` | — | Called when open state should change |
 | `disabled` | `boolean` | `false` | Disables the whole collapsible |
-| `animated` | `boolean` | `true` | Enables height expand/collapse animation |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | Transition easing |
-| `animationDuration` | `number` | `200` | Duration in milliseconds |
-| `animationDelay` | `number` | `0` | Delay in milliseconds |
+| `animation` | `boolean \| AnimationConfig` | `true` | Height expand/collapse animation. `false` turns it off; pass an object to customise it |
 | `class` / other attrs | — | — | Forwarded to the root element |
 
 Root attributes: `data-slot="collapsible"`, `data-state="open" | "closed"`, `data-disabled` when disabled.
@@ -98,9 +95,7 @@ Put borders/padding on the content wrapper, not only on the animated viewport.
 
 ```svelte
 <Collapsible
-  animationTimingFunction="linear"
-  animationDuration={300}
-  animationDelay={50}
+  animation={{ duration: 300, delay: 50, easing: "linear" }}
 >
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Content</CollapsibleContent>
@@ -108,13 +103,30 @@ Put borders/padding on the content wrapper, not only on the animated viewport.
 ```
 
 ```svelte
-<Collapsible animated={false}>
+<Collapsible animation={false}>
   <CollapsibleTrigger>Instant</CollapsibleTrigger>
   <CollapsibleContent>No height transition</CollapsibleContent>
 </Collapsible>
 ```
 
-When `animated={false}`, open/close updates immediately and duration/delay are ignored. `prefers-reduced-motion` also disables motion.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | `boolean` | `true` with a config | Set `false` to turn the animation off. |
+| `duration` | `number` | `200` | Milliseconds. |
+| `delay` | `number` | `0` | Milliseconds. |
+| `easing` | `string` | `"ease-in-out"` | `ease-in-out`, `linear`, or any CSS timing function. |
+| `...` | — | — | Pass `true` for the defaults or `false` to disable. |
+
+Animation is **on by default** (Overlay: off), the default duration is 200ms (Overlay: 160ms), and there is no `type` / `direction`: Disclosure has one built-in height transition. When both are passed, `animation` wins and the deprecated props are ignored.
+
+When animation is off, open/close updates immediately and duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
+
+| Deprecated (works until 2.0.0, warns once in development) | Use |
+| --- | --- |
+| `animated={false}` | `animation={false}` |
+| `animationDuration={320}` | `animation={{ duration: 320 }}` |
+| `animationDelay={120}` | `animation={{ delay: 120 }}` |
+| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
 
 CSS variables on the content viewport:
 
@@ -161,10 +173,7 @@ CSS variables on the content viewport:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `type` | `"single" \| "multiple"` | `"single"` | Selection mode |
-| `animated` | `boolean` | `true` | Height animation for item panels |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | Easing for all items |
-| `animationDuration` | `number` | `200` | Duration in milliseconds |
-| `animationDelay` | `number` | `0` | Delay in milliseconds |
+| `animation` | `boolean \| AnimationConfig` | `true` | Height animation for item panels (shared by all items). `false` turns it off; pass an object to customise it |
 | `disabled` | `boolean` | `false` | Disables the whole accordion |
 | `class` / other attrs | — | — | Forwarded to the root element |
 
@@ -235,9 +244,7 @@ Keyboard: Arrow Up/Down, Home, End.
 <Accordion
   type="single"
   collapsible
-  animationTimingFunction="ease-in-out"
-  animationDuration={300}
-  animationDelay={0}
+  animation={{ duration: 300, easing: "ease-in-out", delay: 0 }}
 >
   ...
 </Accordion>

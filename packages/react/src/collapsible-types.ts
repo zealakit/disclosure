@@ -1,13 +1,22 @@
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
-import type { CollapsibleAnimationProps } from "./animation";
+import type { AnimationSetting, CollapsibleAnimationProps } from "./animation";
 
 export type {
+  AnimationConfig,
+  AnimationEasing,
+  AnimationSetting,
   AnimationTimingFunction,
   CollapsibleAnimationProps,
+  ResolvedAnimationConfig,
 } from "./animation";
 
 export type CollapsibleProps = HTMLAttributes<HTMLDivElement> &
   CollapsibleAnimationProps & {
+    /**
+     * Expand/collapse animation. `false` disables it; an object customises it.
+     * @default true
+     */
+    animation?: AnimationSetting;
     /**
      * Whether the collapsible is initially open (uncontrolled).
      * @default false

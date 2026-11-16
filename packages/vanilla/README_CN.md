@@ -73,6 +73,21 @@ IIFE 全局命名空间： **`ZealakitDisclosure`**。
 
 属性表、Accordion、动画与样式约定见 [README.md](https://github.com/zealakit/disclosure/blob/main/packages/vanilla/README.md)（英文）— 与各框架包行为一致。
 
+## 动画
+
+高度动画**默认开启**。在 Collapsible / Accordion 的**根节点**上配置：
+
+| 属性 | 说明 |
+| --- | --- |
+| `data-animation` | `"false"` 关闭；`""` / `"true"` 开启（默认开启） |
+| `data-animation-duration` | 时长（毫秒，默认 `200`） |
+| `data-animation-delay` | 延迟（毫秒，默认 `0`） |
+| `data-animation-easing` | `ease-in-out`、`linear` 或任意 CSS timing function（默认 `ease-in-out`） |
+
+已弃用（2.0.0 前仍可读取，开发环境仅警告一次；新属性优先）：`data-animated="false"` → `data-animation="false"`，`data-animation-timing-function` → `data-animation-easing`。
+
+动画**默认开启**（Overlay 默认关闭），默认时长 200ms（Overlay 为 160ms），且没有 `type` / `direction`。`prefers-reduced-motion: reduce` 会禁用动效。
+
 ## Agent skill
 
 [skills/disclosure-vanilla.md](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vanilla.md)

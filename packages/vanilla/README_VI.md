@@ -73,6 +73,21 @@ Chi tiết file `dist/*`: xem [README.md](https://github.com/zealakit/disclosure
 
 Bảng attribute, Accordion, animation và styling: xem [README.md](https://github.com/zealakit/disclosure/blob/main/packages/vanilla/README.md) (English) — cùng contract với các package framework.
 
+## Animation
+
+Animation chiều cao **bật mặc định**. Cấu hình trên **root** của Collapsible / Accordion:
+
+| Attribute | Mô tả |
+| --- | --- |
+| `data-animation` | `"false"` để tắt; `""` / `"true"` để bật (mặc định bật) |
+| `data-animation-duration` | Thời lượng ms (mặc định `200`) |
+| `data-animation-delay` | Độ trễ ms (mặc định `0`) |
+| `data-animation-easing` | `ease-in-out`, `linear`, hoặc bất kỳ CSS timing function nào (mặc định `ease-in-out`) |
+
+Đã deprecated (vẫn đọc đến 2.0.0, cảnh báo một lần ở môi trường dev; attribute mới được ưu tiên): `data-animated="false"` → `data-animation="false"`, `data-animation-timing-function` → `data-animation-easing`.
+
+Animation **bật mặc định** (Overlay: tắt), duration mặc định 200ms (Overlay: 160ms), và không có `type` / `direction`. `prefers-reduced-motion: reduce` sẽ tắt chuyển động.
+
 ## Agent skill
 
 [skills/disclosure-vanilla.md](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vanilla.md)

@@ -1,12 +1,20 @@
 import { getContext, setContext } from "svelte";
-import type { AnimationTimingFunction } from "./animation.js";
+import type {
+  AnimationTimingFunction,
+  ResolvedAnimationConfig,
+} from "./animation.js";
 
 export type CollapsibleContextValue = {
   get open(): boolean;
   get disabled(): boolean;
+  get animation(): ResolvedAnimationConfig;
+  /** @deprecated Use `animation.enabled`. */
   get animated(): boolean;
+  /** @deprecated Use `animation.easing`. */
   get animationTimingFunction(): AnimationTimingFunction;
+  /** @deprecated Use `animation.duration`. */
   get animationDuration(): number;
+  /** @deprecated Use `animation.delay`. */
   get animationDelay(): number;
   contentId: string;
   triggerId: string;

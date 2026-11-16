@@ -49,10 +49,7 @@ import {
 | `defaultOpen` | `boolean` | `false` | Trạng thái mở ban đầu khi dùng uncontrolled |
 | `open` | `boolean` | — | Trạng thái mở (controlled) (`v-model:open`) |
 | `disabled` | `boolean` | `false` | Vô hiệu hóa toàn bộ collapsible |
-| `animated` | `boolean` | `true` | Bật animation mở/đóng theo chiều cao |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | Hàm easing của transition |
-| `animationDuration` | `number` | `200` | Thời lượng tính bằng mili giây |
-| `animationDelay` | `number` | `0` | Độ trễ tính bằng mili giây |
+| `animation` | `boolean \| AnimationConfig` | `true` | Animation mở/đóng theo chiều cao. `false` để tắt; truyền object để tùy chỉnh |
 
 ### Events của `Collapsible`
 
@@ -105,9 +102,7 @@ const open = ref(false);
 
 ```vue
 <Collapsible
-  animation-timing-function="linear"
-  :animation-duration="300"
-  :animation-delay="50"
+  :animation="{ duration: 300, delay: 50, easing: 'linear' }"
 >
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Content</CollapsibleContent>
@@ -115,13 +110,30 @@ const open = ref(false);
 ```
 
 ```vue
-<Collapsible :animated="false">
+<Collapsible :animation="false">
   <CollapsibleTrigger>Instant</CollapsibleTrigger>
   <CollapsibleContent>No height transition</CollapsibleContent>
 </Collapsible>
 ```
 
-Khi `animated` là `false`, việc mở/đóng được cập nhật ngay lập tức và duration/delay bị bỏ qua. `prefers-reduced-motion` cũng sẽ tắt chuyển động.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `enabled` | `boolean` | `true` khi có config | Đặt `false` để tắt animation. |
+| `duration` | `number` | `200` | Mili giây. |
+| `delay` | `number` | `0` | Mili giây. |
+| `easing` | `string` | `"ease-in-out"` | `ease-in-out`, `linear`, hoặc bất kỳ CSS timing function nào. |
+| `...` | — | — | Truyền `true` để dùng mặc định, `false` để tắt. |
+
+Animation **bật mặc định** (Overlay: tắt), duration mặc định 200ms (Overlay: 160ms), và không có `type` / `direction`: Disclosure chỉ có một chuyển động chiều cao dựng sẵn. Khi truyền cả hai, `animation` được ưu tiên và các prop deprecated bị bỏ qua.
+
+Khi tắt animation, việc mở/đóng được cập nhật ngay lập tức và duration/delay bị bỏ qua. `prefers-reduced-motion: reduce` cũng sẽ tắt chuyển động.
+
+| Đã deprecated (vẫn hoạt động đến 2.0.0, cảnh báo một lần ở môi trường dev) | Thay bằng |
+| --- | --- |
+| `:animated="false"` | `:animation="false"` |
+| `:animation-duration="320"` | `:animation="{ duration: 320 }"` |
+| `:animation-delay="120"` | `:animation="{ delay: 120 }"` |
+| `animation-timing-function="linear"` | `:animation="{ easing: 'linear' }"` |
 
 Các CSS variable trên content viewport:
 
@@ -170,10 +182,7 @@ import {
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `type` | `"single" \| "multiple"` | `"single"` | Chế độ chọn |
-| `animated` | `boolean` | `true` | Animation chiều cao cho các panel của item |
-| `animationTimingFunction` | `"linear" \| "ease-in-out"` | `"ease-in-out"` | Easing cho tất cả item |
-| `animationDuration` | `number` | `200` | Thời lượng tính bằng mili giây |
-| `animationDelay` | `number` | `0` | Độ trễ tính bằng mili giây |
+| `animation` | `boolean \| AnimationConfig` | `true` | Animation chiều cao cho các panel của item (dùng chung cho mọi item). `false` để tắt; truyền object để tùy chỉnh |
 | `disabled` | `boolean` | `false` | Vô hiệu hóa toàn bộ accordion |
 
 Các prop animation do root Accordion quản lý và được mọi item kế thừa.
@@ -246,9 +255,7 @@ Bàn phím: Arrow Up/Down, Home, End.
 <Accordion
   type="single"
   collapsible
-  animation-timing-function="ease-in-out"
-  :animation-duration="300"
-  :animation-delay="0"
+  :animation="{ duration: 300, easing: 'ease-in-out', delay: 0 }"
 >
   ...
 </Accordion>
