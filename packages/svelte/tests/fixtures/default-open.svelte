@@ -3,10 +3,10 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 </script>
 
-<Collapsible defaultOpen animated={false}>
+<Collapsible defaultOpen animation={false}>
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Panel</CollapsibleContent>
 </Collapsible>

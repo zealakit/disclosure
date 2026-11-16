@@ -3,14 +3,14 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 </script>
 
-<Collapsible animated={false}>
+<Collapsible animation={false}>
   <CollapsibleTrigger>One</CollapsibleTrigger>
   <CollapsibleContent>First</CollapsibleContent>
 </Collapsible>
-<Collapsible animated={false}>
+<Collapsible animation={false}>
   <CollapsibleTrigger>Two</CollapsibleTrigger>
   <CollapsibleContent>Second</CollapsibleContent>
 </Collapsible>

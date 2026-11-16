@@ -1,17 +1,29 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/svelte";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import assert from "node:assert/strict";
+import { afterEach, describe, mock, test } from "node:test";
 import AccordionAnimatedFixture from "./fixtures/accordion-animated.svelte";
 import AccordionControlledFixture from "./fixtures/accordion-controlled.svelte";
 import AccordionDisabledItemFixture from "./fixtures/accordion-disabled-item.svelte";
 import AccordionMultipleFixture from "./fixtures/accordion-multiple.svelte";
 import AccordionNestedFixture from "./fixtures/accordion-nested.svelte";
 import AccordionSingleFixture from "./fixtures/accordion-single.svelte";
+import {
+  render,
+  cleanup,
+  getByRole,
+  getByText,
+  queryByText,
+  findByText,
+  waitFor,
+  click,
+  fireTransitionEnd,
+  keydown,
+  assertAttr,
+  assertFocused,
+  assertDisabled,
+  assertConnected,
+  assertCalledWith,
+  assertLastCalledWith,
+} from "./support/dom.ts";
 
 afterEach(() => {
   cleanup();
@@ -21,90 +33,91 @@ describe("@zealakit/disclosure-svelte Accordion", () => {
   test("single mode opens one item and keeps it open when collapsible is false", async () => {
     render(AccordionSingleFixture);
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(screen.getByText("General content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "General" }));
+    assertConnected(getByText("General content"));
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(screen.getByText("General content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "General" }));
+    assertConnected(getByText("General content"));
 
-    await fireEvent.click(screen.getByRole("button", { name: "Advanced" }));
-    expect(screen.queryByText("General content")).toBeNull();
-    expect(screen.getByText("Advanced content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "Advanced" }));
+    assert.equal(queryByText("General content"), null);
+    assertConnected(getByText("Advanced content"));
   });
 
   test("single mode collapsible closes the open item", async () => {
     render(AccordionSingleFixture, { props: { collapsible: true } });
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(screen.queryByText("General content")).toBeNull();
+    await click(getByRole("button", { name: "General" }));
+    await click(getByRole("button", { name: "General" }));
+    assert.equal(queryByText("General content"), null);
   });
 
   test("multiple mode keeps several items open", async () => {
     render(AccordionMultipleFixture);
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    await fireEvent.click(screen.getByRole("button", { name: "Advanced" }));
-    expect(screen.getByText("General content")).toBeInTheDocument();
-    expect(screen.getByText("Advanced content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "General" }));
+    await click(getByRole("button", { name: "Advanced" }));
+    assertConnected(getByText("General content"));
+    assertConnected(getByText("Advanced content"));
   });
 
   test("supports controlled single value", async () => {
-    const onValueChange = vi.fn();
+    const onValueChange = mock.fn();
     render(AccordionControlledFixture, { props: { onValueChange } });
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(onValueChange).toHaveBeenCalledWith("general");
-    expect(screen.getByText("General content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "General" }));
+    assertCalledWith(onValueChange, "general");
+    assertConnected(getByText("General content"));
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(onValueChange).toHaveBeenLastCalledWith(null);
-    expect(screen.queryByText("General content")).toBeNull();
+    await click(getByRole("button", { name: "General" }));
+    assertLastCalledWith(onValueChange, null);
+    assert.equal(queryByText("General content"), null);
   });
 
   test("disabled item does not open", async () => {
     render(AccordionDisabledItemFixture);
 
-    const trigger = screen.getByRole("button", { name: "Locked" });
-    await fireEvent.click(trigger);
-    expect(trigger).toBeDisabled();
-    expect(screen.queryByText("Hidden")).toBeNull();
+    const trigger = getByRole("button", { name: "Locked" });
+    await click(trigger);
+    assertDisabled(trigger);
+    assert.equal(queryByText("Hidden"), null);
   });
 
   test("supports keyboard navigation with Home and End", async () => {
     render(AccordionSingleFixture);
 
-    const general = screen.getByRole("button", { name: "General" });
-    const advanced = screen.getByRole("button", { name: "Advanced" });
+    const general = getByRole("button", { name: "General" });
+    const advanced = getByRole("button", { name: "Advanced" });
     general.focus();
 
-    await fireEvent.keyDown(general, { key: "ArrowDown" });
-    expect(advanced).toHaveFocus();
+    await keydown(general, "ArrowDown");
+    assertFocused(advanced);
 
-    await fireEvent.keyDown(advanced, { key: "ArrowDown" });
-    expect(general).toHaveFocus();
+    await keydown(advanced, "ArrowDown");
+    assertFocused(general);
 
-    await fireEvent.keyDown(general, { key: "ArrowUp" });
-    expect(advanced).toHaveFocus();
+    await keydown(general, "ArrowUp");
+    assertFocused(advanced);
 
-    await fireEvent.keyDown(advanced, { key: "Home" });
-    expect(general).toHaveFocus();
+    await keydown(advanced, "Home");
+    assertFocused(general);
 
-    await fireEvent.keyDown(general, { key: "End" });
-    expect(advanced).toHaveFocus();
+    await keydown(general, "End");
+    assertFocused(advanced);
   });
 
   test("exposes accordion accessibility relationships", () => {
     render(AccordionSingleFixture, { props: { defaultValue: "general" } });
 
-    const trigger = screen.getByRole("button", { name: "General" });
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    const trigger = getByRole("button", { name: "General" });
+    assertAttr(trigger, "aria-expanded", "true");
     const panel = document.getElementById(
       trigger.getAttribute("aria-controls") ?? "",
     );
-    expect(panel?.tagName).toBe("SECTION");
-    expect(panel).toHaveAttribute("aria-labelledby", trigger.id);
-    expect(trigger.closest('[data-slot="accordion-heading"]')?.tagName).toBe(
+    assert.equal(panel?.tagName, "SECTION");
+    assertAttr(panel, "aria-labelledby", trigger.id);
+    assert.equal(
+      trigger.closest('[data-slot="accordion-heading"]')?.tagName,
       "H3",
     );
   });
@@ -112,37 +125,35 @@ describe("@zealakit/disclosure-svelte Accordion", () => {
   test("supports nested accordions", async () => {
     render(AccordionNestedFixture);
 
-    await fireEvent.click(screen.getByRole("button", { name: "Outer" }));
-    expect(screen.getByText("Outer content")).toBeInTheDocument();
-    expect(screen.queryByText("Inner content")).toBeNull();
+    await click(getByRole("button", { name: "Outer" }));
+    assertConnected(getByText("Outer content"));
+    assert.equal(queryByText("Inner content"), null);
 
-    await fireEvent.click(screen.getByRole("button", { name: "Inner" }));
-    expect(screen.getByText("Inner content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "Inner" }));
+    assertConnected(getByText("Inner content"));
   });
 
   test("animates by default and unmounts after transitionend", async () => {
     render(AccordionAnimatedFixture);
-    const trigger = screen.getByRole("button", { name: "General" });
+    const trigger = getByRole("button", { name: "General" });
 
-    await fireEvent.click(trigger);
-    const content = (await screen.findByText("General content")).closest(
+    await click(trigger);
+    const content = (await findByText("General content")).closest(
       '[data-slot="accordion-content"]',
     ) as HTMLElement;
-    expect(content).toHaveAttribute("data-animated");
+    assertAttr(content, "data-animated");
     await waitFor(() => {
-      expect(content).toHaveAttribute("data-state", "open");
+      assertAttr(content, "data-state", "open");
     });
 
-    await fireEvent.click(trigger);
-    expect(screen.getByText("General content")).toBeInTheDocument();
-    expect(content).toHaveAttribute("data-state", "closed");
-    expect(content).toHaveAttribute("inert");
+    await click(trigger);
+    assertConnected(getByText("General content"));
+    assertAttr(content, "data-state", "closed");
+    assertAttr(content, "inert");
 
-    await fireEvent.transitionEnd(content, {
-      propertyName: "grid-template-rows",
-    });
+    await fireTransitionEnd(content, "grid-template-rows");
     await waitFor(() => {
-      expect(screen.queryByText("General content")).toBeNull();
+      assert.equal(queryByText("General content"), null);
     });
   });
 });

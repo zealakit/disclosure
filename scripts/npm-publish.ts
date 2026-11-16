@@ -282,9 +282,6 @@ function checkVersionAvailability(pkg: PackageConfig): void {
 
 function assertBuiltEntryPoints(pkg: PackageConfig): void {
   const required = ["dist/index.js", "dist/index.d.ts"];
-  if (pkg.id === "vanilla") {
-    required.push("dist/index.global.js", "dist/index.global.min.js");
-  }
   for (const relativePath of required) {
     const absolutePath = path.join(pkg.packageDir, relativePath);
     if (!fs.existsSync(absolutePath)) {

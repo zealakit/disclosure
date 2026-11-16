@@ -1,4 +1,4 @@
-# Disclosure
+# Zealakit Disclosure
 
 [English](https://github.com/zealakit/disclosure/blob/main/README.md) | [Tiếng Việt](https://github.com/zealakit/disclosure/blob/main/README_VI.md) | [中文](https://github.com/zealakit/disclosure/blob/main/README_CN.md)
 
@@ -14,7 +14,6 @@
 只提供交互行为与无障碍能力 — 不含颜色、图标或布局。默认内置高度动画。通过 `data-slot` 和 `data-state` 自行编写样式。
 
 > **Note**
->
 > Disclosure 不是完整 UI 库的替代品。适合在组件库里的 Accordion/Collapsible 难以定制时使用 — 或者你只需要这一个基础组件，而不想引入整套大型设计系统。
 
 ## Packages
@@ -30,7 +29,7 @@
 
 完整 API、props 与使用指南见上方 package 文档。
 
-## 安装
+## Installation
 
 使用你喜欢的包管理器（`npm`、`pnpm`、`yarn`、`bun` …）：
 
@@ -54,17 +53,7 @@ pnpm dev:vanilla
 pnpm dev:nextjs
 ```
 
-## Dependency monitoring
-
-本地 UI，用于查看 root 与 `packages/*` 的依赖版本（排除 `examples/`）：
-
-```bash
-pnpm monitor
-```
-
-打开 http://127.0.0.1:4177 — 详见 [monitor/README.md](https://github.com/zealakit/disclosure/blob/main/monitor/README.md)。
-
-## AI Agent Skills
+## Agent Skills
 
 面向 AI coding agent 的分框架使用说明：
 

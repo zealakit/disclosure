@@ -1,6 +1,6 @@
 {
   "name": "@zealakit/disclosure-vanilla",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Headless disclosure primitives for vanilla JavaScript and static HTML.",
   "keywords": [
     "disclosure",
@@ -13,9 +13,7 @@
     "zealakit",
     "vanilla",
     "javascript",
-    "html",
-    "cdn",
-    "iife"
+    "html"
   ],
   "author": "nqhed - Huy Ed. Nguyen",
   "license": "MIT",
@@ -24,48 +22,44 @@
     "url": "git+https://github.com/zealakit/disclosure.git",
     "directory": "packages/vanilla"
   },
+  "homepage": "https://github.com/zealakit/disclosure#readme",
+  "bugs": {
+    "url": "https://github.com/zealakit/disclosure/issues"
+  },
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "sideEffects": false,
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "browser": "./dist/index.js",
-  "unpkg": "./dist/index.global.min.js",
-  "jsdelivr": "./dist/index.global.min.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./global": {
-      "default": "./dist/index.global.min.js"
-    },
-    "./global.js": "./dist/index.global.js",
-    "./global.min.js": "./dist/index.global.min.js",
     "./package.json": "./package.json"
   },
-  "publishConfig": {
-    "access": "public"
+  "devDependencies": {
+    "happy-dom": "^21.0.4"
   },
   "scripts": {
-    "build": "rm -rf dist && rslib build",
-    "dev": "rslib build --watch",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "pack:check": "npm pack --dry-run"
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tests/tsconfig.json --noEmit",
+    "test": "pnpm build && node --import ./tests/setup.ts --test tests/*.test.ts",
+    "test:watch": "node --import ./tests/setup.ts --test --watch tests/*.test.ts",
+    "clean": "rm -rf dist",
+    "prepack": "pnpm run build"
   },
-  "devDependencies": {
-    "@rslib/core": "^0.16.1",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "happy-dom": "^20.0.10",
-    "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
   }
 }

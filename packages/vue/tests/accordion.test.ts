@@ -1,11 +1,22 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/vue";
-import { afterEach, describe, expect, test } from "vitest";
+import assert from "node:assert/strict";
+import { afterEach, describe, test } from "node:test";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../src";
+} from "../dist/index.js";
+import {
+  render,
+  cleanup,
+  getByRole,
+  getByText,
+  queryByText,
+  click,
+  keydown,
+  assertFocused,
+  assertConnected,
+} from "./support/dom.ts";
 
 afterEach(() => {
   cleanup();
@@ -21,7 +32,7 @@ describe("@zealakit/disclosure-vue Accordion", () => {
         AccordionContent,
       },
       template: `
-        <Accordion type="single" :animated="false">
+        <Accordion type="single" :animation="false">
           <AccordionItem value="general">
             <AccordionTrigger>General</AccordionTrigger>
             <AccordionContent>General content</AccordionContent>
@@ -34,12 +45,12 @@ describe("@zealakit/disclosure-vue Accordion", () => {
       `,
     });
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(screen.getByText("General content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "General" }));
+    assertConnected(getByText("General content"));
 
-    await fireEvent.click(screen.getByRole("button", { name: "Advanced" }));
-    expect(screen.queryByText("General content")).toBeNull();
-    expect(screen.getByText("Advanced content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "Advanced" }));
+    assert.equal(queryByText("General content"), null);
+    assertConnected(getByText("Advanced content"));
   });
 
   test("single collapsible closes open item", async () => {
@@ -51,7 +62,7 @@ describe("@zealakit/disclosure-vue Accordion", () => {
         AccordionContent,
       },
       template: `
-        <Accordion type="single" collapsible :animated="false">
+        <Accordion type="single" collapsible :animation="false">
           <AccordionItem value="general">
             <AccordionTrigger>General</AccordionTrigger>
             <AccordionContent>General content</AccordionContent>
@@ -60,9 +71,9 @@ describe("@zealakit/disclosure-vue Accordion", () => {
       `,
     });
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    expect(screen.queryByText("General content")).toBeNull();
+    await click(getByRole("button", { name: "General" }));
+    await click(getByRole("button", { name: "General" }));
+    assert.equal(queryByText("General content"), null);
   });
 
   test("multiple mode keeps several items open", async () => {
@@ -74,7 +85,7 @@ describe("@zealakit/disclosure-vue Accordion", () => {
         AccordionContent,
       },
       template: `
-        <Accordion type="multiple" :animated="false">
+        <Accordion type="multiple" :animation="false">
           <AccordionItem value="general">
             <AccordionTrigger>General</AccordionTrigger>
             <AccordionContent>General content</AccordionContent>
@@ -87,10 +98,10 @@ describe("@zealakit/disclosure-vue Accordion", () => {
       `,
     });
 
-    await fireEvent.click(screen.getByRole("button", { name: "General" }));
-    await fireEvent.click(screen.getByRole("button", { name: "Advanced" }));
-    expect(screen.getByText("General content")).toBeInTheDocument();
-    expect(screen.getByText("Advanced content")).toBeInTheDocument();
+    await click(getByRole("button", { name: "General" }));
+    await click(getByRole("button", { name: "Advanced" }));
+    assertConnected(getByText("General content"));
+    assertConnected(getByText("Advanced content"));
   });
 
   test("supports keyboard navigation", async () => {
@@ -102,7 +113,7 @@ describe("@zealakit/disclosure-vue Accordion", () => {
         AccordionContent,
       },
       template: `
-        <Accordion type="single" :animated="false">
+        <Accordion type="single" :animation="false">
           <AccordionItem value="general">
             <AccordionTrigger>General</AccordionTrigger>
             <AccordionContent>General content</AccordionContent>
@@ -115,12 +126,12 @@ describe("@zealakit/disclosure-vue Accordion", () => {
       `,
     });
 
-    const general = screen.getByRole("button", { name: "General" });
-    const advanced = screen.getByRole("button", { name: "Advanced" });
+    const general = getByRole("button", { name: "General" });
+    const advanced = getByRole("button", { name: "Advanced" });
     general.focus();
-    await fireEvent.keyDown(general, { key: "ArrowDown" });
-    expect(advanced).toHaveFocus();
-    await fireEvent.keyDown(advanced, { key: "Home" });
-    expect(general).toHaveFocus();
+    await keydown(general, "ArrowDown");
+    assertFocused(advanced);
+    await keydown(advanced, "Home");
+    assertFocused(general);
   });
 });

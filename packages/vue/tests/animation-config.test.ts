@@ -1,5 +1,5 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/vue";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import assert from "node:assert/strict";
+import { afterEach, describe, test } from "node:test";
 import {
   type AnimationConfig,
   Accordion,
@@ -9,11 +9,18 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../src";
+} from "../dist/index.js";
+import {
+  render,
+  cleanup,
+  getByText,
+  queryByText,
+  click,
+  assertMatchObject,
+} from "./support/dom.ts";
 
 afterEach(() => {
   cleanup();
-  vi.restoreAllMocks();
 });
 
 // Exhaustive key check: fails to compile if AnimationConfig drifts from the shared contract.
@@ -26,7 +33,7 @@ const _keys = {
 void _keys;
 
 function snapshot(selector: string) {
-  const content = screen.getByText("Panel").closest(selector) as HTMLElement;
+  const content = getByText("Panel").closest(selector) as HTMLElement;
   return {
     animated: content.hasAttribute("data-animated"),
     duration: content.style.getPropertyValue(
@@ -53,38 +60,33 @@ function renderCollapsible(attrs: string, setup: object = {}) {
 }
 
 describe("@zealakit/disclosure-vue animation option", () => {
-  const cases: Array<[string, string, string]> = [
-    ["default", "", ""],
-    ["animated=false", ':animated="false"', ':animation="false"'],
-    ["duration", ':animation-duration="320"', ':animation="{ duration: 320 }"'],
-    ["delay", ':animation-delay="120"', ':animation="{ delay: 120 }"'],
+  const cases: Array<[string, string, Record<string, unknown>]> = [
     [
-      "easing",
-      'animation-timing-function="linear"',
-      ":animation=\"{ easing: 'linear' }\"",
+      "default",
+      "",
+      {
+        animated: true,
+        duration: "200ms",
+        easing: "ease-in-out",
+        delay: "0ms",
+      },
     ],
+    ["false", ':animation="false"', { animated: false, duration: "200ms" }],
+    ["duration", ':animation="{ duration: 320 }"', { duration: "320ms" }],
+    ["delay", ':animation="{ delay: 120 }"', { delay: "120ms" }],
+    ["easing", ":animation=\"{ easing: 'linear' }\"", { easing: "linear" }],
     [
       "all",
-      ':animated="false" :animation-duration="10" :animation-delay="20" animation-timing-function="linear"',
       ":animation=\"{ enabled: false, duration: 10, delay: 20, easing: 'linear' }\"",
+      { animated: false, duration: "10ms", delay: "20ms", easing: "linear" },
     ],
   ];
 
-  for (const [name, legacy, next] of cases) {
-    test(`${name}: animation matches legacy props`, () => {
-      vi.spyOn(console, "warn").mockImplementation(() => {});
-      expect(renderCollapsible(next)).toEqual(renderCollapsible(legacy));
+  for (const [name, attrs, expected] of cases) {
+    test(name, () => {
+      assertMatchObject(renderCollapsible(attrs), expected);
     });
   }
-
-  test("animation wins over legacy props", () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    const result = renderCollapsible(
-      ':animation="{ duration: 50 }" :animation-duration="999" :animated="false"',
-    );
-    expect(result.duration).toBe("50ms");
-    expect(result.animated).toBe(true);
-  });
 
   test("animation={false} unmounts immediately on close", async () => {
     render({
@@ -95,8 +97,8 @@ describe("@zealakit/disclosure-vue animation option", () => {
           <CollapsibleContent>Panel</CollapsibleContent>
         </Collapsible>`,
     });
-    await fireEvent.click(screen.getByText("Toggle"));
-    expect(screen.queryByText("Panel")).toBeNull();
+    await click(getByText("Toggle"));
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("Accordion reads animation config", () => {
@@ -115,7 +117,7 @@ describe("@zealakit/disclosure-vue animation option", () => {
           </AccordionItem>
         </Accordion>`,
     });
-    expect(snapshot('[data-slot="accordion-content"]')).toMatchObject({
+    assertMatchObject(snapshot('[data-slot="accordion-content"]'), {
       duration: "320ms",
       easing: "linear",
     });

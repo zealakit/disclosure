@@ -4,7 +4,7 @@ import {
   useState,
   type TransitionEvent,
 } from "react";
-import { prefersReducedMotion } from "./collapsible-styles";
+import { prefersReducedMotion } from "./styles.js";
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;

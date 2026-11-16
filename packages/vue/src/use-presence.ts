@@ -1,5 +1,5 @@
 import { computed, onMounted, ref, watch, type Ref } from "vue";
-import { prefersReducedMotion } from "./collapsible-styles";
+import { prefersReducedMotion } from "./styles.js";
 
 export function usePresence(
   open: Ref<boolean>,

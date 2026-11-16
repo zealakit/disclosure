@@ -1,9 +1,8 @@
 <script lang="ts">
 import { untrack } from "svelte";
 import {
-  resolveAnimationSetting,
+  normalizeAnimationConfig,
   type AnimationSetting,
-  type AnimationTimingFunction,
 } from "./animation.js";
 import { setCollapsibleContext } from "./collapsible-context.js";
 
@@ -13,14 +12,6 @@ type Props = {
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
   animation?: AnimationSetting;
-  /** @deprecated Use `animation`. */
-  animated?: boolean;
-  /** @deprecated Use `animation`. */
-  animationTimingFunction?: AnimationTimingFunction;
-  /** @deprecated Use `animation`. */
-  animationDuration?: number;
-  /** @deprecated Use `animation`. */
-  animationDelay?: number;
   children?: import("svelte").Snippet;
   class?: string;
   [key: string]: unknown;
@@ -32,10 +23,6 @@ let {
   onOpenChange,
   disabled = false,
   animation,
-  animated,
-  animationTimingFunction,
-  animationDuration,
-  animationDelay,
   children,
   class: className,
   ...rest
@@ -44,15 +31,7 @@ let {
 let uncontrolledOpen = $state(untrack(() => defaultOpen));
 const instanceId = crypto.randomUUID();
 
-const resolvedAnimation = $derived(
-  resolveAnimationSetting({
-    animation,
-    animated,
-    animationTimingFunction,
-    animationDuration,
-    animationDelay,
-  }),
-);
+const resolvedAnimation = $derived(normalizeAnimationConfig(animation));
 
 const resolvedOpen = $derived(
   open !== undefined ? Boolean(open) : uncontrolledOpen,
@@ -79,18 +58,6 @@ setCollapsibleContext({
   },
   get animation() {
     return resolvedAnimation;
-  },
-  get animated() {
-    return resolvedAnimation.enabled;
-  },
-  get animationTimingFunction() {
-    return resolvedAnimation.easing as AnimationTimingFunction;
-  },
-  get animationDuration() {
-    return resolvedAnimation.duration;
-  },
-  get animationDelay() {
-    return resolvedAnimation.delay;
   },
   contentId,
   triggerId,

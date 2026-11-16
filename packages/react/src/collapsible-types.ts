@@ -1,42 +1,40 @@
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
-import type { AnimationSetting, CollapsibleAnimationProps } from "./animation";
+import type { AnimationSetting } from "./animation.js";
 
 export type {
   AnimationConfig,
   AnimationEasing,
   AnimationSetting,
   AnimationTimingFunction,
-  CollapsibleAnimationProps,
   ResolvedAnimationConfig,
-} from "./animation";
+} from "./animation.js";
 
-export type CollapsibleProps = HTMLAttributes<HTMLDivElement> &
-  CollapsibleAnimationProps & {
-    /**
-     * Expand/collapse animation. `false` disables it; an object customises it.
-     * @default true
-     */
-    animation?: AnimationSetting;
-    /**
-     * Whether the collapsible is initially open (uncontrolled).
-     * @default false
-     */
-    defaultOpen?: boolean;
-    /**
-     * Controlled open state.
-     */
-    open?: boolean;
-    /**
-     * Called when the open state changes.
-     */
-    onOpenChange?: (open: boolean) => void;
-    /**
-     * Whether user interaction is disabled.
-     * @default false
-     */
-    disabled?: boolean;
-    children?: ReactNode;
-  };
+export type CollapsibleProps = HTMLAttributes<HTMLDivElement> & {
+  /**
+   * Expand/collapse animation. `false` disables it; an object customises it.
+   * @default true
+   */
+  animation?: AnimationSetting;
+  /**
+   * Whether the collapsible is initially open (uncontrolled).
+   * @default false
+   */
+  defaultOpen?: boolean;
+  /**
+   * Controlled open state.
+   */
+  open?: boolean;
+  /**
+   * Called when the open state changes.
+   */
+  onOpenChange?: (open: boolean) => void;
+  /**
+   * Whether user interaction is disabled.
+   * @default false
+   */
+  disabled?: boolean;
+  children?: ReactNode;
+};
 
 export type CollapsibleTriggerProps =
   ButtonHTMLAttributes<HTMLButtonElement> & {

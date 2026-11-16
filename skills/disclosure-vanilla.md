@@ -1,15 +1,13 @@
-# Disclosure Vanilla Skill
+# Disclosure for Vanilla JS
 
 Practical instructions for AI coding agents using `@zealakit/disclosure-vanilla`.
 
-## A. Overview
+## Install
 
 Disclosure provides **headless** Collapsible and Accordion primitives for vanilla JavaScript and static HTML.
 
 - Declarative HTML via `data-*` attributes + a small `createDisclosure()` initializer.
 - State, accessibility, and built-in height animation are included.
-- Visual styling is owned by the consumer (CSS via `data-slot` / `data-state`).
-- Put padding, borders, and backgrounds on the content element’s class/style (moved to `[data-collapsible-content-wrapper]` at init).
 
 **Primitives**
 
@@ -19,8 +17,6 @@ Disclosure provides **headless** Collapsible and Accordion primitives for vanill
 | Accordion | `data-accordion` | Grouped panels with exclusive (`single`) or multi (`multiple`) selection |
 
 Do **not** reimplement open-state machinery the library already provides. Do **not** pull in React/Vue/Svelte for this package.
-
-## B. Installation
 
 ### npm / bundler
 
@@ -36,38 +32,30 @@ Always **pin a version** in production examples and generated snippets. Never re
 
 | Artifact | Path |
 | --- | --- |
-| ESM | `dist/index.js` (jsDelivr `/+esm`, esm.sh) |
-| IIFE (min) | `dist/index.global.min.js` |
-| IIFE | `dist/index.global.js` |
+| ESM only | `dist/index.js` (jsDelivr `/+esm`, esm.sh) |
 
-IIFE global: **`ZealakitDisclosure`** → `ZealakitDisclosure.createDisclosure()`.
+The 1.x IIFE build and `ZealakitDisclosure` global were removed in 2.0.0.
 
 ```html
 <!-- Native ESM CDN -->
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2.0.0/+esm";
   const disclosure = createDisclosure();
-</script>
-
-<!-- Direct script CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/dist/index.global.min.js"></script>
-<script>
-  const disclosure = ZealakitDisclosure.createDisclosure();
 </script>
 ```
 
-Also valid: `https://esm.sh/@zealakit/disclosure-vanilla@1.0.0`.
+Also valid: `https://esm.sh/@zealakit/disclosure-vanilla@2.0.0`.
 
-## C. Imports
+## Import
 
 ```ts
 import {
   createDisclosure,
-  DEFAULT_ANIMATION_DURATION_MS,
-  DEFAULT_ANIMATION_DELAY_MS,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
-  resolveAnimationConfig,
-  getCollapsibleAnimationStyle,
+  DEFAULT_ANIMATION_DURATION,
+  DEFAULT_ANIMATION_DELAY,
+  DEFAULT_ANIMATION_EASING,
+  normalizeAnimationConfig,
+  getAnimationStyle,
   ensureCollapsibleStyles,
   prefersReducedMotion,
 } from "@zealakit/disclosure-vanilla";
@@ -75,12 +63,32 @@ import {
 import type {
   CreateDisclosureOptions,
   DisclosureController,
-  CollapsibleAnimationProps,
+  AnimationConfig,
+  AnimationSetting,
   AnimationTimingFunction,
 } from "@zealakit/disclosure-vanilla";
 ```
 
-## D. Initialization
+## Rules
+
+Avoid these mistakes:
+
+1. Forgetting `createDisclosure()` after writing markup — nothing is interactive until init.
+2. Using several independent Collapsibles when exclusive open state is required — use Accordion `single`.
+3. Non-button triggers (`div`/`span` with click handlers).
+4. Missing `data-value` on accordion items.
+5. Adding custom height / `grid-template-rows` animation CSS on the viewport.
+6. Styling only `[data-slot="collapsible-content"]` for borders/padding — style the content class / wrapper.
+7. Passing an invalid `easing` — use `ease-in-out`, `linear`, or any valid CSS timing function.
+8. Treating `data-animation-duration` as seconds — it is **ms**.
+9. Using `data-collapsible` on `multiple` — no effect.
+10. Expecting auto-discovery of dynamically inserted nodes without `refresh()`.
+11. Calling `createDisclosure()` many times instead of one controller + `refresh()`.
+12. Nesting without unique per-accordion `data-value`s when treating separate trees as one group.
+13. Shipping CDN snippets with `@latest` / unpinned URLs — always pin `@x.y.z`.
+14. Using the removed 1.x IIFE global (`ZealakitDisclosure.createDisclosure()`) — import `createDisclosure` from the ESM build instead.
+
+## Initialization
 
 ```ts
 // Entire document
@@ -97,7 +105,7 @@ disclosure.destroy(); // remove listeners; restore detached content
 - Duplicate `createDisclosure()` on already-initialized roots does **not** double-bind listeners.
 - Prefer one controller per page/region; use `refresh()` for dynamic HTML.
 
-## E. Collapsible
+## Collapsible
 
 ```html
 <div data-disclosure>
@@ -126,7 +134,7 @@ disclosure.destroy(); // remove listeners; restore detached content
 
 Triggers must be native `<button type="button">`. The library sets `aria-expanded` and `aria-controls` (uses existing `id` on content when present).
 
-## F. Accordion
+## Accordion
 
 ```html
 <div data-accordion data-accordion-type="single" data-collapsible>
@@ -169,7 +177,7 @@ Supported. Nest a full `data-accordion` tree inside outer content. Keep `data-va
 
 Keyboard (enabled triggers): Arrow Up/Down, Home, End.
 
-## G. Animation
+## Animation
 
 Height animation is **on by default**.
 
@@ -184,33 +192,9 @@ Set on Collapsible or Accordion **root**. Accordion animation is root-owned.
 
 When `data-animation="false"`, duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
 
-Deprecated attributes (still read, warn once in development; the new attribute wins when both are set):
-
-| Deprecated | Use |
-| --- | --- |
-| `data-animated="false"` | `data-animation="false"` |
-| `data-animation-timing-function="linear"` | `data-animation-easing="linear"` |
-
 Do **not** reimplement height animation with custom CSS on the viewport. Style the inner wrapper instead.
 
-## H. Accessibility
-
-Provided by the library:
-
-- Collapsible trigger: `aria-expanded`, `aria-controls`
-- Accordion trigger: `aria-expanded`, `aria-controls`; content: `aria-labelledby` (+ `role="region"` on `div` panels)
-- Accordion keyboard navigation
-- Disabled via `disabled` / `data-disabled`
-- Closed force-mounted content uses `inert` (and `hidden` when not animated)
-
-Requirements for agents:
-
-- Keep triggers as native buttons (never non-interactive clickables).
-- Give each accordion item a stable unique `data-value`.
-- Prefer heading wrappers (`h2`–`h6`) around accordion triggers.
-- Do not strip `aria-*` carelessly.
-
-## I. Dynamic content & cleanup
+## Lifecycle
 
 1. Insert markup into the DOM.
 2. Call `refresh()` on the existing controller (or `destroy()` then `createDisclosure()` again).
@@ -218,19 +202,28 @@ Requirements for agents:
 
 Do not rely on MutationObserver — the API is explicit.
 
-## J. Common mistakes
+## Styling
 
-1. Forgetting `createDisclosure()` after writing markup — nothing is interactive until init.
-2. Using several independent Collapsibles when exclusive open state is required — use Accordion `single`.
-3. Non-button triggers (`div`/`span` with click handlers).
-4. Missing `data-value` on accordion items.
-5. Adding custom height / `grid-template-rows` animation CSS on the viewport.
-6. Styling only `[data-slot="collapsible-content"]` for borders/padding — style the content class / wrapper.
-7. Unsupported easing strings — only `linear` and `ease-in-out`.
-8. Treating `data-animation-duration` as seconds — it is **ms**.
-9. Using `data-collapsible` on `multiple` — no effect.
-10. Expecting auto-discovery of dynamically inserted nodes without `refresh()`.
-11. Calling `createDisclosure()` many times instead of one controller + `refresh()`.
-12. Nesting without unique per-accordion `data-value`s when treating separate trees as one group.
-13. Shipping CDN snippets with `@latest` / unpinned URLs — always pin `@x.y.z`.
-14. Calling `createDisclosure` as a bare global after the IIFE build — use `ZealakitDisclosure.createDisclosure()`.
+- Visual styling is owned by the consumer (CSS via `data-slot` / `data-state`).
+- Put padding, borders, and backgrounds on the content element’s class/style (moved to `[data-collapsible-content-wrapper]` at init).
+
+## Verify
+
+Check the rendered DOM for:
+
+- [ ] Collapsible trigger: `aria-expanded`, `aria-controls`
+- [ ] Accordion trigger: `aria-expanded`, `aria-controls`; content: `aria-labelledby` (+ `role="region"` on `div` panels)
+- [ ] Accordion keyboard navigation
+- [ ] Disabled via `disabled` / `data-disabled`
+- [ ] Closed force-mounted content uses `inert` (and `hidden` when not animated)
+
+Before finishing:
+
+- [ ] Keep triggers as native buttons (never non-interactive clickables).
+- [ ] Give each accordion item a stable unique `data-value`.
+- [ ] Prefer heading wrappers (`h2`–`h6`) around accordion triggers.
+- [ ] Do not strip `aria-*` carelessly.
+
+## Full API
+
+Props, events, and options: [packages/vanilla/README.md](https://github.com/zealakit/disclosure/blob/main/packages/vanilla/README.md).

@@ -1,14 +1,12 @@
-# Disclosure Svelte Skill
+# Disclosure for Svelte
 
 Practical instructions for AI coding agents using `@zealakit/disclosure-svelte`.
 
-## A. Overview
+## Install
 
 Disclosure provides **headless** Collapsible and Accordion primitives for **Svelte 5**.
 
 - State, composition, accessibility, and built-in height animation are included.
-- Visual styling is owned by the consumer (`class`, CSS via `data-slot` / `data-state`).
-- Put padding, borders, and backgrounds on `CollapsibleContent` / `AccordionContent` (they land on `[data-collapsible-content-wrapper]`).
 
 **Primitives**
 
@@ -19,15 +17,13 @@ Disclosure provides **headless** Collapsible and Accordion primitives for **Svel
 
 Use Svelte 5 runes (`$state`, `$bindable`) and `bind:` — do not apply React or Vue conventions.
 
-## B. Installation
-
 ```bash
 npm i @zealakit/disclosure-svelte
 ```
 
 Peer dependency: `svelte` (^5.0.0).
 
-## C. Imports
+## Import
 
 ```ts
 import {
@@ -44,9 +40,9 @@ import {
   setAccordionContext,
   getAccordionItemContext,
   setAccordionItemContext,
-  DEFAULT_ANIMATION_DURATION_MS,
-  DEFAULT_ANIMATION_DELAY_MS,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  DEFAULT_ANIMATION_DURATION,
+  DEFAULT_ANIMATION_DELAY,
+  DEFAULT_ANIMATION_EASING,
 } from "@zealakit/disclosure-svelte";
 
 import type {
@@ -62,12 +58,27 @@ import type {
   AccordionContentProps,
   AccordionContextValue,
   AccordionItemContextValue,
-  CollapsibleAnimationProps,
+  AnimationConfig,
+  AnimationSetting,
   AnimationTimingFunction,
 } from "@zealakit/disclosure-svelte";
 ```
 
-## D. Collapsible
+## Rules
+
+Avoid these mistakes:
+
+1. Using several `Collapsible`s when exclusive open state is required — use `Accordion type="single"`.
+2. Writing Svelte 4 `export let open` patterns — this package targets Svelte 5 (`$state`, `bind:`).
+3. Applying Vue `v-model:open` or React `useState` idioms in `.svelte` files.
+4. Reimplementing height animation in CSS.
+5. Styling only the content viewport for borders/padding — style Content `class` / the wrapper.
+6. Passing an invalid `easing` — use `ease-in-out`, `linear`, or any valid CSS timing function.
+7. Treating duration/delay as seconds — values are **ms**.
+8. Using `collapsible` on `type="multiple"` — no effect.
+9. Binding `value` with the wrong type (`string` vs `string[]`) for the Accordion `type`.
+
+## Collapsible
 
 Compose `Collapsible` → `CollapsibleTrigger` → `CollapsibleContent`.
 
@@ -75,12 +86,7 @@ Compose `Collapsible` → `CollapsibleTrigger` → `CollapsibleContent`.
 
 ```svelte
 <script lang="ts">
-  import {
-    Collapsible,
-    CollapsibleTrigger,
-    CollapsibleContent,
-  } from "@zealakit/disclosure-svelte";
-</script>
+  </script>
 
 <Collapsible>
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
@@ -101,13 +107,7 @@ Compose `Collapsible` → `CollapsibleTrigger` → `CollapsibleContent`.
 
 ```svelte
 <script lang="ts">
-  import {
-    Collapsible,
-    CollapsibleTrigger,
-    CollapsibleContent,
-  } from "@zealakit/disclosure-svelte";
-
-  let open = $state(false);
+    let open = $state(false);
 </script>
 
 <Collapsible bind:open>
@@ -135,7 +135,7 @@ You can also pass `open` + `onOpenChange` without `bind:` when the parent fully 
 </CollapsibleContent>
 ```
 
-## E. Accordion
+## Accordion
 
 Compose `Accordion` → `AccordionItem` → `AccordionTrigger` + `AccordionContent`. Every item needs a stable `value` string.
 
@@ -143,13 +143,7 @@ Compose `Accordion` → `AccordionItem` → `AccordionTrigger` + `AccordionConte
 
 ```svelte
 <script lang="ts">
-  import {
-    Accordion,
-    AccordionItem,
-    AccordionTrigger,
-    AccordionContent,
-  } from "@zealakit/disclosure-svelte";
-</script>
+  </script>
 
 <Accordion type="single" collapsible>
   <AccordionItem value="general">
@@ -227,7 +221,7 @@ Optional callback: `onValueChange`.
 
 Supported. Nest a full `Accordion` inside an outer `AccordionContent`. Keep item `value`s unique within each accordion instance.
 
-## F. Animation
+## Animation
 
 Height animation is **on by default**. Configure it with one `animation` prop: `boolean | AnimationConfig`.
 
@@ -256,20 +250,11 @@ Set on `Collapsible` or `Accordion` root. Accordion animation is root-owned (no 
 
 When animation is off, duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
 
-Deprecated aliases (work until 2.0.0, warn once in development; `animation` wins when both are set):
-
-| Deprecated | Use |
-| --- | --- |
-| `animated={false}` | `animation={false}` |
-| `animationDuration={320}` | `animation={{ duration: 320 }}` |
-| `animationDelay={120}` | `animation={{ delay: 120 }}` |
-| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
-
 Do **not** reimplement height animation with custom CSS on the viewport.
 
-Exported defaults: `DEFAULT_ANIMATION_DURATION_MS`, `DEFAULT_ANIMATION_DELAY_MS`, `DEFAULT_ANIMATION_TIMING_FUNCTION`.
+Exported defaults: `DEFAULT_ANIMATION_DURATION`, `DEFAULT_ANIMATION_DELAY`, `DEFAULT_ANIMATION_EASING`.
 
-## G. Framework-specific integration
+## Integration
 
 ### Svelte 5
 
@@ -292,26 +277,23 @@ Snippet/children composition via nested components. Context helpers (`getCollaps
 
 Use `<script lang="ts">` and exported prop types. Do not invent Vue `v-model` or React hooks APIs in Svelte files.
 
-## H. Accessibility
+## Styling
 
-Provided by the library:
+- Visual styling is owned by the consumer (`class`, CSS via `data-slot` / `data-state`).
+- Put padding, borders, and backgrounds on `CollapsibleContent` / `AccordionContent` (they land on `[data-collapsible-content-wrapper]`).
 
-- Collapsible trigger: `aria-expanded`, `aria-controls`
-- Accordion trigger: `aria-expanded`, `aria-controls`; content: `aria-labelledby`
-- Accordion keyboard: Arrow Up/Down, Home, End
-- Disabled via `disabled` / `data-disabled`
-- Closed force-mounted content uses `inert` (and `hidden` when not animated)
+## Verify
+
+Check the rendered DOM for:
+
+- [ ] Collapsible trigger: `aria-expanded`, `aria-controls`
+- [ ] Accordion trigger: `aria-expanded`, `aria-controls`; content: `aria-labelledby`
+- [ ] Accordion keyboard: Arrow Up/Down, Home, End
+- [ ] Disabled via `disabled` / `data-disabled`
+- [ ] Closed force-mounted content uses `inert` (and `hidden` when not animated)
 
 Keep library triggers as buttons; give each `AccordionItem` a stable unique `value`.
 
-## I. Common mistakes
+## Full API
 
-1. Using several `Collapsible`s when exclusive open state is required — use `Accordion type="single"`.
-2. Writing Svelte 4 `export let open` patterns — this package targets Svelte 5 (`$state`, `bind:`).
-3. Applying Vue `v-model:open` or React `useState` idioms in `.svelte` files.
-4. Reimplementing height animation in CSS.
-5. Styling only the content viewport for borders/padding — style Content `class` / the wrapper.
-6. Unsupported easing strings — only `"linear"` and `"ease-in-out"`.
-7. Treating duration/delay as seconds — values are **ms**.
-8. Using `collapsible` on `type="multiple"` — no effect.
-9. Binding `value` with the wrong type (`string` vs `string[]`) for the Accordion `type`.
+Props, events, and options: [packages/svelte/README.md](https://github.com/zealakit/disclosure/blob/main/packages/svelte/README.md).

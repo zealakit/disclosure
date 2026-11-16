@@ -1,16 +1,15 @@
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
-import type { AnimationSetting, CollapsibleAnimationProps } from "./animation";
+import type { AnimationSetting } from "./animation.js";
 
 export type {
   AnimationConfig,
   AnimationEasing,
   AnimationSetting,
   AnimationTimingFunction,
-  CollapsibleAnimationProps,
   ResolvedAnimationConfig,
-} from "./animation";
+} from "./animation.js";
 
-type AccordionSharedProps = CollapsibleAnimationProps & {
+type AccordionSharedProps = {
   /**
    * Expand/collapse animation. `false` disables it; an object customises it.
    * @default true

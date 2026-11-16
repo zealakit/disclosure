@@ -11,11 +11,10 @@ import {
 } from "react";
 import {
   AccordionContext,
-  type AccordionContextValue,
   AccordionItemContext,
   useAccordionContext,
   useAccordionItemContext,
-} from "./accordion-context";
+} from "./accordion-context.js";
 import type {
   AccordionContentProps,
   AccordionItemProps,
@@ -23,10 +22,10 @@ import type {
   AccordionProps,
   AccordionSingleProps,
   AccordionTriggerProps,
-} from "./accordion-types";
-import { getAnimationStyle, resolveAnimationSetting } from "./animation";
-import { ensureCollapsibleStyles } from "./collapsible-styles";
-import { usePresence } from "./use-presence";
+} from "./accordion-types.js";
+import { getAnimationStyle, normalizeAnimationConfig } from "./animation.js";
+import { ensureCollapsibleStyles } from "./styles.js";
+import { usePresence } from "./use-presence.js";
 
 export type {
   AccordionContentProps,
@@ -39,19 +38,12 @@ export type {
   AnimationEasing,
   AnimationSetting,
   AnimationTimingFunction,
-  CollapsibleAnimationProps,
   ResolvedAnimationConfig,
-} from "./accordion-types";
+} from "./accordion-types.js";
 
 function AccordionRoot(props: AccordionProps) {
   const type = props.type ?? "single";
-  const animation = resolveAnimationSetting({
-    animation: props.animation,
-    animated: props.animated,
-    animationTimingFunction: props.animationTimingFunction,
-    animationDuration: props.animationDuration,
-    animationDelay: props.animationDelay,
-  });
+  const animation = normalizeAnimationConfig(props.animation);
   const disabled = props.disabled ?? false;
   const collapsible =
     type === "single"
@@ -173,11 +165,6 @@ function AccordionRoot(props: AccordionProps) {
     () => ({
       type,
       animation: { enabled, duration, delay, easing },
-      animated: enabled,
-      animationTimingFunction:
-        easing as AccordionContextValue["animationTimingFunction"],
-      animationDuration: duration,
-      animationDelay: delay,
       disabled,
       collapsible,
       isItemOpen,
@@ -208,10 +195,6 @@ function AccordionRoot(props: AccordionProps) {
     defaultValue: _defaultValue,
     onValueChange: _onValueChange,
     animation: _animation,
-    animated: _animated,
-    animationTimingFunction: _animationTimingFunction,
-    animationDuration: _animationDuration,
-    animationDelay: _animationDelay,
     disabled: _disabled,
     children,
     ...rest

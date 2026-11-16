@@ -5,7 +5,7 @@ import {
   getAccordionItemContext,
 } from "./accordion-context.js";
 import { getAnimationStyleText } from "./animation-style.js";
-import { ensureCollapsibleStyles } from "./collapsible-styles.js";
+import { ensureCollapsibleStyles } from "./styles.js";
 import { createPresence } from "./use-presence.svelte.js";
 
 type Props = {

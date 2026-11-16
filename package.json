@@ -37,24 +37,28 @@
     "dev:svelte": "pnpm --filter @zealakit/disclosure-svelte-example run dev",
     "dev:vanilla": "pnpm --filter @zealakit/disclosure-vanilla-example run dev",
     "dev:nextjs": "pnpm --filter @zealakit/disclosure-nextjs-example run dev",
-    "test": "pnpm -r --filter './packages/*' run test",
+    "test": "pnpm --filter @zealakit/disclosure-vanilla run test && pnpm --filter @zealakit/disclosure-react run test && pnpm --filter @zealakit/disclosure-vue run test && pnpm --filter @zealakit/disclosure-svelte run test",
     "typecheck": "pnpm -r --filter './packages/*' run typecheck",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "check:animation": "node scripts/check-animation-parity.mjs",
     "format": "biome format --write .",
-    "clean": "pnpm -r exec rm -rf dist .svelte-kit && rm -rf node_modules",
+    "check": "pnpm build && pnpm typecheck && pnpm test && pnpm lint && pnpm check:animation",
+    "clean": "pnpm -r exec rm -rf dist .next && rm -rf artifacts",
     "npm:publish:check": "node --strip-types scripts/npm-publish.ts check",
     "npm:publish:react": "node --strip-types scripts/npm-publish.ts react",
     "npm:publish:vue": "node --strip-types scripts/npm-publish.ts vue",
     "npm:publish:svelte": "node --strip-types scripts/npm-publish.ts svelte",
     "npm:publish:vanilla": "node --strip-types scripts/npm-publish.ts vanilla",
     "npm:publish:all": "node --strip-types scripts/npm-publish.ts all",
-    "monitor": "node --strip-types monitor/server.ts"
+    "monitor": "node --strip-types monitor/server.ts",
+    "readme:check": "node scripts/check-readmes.mjs",
+    "pack:packages": "node scripts/pack-packages.mjs",
+    "release:check": "pnpm check && pnpm pack:packages"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.11",
+    "@biomejs/biome": "2.6.8",
     "@types/node": "^24.19.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

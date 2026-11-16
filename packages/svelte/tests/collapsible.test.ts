@@ -1,13 +1,7 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/svelte";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import assert from "node:assert/strict";
+import { afterEach, describe, mock, test } from "node:test";
 import AnimatedFixture from "./fixtures/animated.svelte";
-import AnimationConfigFixture from "./fixtures/animation-config.svelte";
+import AnimationOptionFixture from "./fixtures/animation-option.svelte";
 import BasicFixture from "./fixtures/basic.svelte";
 import ContentChromeFixture from "./fixtures/content-chrome.svelte";
 import ControlledFixture from "./fixtures/controlled.svelte";
@@ -16,6 +10,22 @@ import ForceMountFixture from "./fixtures/force-mount.svelte";
 import NestedFixture from "./fixtures/nested.svelte";
 import MultipleFixture from "./fixtures/multiple.svelte";
 import DefaultOpenFixture from "./fixtures/default-open.svelte";
+import {
+  render,
+  cleanup,
+  getByRole,
+  getByText,
+  queryByText,
+  waitFor,
+  click,
+  fireTransitionEnd,
+  assertAttr,
+  assertNoAttr,
+  assertDisabled,
+  assertConnected,
+  assertText,
+  assertCalledWith,
+} from "./support/dom.ts";
 
 afterEach(() => {
   cleanup();
@@ -24,216 +34,219 @@ afterEach(() => {
 describe("@zealakit/disclosure-svelte", () => {
   test("starts closed by default", () => {
     render(BasicFixture);
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByText("Panel")).toBeNull();
+    const trigger = getByRole("button", { name: "Toggle" });
+    assertAttr(trigger, "aria-expanded", "false");
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("starts open with defaultOpen", () => {
     render(DefaultOpenFixture);
-    expect(screen.getByRole("button", { name: "Toggle" })).toHaveAttribute(
+    assertAttr(
+      getByRole("button", { name: "Toggle" }),
       "aria-expanded",
       "true",
     );
-    expect(screen.getByText("Panel")).toBeInTheDocument();
+    assertConnected(getByText("Panel"));
   });
 
   test("toggles uncontrolled state", async () => {
     render(BasicFixture);
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByText("Panel")).toBeInTheDocument();
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
+    assertAttr(trigger, "aria-expanded", "true");
+    assertConnected(getByText("Panel"));
 
-    await fireEvent.click(trigger);
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByText("Panel")).toBeNull();
+    await click(trigger);
+    assertAttr(trigger, "aria-expanded", "false");
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("supports controlled open state", async () => {
-    const onOpenChange = vi.fn();
+    const onOpenChange = mock.fn();
     render(ControlledFixture, { props: { onOpenChange } });
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
-    expect(onOpenChange).toHaveBeenCalledWith(true);
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
+    assertCalledWith(onOpenChange, true);
+    assertAttr(trigger, "aria-expanded", "true");
   });
 
   test("does not toggle when disabled", async () => {
     render(DisabledFixture);
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    expect(trigger).toBeDisabled();
-    await fireEvent.click(trigger);
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByText("Panel")).toBeNull();
+    const trigger = getByRole("button", { name: "Toggle" });
+    assertDisabled(trigger);
+    await click(trigger);
+    assertAttr(trigger, "aria-expanded", "false");
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("forceMount keeps content in the DOM while hidden", async () => {
     render(ForceMountFixture);
-    const content = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
-    expect(content).toBeInTheDocument();
-    expect(content).toHaveAttribute("hidden");
-    expect(content).toHaveAttribute("data-state", "closed");
+    const content = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
+    assertConnected(content);
+    assertAttr(content, "hidden");
+    assertAttr(content, "data-state", "closed");
 
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
-    expect(content).not.toHaveAttribute("hidden");
-    expect(content).toHaveAttribute("data-state", "open");
+    await click(getByRole("button", { name: "Toggle" }));
+    assertNoAttr(content, "hidden");
+    assertAttr(content, "data-state", "open");
   });
 
   test("sets aria relationship between trigger and content", () => {
     render(DefaultOpenFixture);
-    const trigger = screen.getByRole("button", { name: "Toggle" });
+    const trigger = getByRole("button", { name: "Toggle" });
     const contentId = trigger.getAttribute("aria-controls");
-    expect(contentId).toBeTruthy();
-    expect(document.getElementById(contentId ?? "")).toHaveTextContent("Panel");
+    assert.ok(contentId);
+    assertText(document.getElementById(contentId ?? ""), "Panel");
   });
 
   test("supports nested independent instances", async () => {
     render(NestedFixture);
-    await fireEvent.click(screen.getByRole("button", { name: "Outer" }));
-    expect(
-      screen.getByText("Outer panel", { exact: false }),
-    ).toBeInTheDocument();
-    expect(screen.queryByText("Inner panel")).toBeNull();
+    await click(getByRole("button", { name: "Outer" }));
+    assertConnected(getByText("Outer panel", { exact: false }));
+    assert.equal(queryByText("Inner panel"), null);
 
-    await fireEvent.click(screen.getByRole("button", { name: "Inner" }));
-    expect(screen.getByText("Inner panel")).toBeInTheDocument();
+    await click(getByRole("button", { name: "Inner" }));
+    assertConnected(getByText("Inner panel"));
   });
 
   test("exposes data-slot attributes for styling", () => {
     render(DefaultOpenFixture);
-    expect(document.querySelector('[data-slot="collapsible"]')).not.toBeNull();
-    expect(
+    assert.notEqual(document.querySelector('[data-slot="collapsible"]'), null);
+    assert.notEqual(
       document.querySelector('[data-slot="collapsible-trigger"]'),
-    ).not.toBeNull();
-    expect(
+      null,
+    );
+    assert.notEqual(
       document.querySelector('[data-slot="collapsible-content"]'),
-    ).not.toBeNull();
+      null,
+    );
   });
 
   test("keeps multiple roots independent", async () => {
     render(MultipleFixture);
-    await fireEvent.click(screen.getByRole("button", { name: "One" }));
-    expect(screen.getByText("First")).toBeInTheDocument();
-    expect(screen.queryByText("Second")).toBeNull();
+    await click(getByRole("button", { name: "One" }));
+    assertConnected(getByText("First"));
+    assert.equal(queryByText("Second"), null);
   });
 
   test("animates by default and keeps content mounted while closing", async () => {
     render(AnimatedFixture);
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
     await waitFor(() => {
-      expect(screen.getByText("Panel")).toBeInTheDocument();
+      assertConnected(getByText("Panel"));
     });
 
-    const content = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
-    expect(content).toHaveAttribute("data-animated");
-    expect(content).not.toHaveAttribute("hidden");
-    expect(
+    const content = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
+    assertAttr(content, "data-animated");
+    assertNoAttr(content, "hidden");
+    assert.notEqual(
       content.querySelector("[data-collapsible-content-wrapper]"),
-    ).not.toBeNull();
+      null,
+    );
     await waitFor(() => {
-      expect(content).toHaveAttribute("data-state", "open");
+      assertAttr(content, "data-state", "open");
     });
-    expect(content).not.toHaveAttribute("inert");
+    assertNoAttr(content, "inert");
 
-    await fireEvent.click(trigger);
-    expect(screen.getByText("Panel")).toBeInTheDocument();
-    expect(content).toHaveAttribute("data-state", "closed");
-    expect(content).toHaveAttribute("inert");
+    await click(trigger);
+    assertConnected(getByText("Panel"));
+    assertAttr(content, "data-state", "closed");
+    assertAttr(content, "inert");
 
-    await fireEvent.transitionEnd(content, {
-      propertyName: "grid-template-rows",
-    });
+    await fireTransitionEnd(content, "grid-template-rows");
     await waitFor(() => {
-      expect(screen.queryByText("Panel")).toBeNull();
+      assert.equal(queryByText("Panel"), null);
     });
   });
 
-  test("animated={false} unmounts immediately on close", async () => {
+  test("animation={false} unmounts immediately on close", async () => {
     render(DefaultOpenFixture);
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
-    expect(screen.queryByText("Panel")).toBeNull();
+    await click(getByRole("button", { name: "Toggle" }));
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("injects animation styles once", async () => {
     render(AnimatedFixture);
     render(AnimatedFixture);
-    expect(
-      document.querySelectorAll("#zealakit-collapsible-styles"),
-    ).toHaveLength(1);
+    assert.equal(
+      document.querySelectorAll("#zealakit-collapsible-styles").length,
+      1,
+    );
   });
 
   test("applies animation configuration CSS variables", () => {
-    render(AnimationConfigFixture, {
+    render(AnimationOptionFixture, {
       props: {
-        animationTimingFunction: "linear",
-        animationDuration: 320,
-        animationDelay: 40,
+        animation: { easing: "linear", duration: 320, delay: 40 },
       },
     });
 
-    const content = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
-    expect(content.getAttribute("style") ?? "").toContain(
-      "--collapsible-animation-easing: linear",
+    const content = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
+    assert.ok(
+      (content.getAttribute("style") ?? "").includes(
+        "--collapsible-animation-easing: linear",
+      ),
     );
-    expect(content.getAttribute("style") ?? "").toContain(
-      "--collapsible-animation-duration: 320ms",
+    assert.ok(
+      (content.getAttribute("style") ?? "").includes(
+        "--collapsible-animation-duration: 320ms",
+      ),
     );
-    expect(content.getAttribute("style") ?? "").toContain(
-      "--collapsible-animation-delay: 40ms",
+    assert.ok(
+      (content.getAttribute("style") ?? "").includes(
+        "--collapsible-animation-delay: 40ms",
+      ),
     );
   });
 
   test("applies consumer chrome to the clipped content wrapper", async () => {
     render(ContentChromeFixture);
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
+    await click(getByRole("button", { name: "Toggle" }));
     await waitFor(() => {
-      expect(screen.getByText("Panel")).toBeInTheDocument();
+      assertConnected(getByText("Panel"));
     });
 
-    const viewport = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+    const viewport = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
     const wrapper = viewport.querySelector(
       "[data-collapsible-content-wrapper]",
     ) as HTMLElement;
 
-    expect(viewport).toHaveAttribute("data-animated");
-    expect(viewport.className).not.toContain("panel-chrome");
-    expect(wrapper.className).toContain("panel-chrome");
-    expect(wrapper.getAttribute("style") ?? "").toContain("border-left");
+    assertAttr(viewport, "data-animated");
+    assert.ok(!viewport.className.includes("panel-chrome"));
+    assert.ok(wrapper.className.includes("panel-chrome"));
+    assert.ok((wrapper.getAttribute("style") ?? "").includes("border-left"));
   });
 
   test("ignores stale close transition after reopen", async () => {
     render(AnimatedFixture);
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
     await waitFor(() => {
-      expect(screen.getByText("Panel")).toBeInTheDocument();
+      assertConnected(getByText("Panel"));
     });
 
-    const viewport = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+    const viewport = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
 
-    await fireEvent.click(trigger);
-    expect(viewport).toHaveAttribute("data-state", "closed");
+    await click(trigger);
+    assertAttr(viewport, "data-state", "closed");
 
-    await fireEvent.click(trigger);
+    await click(trigger);
     await waitFor(() => {
-      expect(viewport).toHaveAttribute("data-state", "open");
+      assertAttr(viewport, "data-state", "open");
     });
 
-    await fireEvent.transitionEnd(viewport, {
-      propertyName: "grid-template-rows",
-    });
-    expect(screen.getByText("Panel")).toBeInTheDocument();
+    await fireTransitionEnd(viewport, "grid-template-rows");
+    assertConnected(getByText("Panel"));
   });
 });

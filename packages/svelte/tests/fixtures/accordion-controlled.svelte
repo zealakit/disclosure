@@ -4,7 +4,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 
 type Props = {
   onValueChange?: (value: string | null) => void;
@@ -17,7 +17,7 @@ let value = $state<string | null>(null);
 <Accordion
   type="single"
   collapsible
-  animated={false}
+  animation={false}
   bind:value
   onValueChange={(next: string | null) => {
     onValueChange?.(next);

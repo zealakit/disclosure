@@ -4,7 +4,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 
 type Props = {
   collapsible?: boolean;
@@ -14,7 +14,7 @@ type Props = {
 let { collapsible = false, defaultValue }: Props = $props();
 </script>
 
-<Accordion type="single" {collapsible} {defaultValue} animated={false}>
+<Accordion type="single" {collapsible} {defaultValue} animation={false}>
   <AccordionItem value="general">
     <AccordionTrigger>General</AccordionTrigger>
     <AccordionContent>General content</AccordionContent>

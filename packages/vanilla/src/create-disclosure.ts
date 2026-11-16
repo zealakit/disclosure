@@ -1,5 +1,5 @@
-import { initAccordion, type AccordionInstance } from "./accordion";
-import { initCollapsible, type CollapsibleInstance } from "./collapsible";
+import { initAccordion, type AccordionInstance } from "./accordion.js";
+import { initCollapsible, type CollapsibleInstance } from "./collapsible.js";
 
 export type CreateDisclosureOptions = {
   /**

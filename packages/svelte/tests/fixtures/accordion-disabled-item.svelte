@@ -4,10 +4,10 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 </script>
 
-<Accordion type="single" collapsible animated={false}>
+<Accordion type="single" collapsible animation={false}>
   <AccordionItem value="locked" disabled>
     <AccordionTrigger>Locked</AccordionTrigger>
     <AccordionContent>Hidden</AccordionContent>

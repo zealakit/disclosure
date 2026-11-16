@@ -4,18 +4,16 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
   type AnimationSetting,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 
 type Props = {
   animation?: AnimationSetting;
-  animationDuration?: number;
-  animated?: boolean;
 };
 
-let { animation, animationDuration, animated }: Props = $props();
+let { animation }: Props = $props();
 </script>
 
-<Collapsible defaultOpen {animation} {animationDuration} {animated}>
+<Collapsible defaultOpen {animation}>
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>
   <CollapsibleContent>Panel</CollapsibleContent>
 </Collapsible>

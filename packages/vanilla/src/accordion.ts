@@ -1,4 +1,4 @@
-import { normalizeAnimationConfig } from "./animation";
+import { normalizeAnimationConfig } from "./animation.js";
 import {
   applyAnimationStyle,
   createPresence,
@@ -10,8 +10,8 @@ import {
   setDataState,
   setDisabledAttr,
   type PresenceController,
-} from "./dom";
-import { ensureCollapsibleStyles } from "./styles";
+} from "./dom.js";
+import { ensureCollapsibleStyles } from "./styles.js";
 
 export type AccordionInstance = {
   root: HTMLElement;

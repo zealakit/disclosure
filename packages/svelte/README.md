@@ -9,7 +9,6 @@ Headless Collapsible and Accordion for Svelte 5. Built-in height animation is en
 Apply padding, borders, and backgrounds via `class` on `CollapsibleContent` / `AccordionContent` (or `[data-collapsible-content-wrapper]`). Those styles land on the clipped content panel so exit animations collapse cleanly.
 
 > **Note**
->
 > Disclosure is not a replacement for a full UI library. Use it when Accordion or Collapsible in your kit is hard to restyle — or when you only need that one primitive and don’t want to pull in a large design system.
 
 ## Install
@@ -117,16 +116,9 @@ Put borders/padding on the content wrapper, not only on the animated viewport.
 | `easing` | `string` | `"ease-in-out"` | `ease-in-out`, `linear`, or any CSS timing function. |
 | `...` | — | — | Pass `true` for the defaults or `false` to disable. |
 
-Animation is **on by default** (Overlay: off), the default duration is 200ms (Overlay: 160ms), and there is no `type` / `direction`: Disclosure has one built-in height transition. When both are passed, `animation` wins and the deprecated props are ignored.
+Animation is **on by default** (Overlay: off), the default duration is 200ms (Overlay: 160ms), and there is no `type` / `direction`: Disclosure has one built-in height transition.
 
 When animation is off, open/close updates immediately and duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
-
-| Deprecated (works until 2.0.0, warns once in development) | Use |
-| --- | --- |
-| `animated={false}` | `animation={false}` |
-| `animationDuration={320}` | `animation={{ duration: 320 }}` |
-| `animationDelay={120}` | `animation={{ delay: 120 }}` |
-| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
 
 CSS variables on the content viewport:
 
@@ -238,7 +230,7 @@ Keyboard: Arrow Up/Down, Home, End.
 </Accordion>
 ```
 
-### Accordion with custom animation
+### Animation configuration
 
 ```svelte
 <Accordion
@@ -260,7 +252,7 @@ Keyboard: Arrow Up/Down, Home, End.
 | `data-collapsible-content-wrapper` | inner panel | Borders, padding, backgrounds |
 | `data-animated` | content viewport | Present when height animation is active |
 
-## AI Agent Skill
+## Agent Skill
 
 Practical Svelte usage for AI coding agents: [disclosure-svelte skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-svelte.md).
 

@@ -1,14 +1,15 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
+import assert from "node:assert/strict";
+import { afterEach, describe, test } from "node:test";
 import {
   type AnimationConfig,
   createDisclosure,
   normalizeAnimationConfig,
-} from "../src";
+} from "../dist/index.js";
+import { assertMatchObject } from "./support/dom.ts";
 
 afterEach(() => {
   document.body.innerHTML = "";
   document.getElementById("zealakit-collapsible-styles")?.remove();
-  vi.restoreAllMocks();
 });
 
 // Exhaustive key check: fails to compile if AnimationConfig drifts from the shared contract.
@@ -50,68 +51,61 @@ function snapshot(rootAttrs: string, kind: "collapsible" | "accordion") {
 }
 
 describe("@zealakit/disclosure-vanilla animation attributes", () => {
-  const cases: Array<[string, string, string]> = [
-    ["default", "", ""],
-    ["disabled", 'data-animated="false"', 'data-animation="false"'],
+  const cases: Array<[string, string, Record<string, unknown>]> = [
     [
-      "duration",
-      'data-animation-duration="320"',
-      'data-animation-duration="320"',
+      "default",
+      "",
+      {
+        animated: true,
+        duration: "200ms",
+        easing: "ease-in-out",
+        delay: "0ms",
+      },
     ],
-    [
-      "easing",
-      'data-animation-timing-function="linear"',
-      'data-animation-easing="linear"',
-    ],
+    ["disabled", 'data-animation="false"', { animated: false }],
+    ["duration", 'data-animation-duration="320"', { duration: "320ms" }],
+    ["easing", 'data-animation-easing="linear"', { easing: "linear" }],
     [
       "all",
-      'data-animated="false" data-animation-duration="10" data-animation-delay="20" data-animation-timing-function="linear"',
       'data-animation="false" data-animation-duration="10" data-animation-delay="20" data-animation-easing="linear"',
+      { animated: false, duration: "10ms", delay: "20ms", easing: "linear" },
     ],
   ];
 
   for (const kind of ["collapsible", "accordion"] as const) {
-    for (const [name, legacy, next] of cases) {
-      test(`${kind} ${name}: data-animation* matches legacy attrs`, () => {
-        vi.spyOn(console, "warn").mockImplementation(() => {});
-        expect(snapshot(next, kind)).toEqual(snapshot(legacy, kind));
+    for (const [name, attrs, expected] of cases) {
+      test(`${kind} ${name}`, () => {
+        assertMatchObject(snapshot(attrs, kind), expected);
       });
     }
   }
 
   test('data-animation="" and "true" enable with overrides', () => {
-    expect(
+    assertMatchObject(
       snapshot('data-animation="" data-animation-duration="70"', "collapsible"),
-    ).toMatchObject({
-      animated: true,
-      duration: "70ms",
-    });
-    expect(snapshot('data-animation="true"', "collapsible").animated).toBe(
+      {
+        animated: true,
+        duration: "70ms",
+      },
+    );
+    assert.equal(
+      snapshot('data-animation="true"', "collapsible").animated,
       true,
     );
   });
 
   test("data-animation-easing passes any non-empty value", () => {
-    expect(
+    assert.equal(
       snapshot(
         'data-animation-easing="cubic-bezier(0.4, 0, 0.2, 1)"',
         "collapsible",
       ).easing,
-    ).toBe("cubic-bezier(0.4, 0, 0.2, 1)");
-  });
-
-  test("new attrs win over legacy attrs", () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    const result = snapshot(
-      'data-animation="true" data-animated="false" data-animation-easing="ease" data-animation-timing-function="linear"',
-      "collapsible",
+      "cubic-bezier(0.4, 0, 0.2, 1)",
     );
-    expect(result.animated).toBe(true);
-    expect(result.easing).toBe("ease");
   });
 
   test("normalizeAnimationConfig defaults", () => {
-    expect(normalizeAnimationConfig(undefined)).toEqual({
+    assert.deepEqual(normalizeAnimationConfig(undefined), {
       enabled: true,
       duration: 200,
       delay: 0,

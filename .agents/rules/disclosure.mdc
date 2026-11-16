@@ -1,5 +1,5 @@
 ---
-description: Disclosure monorepo conventions — package boundaries, a11y, docs sync
+description: Disclosure monorepo conventions — package boundaries, SSR safety, build and docs sync
 alwaysApply: true
 ---
 
@@ -10,3 +10,13 @@ alwaysApply: true
 - Prefer `data-slot` / `data-state` hooks for styling; put chrome on the content wrapper, not the animated viewport.
 - When changing public API or usage, update `README.md`, `README_VI.md`, and `README_CN.md` together.
 - Use Biome for lint (`pnpm lint` / `pnpm lint:fix`).
+- SSR safety: no `window` / `document` at module init or during render.
+- TypeScript only: `type` aliases, `import type`, strict mode, ESM with explicit `.js` relative specifiers. Files are `kebab-case`.
+- No `.vue` SFCs in `packages/vue/src`, and no bundler (`tsc` / `svelte-package`, ESM only).
+- Changes ship with focused tests in the owning package. Do not add a second test framework or DOM library.
+- Do not export unimplemented APIs or placeholder components.
+- The shared animation block in `packages/*/src/animation.ts` mirrors Overlay. Run `pnpm check:animation`.
+- Verify with `pnpm check` before reporting work as done.
+- `examples/` are integration/smoke-test projects only. There is no `docs/` folder.
+- Load `.agents/skills/disclosure/SKILL.md` before code, test, docs, or release work, and `.agents/skills/readme-system/SKILL.md` before touching any README. Run `pnpm readme:check` after README changes.
+- Update the READMEs, `.agents/AGENTS.md`, and `.agents/skills/disclosure/SKILL.md` together when architecture, package boundaries, commands, or workflows change.

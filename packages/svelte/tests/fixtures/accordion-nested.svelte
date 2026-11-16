@@ -4,15 +4,15 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 </script>
 
-<Accordion type="single" collapsible animated={false}>
+<Accordion type="single" collapsible animation={false}>
   <AccordionItem value="outer">
     <AccordionTrigger>Outer</AccordionTrigger>
     <AccordionContent>
       Outer content
-      <Accordion type="single" collapsible animated={false}>
+      <Accordion type="single" collapsible animation={false}>
         <AccordionItem value="inner">
           <AccordionTrigger>Inner</AccordionTrigger>
           <AccordionContent>Inner content</AccordionContent>

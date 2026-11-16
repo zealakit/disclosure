@@ -2,7 +2,7 @@
 import { onMount } from "svelte";
 import { getAnimationStyleText } from "./animation-style.js";
 import { getCollapsibleContext } from "./collapsible-context.js";
-import { ensureCollapsibleStyles } from "./collapsible-styles.js";
+import { ensureCollapsibleStyles } from "./styles.js";
 import { createPresence } from "./use-presence.svelte.js";
 
 type Props = {

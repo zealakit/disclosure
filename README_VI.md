@@ -1,4 +1,4 @@
-# Disclosure
+# Zealakit Disclosure
 
 [English](https://github.com/zealakit/disclosure/blob/main/README.md) | [Tiếng Việt](https://github.com/zealakit/disclosure/blob/main/README_VI.md) | [中文](https://github.com/zealakit/disclosure/blob/main/README_CN.md)
 
@@ -14,7 +14,6 @@ Bộ primitive disclosure headless cho các UI framework hiện đại.
 Chỉ cung cấp hành vi và accessibility — không màu, icon hay layout. Animation chiều cao bật sẵn theo mặc định. Tự style bằng CSS qua `data-slot` và `data-state`.
 
 > **Note**
->
 > Disclosure không thay thế một UI library đầy đủ. Dùng khi Accordion/Collapsible trong kit khó custom — hoặc khi bạn chỉ cần một primitive đó và không muốn kéo cả design system lớn.
 
 ## Packages
@@ -30,7 +29,7 @@ Mỗi package cài độc lập. Không có shared runtime package.
 
 API, props và hướng dẫn dùng nằm trong tài liệu package ở trên.
 
-## Cài đặt
+## Installation
 
 Dùng package manager bạn thích (`npm`, `pnpm`, `yarn`, `bun`, …):
 
@@ -54,17 +53,7 @@ pnpm dev:vanilla
 pnpm dev:nextjs
 ```
 
-## Dependency monitoring
-
-UI local để theo dõi dependency ở root + `packages/*` (không gồm `examples/`):
-
-```bash
-pnpm monitor
-```
-
-Mở http://127.0.0.1:4177 — xem [monitor/README.md](https://github.com/zealakit/disclosure/blob/main/monitor/README.md).
-
-## AI Agent Skills
+## Agent Skills
 
 Hướng dẫn theo framework dành cho AI coding agent:
 

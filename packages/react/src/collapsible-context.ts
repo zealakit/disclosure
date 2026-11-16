@@ -1,21 +1,10 @@
 import { createContext, useContext } from "react";
-import type {
-  AnimationTimingFunction,
-  ResolvedAnimationConfig,
-} from "./animation";
+import type { ResolvedAnimationConfig } from "./animation.js";
 
 export type CollapsibleContextValue = {
   open: boolean;
   disabled: boolean;
   animation: ResolvedAnimationConfig;
-  /** @deprecated Use `animation.enabled`. */
-  animated: boolean;
-  /** @deprecated Use `animation.easing`. */
-  animationTimingFunction: AnimationTimingFunction;
-  /** @deprecated Use `animation.duration`. */
-  animationDuration: number;
-  /** @deprecated Use `animation.delay`. */
-  animationDelay: number;
   contentId: string;
   triggerId: string;
   setOpen: (open: boolean) => void;

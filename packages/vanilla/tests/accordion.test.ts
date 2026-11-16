@@ -1,6 +1,13 @@
-import { fireEvent } from "@testing-library/dom";
-import { afterEach, describe, expect, test } from "vitest";
-import { createDisclosure } from "../src";
+import assert from "node:assert/strict";
+import { afterEach, describe, test } from "node:test";
+import { createDisclosure } from "../dist/index.js";
+import {
+  assertAttr,
+  assertFocused,
+  assertDisabled,
+  click,
+  keydown,
+} from "./support/dom.ts";
 
 function mount(html: string): void {
   document.body.innerHTML = html;
@@ -18,7 +25,7 @@ afterEach(() => {
 });
 
 const singleFixture = `
-  <div data-accordion data-accordion-type="single" data-animated="false">
+  <div data-accordion data-accordion-type="single" data-animation="false">
     <section data-accordion-item data-value="general">
       <h3>
         <button type="button" data-accordion-trigger>General</button>
@@ -39,20 +46,20 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     mount(singleFixture);
     createDisclosure();
 
-    fireEvent.click(button("General"));
-    expect(document.body.textContent).toContain("General content");
+    click(button("General"));
+    assert.ok(document.body.textContent.includes("General content"));
 
-    fireEvent.click(button("General"));
-    expect(document.body.textContent).toContain("General content");
+    click(button("General"));
+    assert.ok(document.body.textContent.includes("General content"));
 
-    fireEvent.click(button("Advanced"));
-    expect(document.body.textContent).not.toContain("General content");
-    expect(document.body.textContent).toContain("Advanced content");
+    click(button("Advanced"));
+    assert.ok(!document.body.textContent.includes("General content"));
+    assert.ok(document.body.textContent.includes("Advanced content"));
   });
 
   test("single mode collapsible closes the open item", () => {
     mount(`
-      <div data-accordion data-accordion-type="single" data-collapsible data-animated="false">
+      <div data-accordion data-accordion-type="single" data-collapsible data-animation="false">
         <section data-accordion-item data-value="general">
           <h3><button type="button" data-accordion-trigger>General</button></h3>
           <div data-accordion-content>General content</div>
@@ -61,14 +68,14 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     `);
     createDisclosure();
 
-    fireEvent.click(button("General"));
-    fireEvent.click(button("General"));
-    expect(document.body.textContent).not.toContain("General content");
+    click(button("General"));
+    click(button("General"));
+    assert.ok(!document.body.textContent.includes("General content"));
   });
 
   test("multiple mode keeps several items open", () => {
     mount(`
-      <div data-accordion data-accordion-type="multiple" data-animated="false">
+      <div data-accordion data-accordion-type="multiple" data-animation="false">
         <section data-accordion-item data-value="general">
           <h3><button type="button" data-accordion-trigger>General</button></h3>
           <div data-accordion-content>General content</div>
@@ -81,15 +88,15 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     `);
     createDisclosure();
 
-    fireEvent.click(button("General"));
-    fireEvent.click(button("Advanced"));
-    expect(document.body.textContent).toContain("General content");
-    expect(document.body.textContent).toContain("Advanced content");
+    click(button("General"));
+    click(button("Advanced"));
+    assert.ok(document.body.textContent.includes("General content"));
+    assert.ok(document.body.textContent.includes("Advanced content"));
   });
 
   test("disabled item does not open", () => {
     mount(`
-      <div data-accordion data-accordion-type="single" data-collapsible data-animated="false">
+      <div data-accordion data-accordion-type="single" data-collapsible data-animation="false">
         <section data-accordion-item data-value="locked" data-disabled>
           <h3><button type="button" data-accordion-trigger>Locked</button></h3>
           <div data-accordion-content>Hidden</div>
@@ -99,9 +106,9 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     createDisclosure();
 
     const trigger = button("Locked");
-    fireEvent.click(trigger);
-    expect(trigger).toBeDisabled();
-    expect(document.body.textContent).not.toContain("Hidden");
+    click(trigger);
+    assertDisabled(trigger);
+    assert.ok(!document.body.textContent.includes("Hidden"));
   });
 
   test("supports keyboard navigation with Home and End", () => {
@@ -112,19 +119,19 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     const advanced = button("Advanced");
     general.focus();
 
-    fireEvent.keyDown(general, { key: "ArrowDown" });
-    expect(advanced).toHaveFocus();
+    keydown(general, "ArrowDown");
+    assertFocused(advanced);
 
-    fireEvent.keyDown(advanced, { key: "Home" });
-    expect(general).toHaveFocus();
+    keydown(advanced, "Home");
+    assertFocused(general);
 
-    fireEvent.keyDown(general, { key: "End" });
-    expect(advanced).toHaveFocus();
+    keydown(general, "End");
+    assertFocused(advanced);
   });
 
   test("exposes accordion accessibility relationships", () => {
     mount(`
-      <div data-accordion data-accordion-type="single" data-default-value="general" data-animated="false">
+      <div data-accordion data-accordion-type="single" data-default-value="general" data-animation="false">
         <section data-accordion-item data-value="general">
           <h3><button type="button" data-accordion-trigger>General</button></h3>
           <div id="general-content" data-accordion-content>General content</div>
@@ -134,25 +141,26 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     createDisclosure();
 
     const trigger = button("General");
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    assertAttr(trigger, "aria-expanded", "true");
     const panel = document.getElementById(
       trigger.getAttribute("aria-controls") ?? "",
     );
-    expect(panel).toHaveAttribute("role", "region");
-    expect(panel).toHaveAttribute("aria-labelledby", trigger.id);
-    expect(trigger.closest('[data-slot="accordion-heading"]')?.tagName).toBe(
+    assertAttr(panel, "role", "region");
+    assertAttr(panel, "aria-labelledby", trigger.id);
+    assert.equal(
+      trigger.closest('[data-slot="accordion-heading"]')?.tagName,
       "H3",
     );
   });
 
   test("supports nested accordions", () => {
     mount(`
-      <div data-accordion data-accordion-type="single" data-collapsible data-animated="false">
+      <div data-accordion data-accordion-type="single" data-collapsible data-animation="false">
         <section data-accordion-item data-value="outer">
           <h3><button type="button" data-accordion-trigger>Outer</button></h3>
           <div data-accordion-content>
             Outer content
-            <div data-accordion data-accordion-type="single" data-collapsible data-animated="false">
+            <div data-accordion data-accordion-type="single" data-collapsible data-animation="false">
               <section data-accordion-item data-value="inner">
                 <h3><button type="button" data-accordion-trigger>Inner</button></h3>
                 <div data-accordion-content>Inner content</div>
@@ -164,17 +172,17 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     `);
     createDisclosure();
 
-    fireEvent.click(button("Outer"));
-    expect(document.body.textContent).toContain("Outer content");
-    expect(document.body.textContent).not.toContain("Inner content");
+    click(button("Outer"));
+    assert.ok(document.body.textContent.includes("Outer content"));
+    assert.ok(!document.body.textContent.includes("Inner content"));
 
-    fireEvent.click(button("Inner"));
-    expect(document.body.textContent).toContain("Inner content");
+    click(button("Inner"));
+    assert.ok(document.body.textContent.includes("Inner content"));
   });
 
   test("respects data-default-value", () => {
     mount(`
-      <div data-accordion data-accordion-type="single" data-default-value="advanced" data-animated="false">
+      <div data-accordion data-accordion-type="single" data-default-value="advanced" data-animation="false">
         <section data-accordion-item data-value="general">
           <h3><button type="button" data-accordion-trigger>General</button></h3>
           <div data-accordion-content>General content</div>
@@ -187,7 +195,7 @@ describe("@zealakit/disclosure-vanilla Accordion", () => {
     `);
     createDisclosure();
 
-    expect(document.body.textContent).toContain("Advanced content");
-    expect(document.body.textContent).not.toContain("General content");
+    assert.ok(document.body.textContent.includes("Advanced content"));
+    assert.ok(!document.body.textContent.includes("General content"));
   });
 });

@@ -1017,7 +1017,7 @@
 - Repository: disclosure — pnpm monorepo of headless Collapsible/Accordion packages.
 - Published packages: ${publishedPackageList()}.
 - Architecture: each framework/vanilla package is independent (no shared runtime). Keep public behavior aligned across packages when a dependency change affects shared contracts (animation, a11y, presence).
-- Tooling stack to consider: TypeScript, Biome, Vitest, Rslib/Rspack, React/Vue/Svelte peers where applicable, and Vanilla ESM + IIFE CDN builds (\`ZealakitDisclosure\` global).
+- Tooling stack to consider: TypeScript (tsc, NodeNext), Biome, the Node test runner, happy-dom, svelte-package, React/Vue/Svelte peers where applicable, and the Vanilla ESM-only build.
 - Scan time: ${generatedAt}
 - Monitor summary (unique deps): total ${summary.total ?? "—"}, outdated ${summary.outdated ?? "—"}, up to date ${summary.upToDate ?? "—"}, registry errors ${summary.errors ?? "—"}.
 - Prompt scope: ${scopeNote} (${rows.length} row(s)).
@@ -1036,8 +1036,8 @@ Before recommending any upgrade, inspect the actual repository and determine:
 2. Whether breaking changes exist between the declared/resolved version and the proposed target.
 3. Whether peer dependency constraints remain compatible (especially React/Vue/Svelte peers vs pinned devDependencies).
 4. Whether the upgrade affects other packages in the workspace (react / vue / svelte / vanilla / root).
-5. Whether framework and build-tool versions remain compatible (React/Vue/Svelte, Vitest, Rslib, TypeScript, Biome, happy-dom, testing-library, etc.).
-6. For \`@zealakit/disclosure-vanilla\`: whether ESM + IIFE (\`dist/index.js\`, \`dist/index.global(.min).js\`) and \`package.json\` exports/CDN entry points still build and pack correctly.
+5. Whether framework and build-tool versions remain compatible (React/Vue/Svelte, TypeScript, Biome, happy-dom, svelte-package, etc.).
+6. For \`@zealakit/disclosure-vanilla\`: whether the ESM build (\`dist/index.js\`, \`dist/index.d.ts\`) and \`package.json\` exports still build and pack correctly.
 7. Whether configuration, tests, skills, or README changes are required.
 8. Whether the upgrade should be performed now, postponed, or avoided.
 

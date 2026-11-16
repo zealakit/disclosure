@@ -195,7 +195,7 @@ Update flow:
 The prompt is generated **client-side** from current monitor data. It asks an external agent to:
 
 1. Inspect the real repository (do not assume the prompt already did)
-2. Check breaking changes, peers, workspace impact, tooling compatibility (including Vanilla ESM/IIFE CDN artifacts when relevant)
+2. Check breaking changes, peers, workspace impact, tooling compatibility (including the Vanilla ESM build when relevant)
 3. Return structured recommendations: safe / safe with changes / needs investigation / not recommended
 
 Scope rules:

@@ -1,4 +1,4 @@
-import { prefersReducedMotion } from "./collapsible-styles.js";
+import { prefersReducedMotion } from "./styles.js";
 
 export type PresenceOptions = {
   open: () => boolean;

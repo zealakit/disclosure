@@ -4,10 +4,10 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 </script>
 
-<Accordion type="multiple" animated={false}>
+<Accordion type="multiple" animation={false}>
   <AccordionItem value="general">
     <AccordionTrigger>General</AccordionTrigger>
     <AccordionContent>General content</AccordionContent>

@@ -1,11 +1,9 @@
 import {
   type AnimationConfig,
   type ResolvedAnimationConfig,
-  type AnimationTimingFunction,
   getAnimationStyle,
-  warnLegacyAnimationProp,
-} from "./animation";
-import { prefersReducedMotion } from "./styles";
+} from "./animation.js";
+import { prefersReducedMotion } from "./styles.js";
 
 let idCounter = 0;
 
@@ -49,41 +47,15 @@ export function parseNumberAttribute(
  *
  * - `data-animation` (`"false"` disables; `""` / `"true"` enable)
  * - `data-animation-duration`, `data-animation-delay`, `data-animation-easing`
- *
- * Deprecated attributes are still read when the new one is absent:
- * `data-animated` and `data-animation-timing-function` (`linear` / `ease-in-out`).
  */
 export function readAnimationSetting(root: Element): AnimationConfig {
-  let enabled: boolean | undefined;
-  if (root.hasAttribute("data-animation")) {
-    enabled = parseBooleanAttribute(root, "data-animation", true);
-  } else if (root.hasAttribute("data-animated")) {
-    warnLegacyAnimationProp("data-animated", 'data-animation="false"');
-    enabled = parseBooleanAttribute(root, "data-animated", true);
-  }
-
-  let easing: AnimationConfig["easing"];
-  const easingAttr = root.getAttribute("data-animation-easing");
-  if (easingAttr) {
-    easing = easingAttr;
-  } else {
-    const timing = root.getAttribute("data-animation-timing-function");
-    if (timing !== null) {
-      warnLegacyAnimationProp(
-        "data-animation-timing-function",
-        "data-animation-easing",
-      );
-    }
-    if (timing === "linear" || timing === "ease-in-out") {
-      easing = timing as AnimationTimingFunction;
-    }
-  }
-
   return {
-    enabled,
+    enabled: root.hasAttribute("data-animation")
+      ? parseBooleanAttribute(root, "data-animation", true)
+      : undefined,
     duration: parseNumberAttribute(root, "data-animation-duration"),
     delay: parseNumberAttribute(root, "data-animation-delay"),
-    easing,
+    easing: root.getAttribute("data-animation-easing") || undefined,
   };
 }
 

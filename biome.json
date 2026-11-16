@@ -1,7 +1,15 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["**", "!**/dist", "!**/node_modules", "!**/.svelte-kit"]
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.svelte-kit",
+      "!**/.next",
+      "!**/*.tsbuildinfo",
+      "!**/*.md"
+    ]
   },
   "assist": {
     "actions": {
@@ -39,21 +47,46 @@
   },
   "overrides": [
     {
+      "includes": ["**/tests/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noComponentHookFactories": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": ["**/*.vue", "**/*.svelte"],
       "linter": {
         "rules": {
           "correctness": {
             "noUnusedImports": "off",
-            "noUnusedVariables": "off"
+            "noUnusedVariables": "off",
+            "useHookAtTopLevel": "off"
           },
           "style": {
-            "useImportType": "off"
+            "useImportType": "off",
+            "useVueMultiWordComponentNames": "off"
           },
           "a11y": {
             "useButtonType": "off",
             "noStaticElementInteractions": "off",
             "useKeyWithClickEvents": "off",
             "useSemanticElements": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["examples/vanilla/index.html"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noNoninteractiveTabindex": "off",
+            "useFocusableInteractive": "off",
+            "useSemanticElements": "off",
+            "useAriaPropsForRole": "off"
           }
         }
       }

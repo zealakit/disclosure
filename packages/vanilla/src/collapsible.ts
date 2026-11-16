@@ -1,4 +1,4 @@
-import { normalizeAnimationConfig } from "./animation";
+import { normalizeAnimationConfig } from "./animation.js";
 import {
   applyAnimationStyle,
   createPresence,
@@ -9,8 +9,8 @@ import {
   queryOwned,
   setDataState,
   setDisabledAttr,
-} from "./dom";
-import { ensureCollapsibleStyles } from "./styles";
+} from "./dom.js";
+import { ensureCollapsibleStyles } from "./styles.js";
 
 export type CollapsibleInstance = {
   root: HTMLElement;

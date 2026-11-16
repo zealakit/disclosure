@@ -3,7 +3,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 
 type Props = {
   onOpenChange?: (open: boolean) => void;
@@ -15,7 +15,7 @@ let open = $state(false);
 
 <Collapsible
   bind:open
-  animated={false}
+  animation={false}
   onOpenChange={(next) => {
     onOpenChange?.(next);
   }}

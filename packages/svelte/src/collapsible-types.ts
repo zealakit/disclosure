@@ -1,18 +1,14 @@
-import type {
-  AnimationSetting,
-  CollapsibleAnimationProps,
-} from "./animation.js";
+import type { AnimationSetting } from "./animation.js";
 
 export type {
   AnimationConfig,
   AnimationEasing,
   AnimationSetting,
   AnimationTimingFunction,
-  CollapsibleAnimationProps,
   ResolvedAnimationConfig,
 } from "./animation.js";
 
-export type CollapsibleProps = CollapsibleAnimationProps & {
+export type CollapsibleProps = {
   /**
    * Expand/collapse animation. `false` disables it; an object customises it.
    * @default true

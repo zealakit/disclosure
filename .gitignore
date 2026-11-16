@@ -28,5 +28,7 @@ coverage
 # Dependency monitor
 monitor/reports/*
 !monitor/reports/.gitkeep
+*.tsbuildinfo
+artifacts/
 
 /plans

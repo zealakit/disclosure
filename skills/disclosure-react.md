@@ -1,14 +1,12 @@
-# Disclosure React Skill
+# Disclosure for React
 
 Practical instructions for AI coding agents using `@zealakit/disclosure-react`.
 
-## A. Overview
+## Install
 
 Disclosure provides **headless** Collapsible and Accordion primitives for React 18+.
 
 - State, composition, accessibility, and built-in height animation are included.
-- Visual styling is owned by the consumer (`className`, CSS via `data-slot` / `data-state`).
-- Put padding, borders, and backgrounds on `CollapsibleContent` / `AccordionContent` (they land on `[data-collapsible-content-wrapper]`).
 
 **Primitives**
 
@@ -19,15 +17,13 @@ Disclosure provides **headless** Collapsible and Accordion primitives for React 
 
 Do **not** reimplement open-state machinery the library already provides.
 
-## B. Installation
-
 ```bash
 npm i @zealakit/disclosure-react
 ```
 
-Peer dependencies: `react`, `react-dom` (≥ 18).
+Peer dependencies: `react`, `react-dom` (`^18.0.0 || ^19.0.0`).
 
-## C. Imports
+## Import
 
 ```tsx
 import {
@@ -39,9 +35,9 @@ import {
   AccordionTrigger,
   AccordionContent,
   useCollapsibleContext,
-  DEFAULT_ANIMATION_DURATION_MS,
-  DEFAULT_ANIMATION_DELAY_MS,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
+  DEFAULT_ANIMATION_DURATION,
+  DEFAULT_ANIMATION_DELAY,
+  DEFAULT_ANIMATION_EASING,
 } from "@zealakit/disclosure-react";
 
 import type {
@@ -55,24 +51,34 @@ import type {
   AccordionItemProps,
   AccordionTriggerProps,
   AccordionContentProps,
-  CollapsibleAnimationProps,
+  AnimationConfig,
+  AnimationSetting,
   AnimationTimingFunction,
 } from "@zealakit/disclosure-react";
 ```
 
-## D. Collapsible
+## Rules
+
+Avoid these mistakes:
+
+1. Using several independent `Collapsible`s when exclusive open state is required — use `Accordion type="single"` instead.
+2. Reimplementing open state with extra React state while also passing `defaultOpen` only — pick controlled or uncontrolled.
+3. Adding custom height/`grid-template-rows` animation CSS — the library already animates.
+4. Styling only `[data-slot="collapsible-content"]` for borders/padding — style Content `className` / the wrapper.
+5. Passing an invalid `easing` — use `ease-in-out`, `linear`, or any valid CSS timing function.
+6. Treating `animation.duration` as seconds — it is **ms**.
+7. Forgetting `"use client"` on Next.js App Router leaves that use Disclosure.
+8. Adding `"use client"` inside the library package (not needed / not present).
+9. Using `collapsible` on `type="multiple"` — it has no effect.
+10. Nesting without unique per-accordion item values when values collide across instances you treat as one group.
+
+## Collapsible
 
 Compose `Collapsible` → `CollapsibleTrigger` → `CollapsibleContent`.
 
 ### Uncontrolled
 
 ```tsx
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@zealakit/disclosure-react";
-
 export function Example() {
   return (
     <Collapsible>
@@ -96,12 +102,6 @@ export function Example() {
 
 ```tsx
 import { useState } from "react";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@zealakit/disclosure-react";
-
 export function Controlled() {
   const [open, setOpen] = useState(false);
 
@@ -133,20 +133,13 @@ Use either controlled (`open` + `onOpenChange`) **or** uncontrolled (`defaultOpe
 </CollapsibleContent>
 ```
 
-## E. Accordion
+## Accordion
 
 Compose `Accordion` → `AccordionItem` → `AccordionTrigger` + `AccordionContent`. Every item needs a stable `value` string.
 
 ### Single mode (default `type="single"`)
 
 ```tsx
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@zealakit/disclosure-react";
-
 export function Faq() {
   return (
     <Accordion type="single" collapsible>
@@ -221,7 +214,7 @@ const [value, setValue] = useState<string[]>([]);
 
 Supported. Nest a full `Accordion` inside an outer `AccordionContent`. Keep item `value`s unique within each accordion instance.
 
-## F. Animation
+## Animation
 
 Height animation is **on by default**. Configure it with one `animation` prop: `boolean | AnimationConfig`.
 
@@ -250,20 +243,11 @@ Set on `Collapsible` or `Accordion` root. Accordion animation is root-owned (no 
 
 When animation is off, duration/delay are ignored. `prefers-reduced-motion: reduce` also disables motion.
 
-Deprecated aliases (work until 2.0.0, warn once in development; `animation` wins when both are set):
-
-| Deprecated | Use |
-| --- | --- |
-| `animated={false}` | `animation={false}` |
-| `animationDuration={320}` | `animation={{ duration: 320 }}` |
-| `animationDelay={120}` | `animation={{ delay: 120 }}` |
-| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
-
 Do **not** reimplement height animation with custom CSS on the viewport. Style the inner wrapper instead.
 
-Exported defaults: `DEFAULT_ANIMATION_DURATION_MS`, `DEFAULT_ANIMATION_DELAY_MS`, `DEFAULT_ANIMATION_TIMING_FUNCTION`.
+Exported defaults: `DEFAULT_ANIMATION_DURATION`, `DEFAULT_ANIMATION_DELAY`, `DEFAULT_ANIMATION_EASING`.
 
-## G. Framework-specific integration
+## Integration
 
 ### Composition
 
@@ -308,31 +292,27 @@ export function Faq() {
 
 Server Components may **import and render** the client leaf, but must not own the interactive tree themselves.
 
-## H. Accessibility
+## Styling
 
-Provided by the library:
+- Visual styling is owned by the consumer (`className`, CSS via `data-slot` / `data-state`).
+- Put padding, borders, and backgrounds on `CollapsibleContent` / `AccordionContent` (they land on `[data-collapsible-content-wrapper]`).
 
-- Collapsible trigger: `aria-expanded`, `aria-controls`
-- Accordion trigger: `aria-expanded`, `aria-controls`; content: `aria-labelledby`
-- Accordion keyboard: Arrow Up/Down, Home, End (enabled triggers only)
-- Disabled state via `disabled` / `data-disabled`
-- Closed force-mounted content uses `inert` (and `hidden` when not animated)
+## Verify
 
-Requirements for agents:
+Check the rendered DOM for:
 
-- Keep triggers as the library buttons (do not replace with non-button clickables).
-- Give each `AccordionItem` a stable unique `value`.
-- Do not strip `aria-*` by overriding carelessly.
+- [ ] Collapsible trigger: `aria-expanded`, `aria-controls`
+- [ ] Accordion trigger: `aria-expanded`, `aria-controls`; content: `aria-labelledby`
+- [ ] Accordion keyboard: Arrow Up/Down, Home, End (enabled triggers only)
+- [ ] Disabled state via `disabled` / `data-disabled`
+- [ ] Closed force-mounted content uses `inert` (and `hidden` when not animated)
 
-## I. Common mistakes
+Before finishing:
 
-1. Using several independent `Collapsible`s when exclusive open state is required — use `Accordion type="single"` instead.
-2. Reimplementing open state with extra React state while also passing `defaultOpen` only — pick controlled or uncontrolled.
-3. Adding custom height/`grid-template-rows` animation CSS — the library already animates.
-4. Styling only `[data-slot="collapsible-content"]` for borders/padding — style Content `className` / the wrapper.
-5. Passing unsupported easing strings — only `"linear"` and `"ease-in-out"`.
-6. Treating `animation.duration` as seconds — it is **ms**.
-7. Forgetting `"use client"` on Next.js App Router leaves that use Disclosure.
-8. Adding `"use client"` inside the library package (not needed / not present).
-9. Using `collapsible` on `type="multiple"` — it has no effect.
-10. Nesting without unique per-accordion item values when values collide across instances you treat as one group.
+- [ ] Keep triggers as the library buttons (do not replace with non-button clickables).
+- [ ] Give each `AccordionItem` a stable unique `value`.
+- [ ] Do not strip `aria-*` by overriding carelessly.
+
+## Full API
+
+Props, events, and options: [packages/react/README.md](https://github.com/zealakit/disclosure/blob/main/packages/react/README.md).

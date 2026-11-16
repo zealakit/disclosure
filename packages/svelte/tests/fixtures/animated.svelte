@@ -3,7 +3,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../../src/index.js";
+} from "../../dist/index.js";
 </script>
 
 <Collapsible>

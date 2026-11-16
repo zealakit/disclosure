@@ -1,20 +1,9 @@
 import type { InjectionKey, Ref } from "vue";
-import type {
-  AnimationTimingFunction,
-  ResolvedAnimationConfig,
-} from "./animation";
+import type { ResolvedAnimationConfig } from "./animation.js";
 
 export type AccordionContextValue = {
   type: "single" | "multiple";
   animation: ResolvedAnimationConfig;
-  /** @deprecated Use `animation.enabled`. */
-  animated: boolean;
-  /** @deprecated Use `animation.easing`. */
-  animationTimingFunction: AnimationTimingFunction;
-  /** @deprecated Use `animation.duration`. */
-  animationDuration: number;
-  /** @deprecated Use `animation.delay`. */
-  animationDelay: number;
   disabled: boolean;
   collapsible: boolean;
   isItemOpen: (value: string) => boolean;

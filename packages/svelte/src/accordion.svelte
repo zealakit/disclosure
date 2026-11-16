@@ -1,9 +1,8 @@
 <script lang="ts">
 import { untrack } from "svelte";
 import {
-  resolveAnimationSetting,
+  normalizeAnimationConfig,
   type AnimationSetting,
-  type AnimationTimingFunction,
 } from "./animation.js";
 import { setAccordionContext } from "./accordion-context.js";
 
@@ -13,14 +12,6 @@ type Props = {
   defaultValue?: string | string[] | null;
   collapsible?: boolean;
   animation?: AnimationSetting;
-  /** @deprecated Use `animation`. */
-  animated?: boolean;
-  /** @deprecated Use `animation`. */
-  animationTimingFunction?: AnimationTimingFunction;
-  /** @deprecated Use `animation`. */
-  animationDuration?: number;
-  /** @deprecated Use `animation`. */
-  animationDelay?: number;
   disabled?: boolean;
   onValueChange?: (value: never) => void;
   children?: import("svelte").Snippet;
@@ -34,10 +25,6 @@ let {
   defaultValue,
   collapsible = false,
   animation,
-  animated,
-  animationTimingFunction,
-  animationDuration,
-  animationDelay,
   disabled = false,
   onValueChange,
   children,
@@ -58,15 +45,7 @@ let uncontrolledMultiple = $state<string[]>(
 
 const triggers = new Map<string, HTMLButtonElement>();
 
-const resolvedAnimation = $derived(
-  resolveAnimationSetting({
-    animation,
-    animated,
-    animationTimingFunction,
-    animationDuration,
-    animationDelay,
-  }),
-);
+const resolvedAnimation = $derived(normalizeAnimationConfig(animation));
 
 const isControlled = $derived(value !== undefined);
 const resolvedCollapsible = $derived(type === "single" ? collapsible : false);
@@ -131,18 +110,6 @@ setAccordionContext({
   },
   get animation() {
     return resolvedAnimation;
-  },
-  get animated() {
-    return resolvedAnimation.enabled;
-  },
-  get animationTimingFunction() {
-    return resolvedAnimation.easing as AnimationTimingFunction;
-  },
-  get animationDuration() {
-    return resolvedAnimation.duration;
-  },
-  get animationDelay() {
-    return resolvedAnimation.delay;
   },
   get disabled() {
     return disabled;

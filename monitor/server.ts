@@ -414,8 +414,14 @@ function readResolvedFromLockfile(): Map<string, string> {
       inImporters = true;
       continue;
     }
-    if (inImporters && /^\S/.test(line) && line !== "importers:") {
-      break;
+    if (inImporters && line === "packages:") {
+      // pnpm 12 can emit more than one importers/packages pair (the first one
+      // only carries configDependencies). Keep scanning the file so the real
+      // workspace importers later in the lockfile are not skipped.
+      inImporters = false;
+      currentImporter = null;
+      inDepBlock = false;
+      continue;
     }
     if (!inImporters) continue;
 

@@ -1,13 +1,26 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/vue";
 import { defineComponent, ref } from "vue";
-import { afterEach, describe, expect, test, vi } from "vitest";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../src";
+import assert from "node:assert/strict";
+import { afterEach, describe, mock, test } from "node:test";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../dist/index.js";
+import {
+  render,
+  cleanup,
+  getByRole,
+  getByText,
+  queryByText,
+  waitFor,
+  click,
+  fireTransitionEnd,
+  assertAttr,
+  assertNoAttr,
+  assertDisabled,
+  assertConnected,
+  assertCalledWith,
+} from "./support/dom.ts";
 
 afterEach(() => {
   cleanup();
@@ -18,43 +31,44 @@ describe("@zealakit/disclosure-vue", () => {
     render({
       components: { Collapsible, CollapsibleTrigger, CollapsibleContent },
       template: `
-        <Collapsible :animated="false">
+        <Collapsible :animation="false">
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Panel</CollapsibleContent>
         </Collapsible>
       `,
     });
 
-    expect(screen.getByRole("button", { name: "Toggle" })).toHaveAttribute(
+    assertAttr(
+      getByRole("button", { name: "Toggle" }),
       "aria-expanded",
       "false",
     );
-    expect(screen.queryByText("Panel")).toBeNull();
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("toggles uncontrolled state", async () => {
     render({
       components: { Collapsible, CollapsibleTrigger, CollapsibleContent },
       template: `
-        <Collapsible :animated="false">
+        <Collapsible :animation="false">
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Panel</CollapsibleContent>
         </Collapsible>
       `,
     });
 
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByText("Panel")).toBeInTheDocument();
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
+    assertAttr(trigger, "aria-expanded", "true");
+    assertConnected(getByText("Panel"));
 
-    await fireEvent.click(trigger);
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByText("Panel")).toBeNull();
+    await click(trigger);
+    assertAttr(trigger, "aria-expanded", "false");
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("supports controlled open via v-model:open", async () => {
-    const onOpenChange = vi.fn();
+    const onOpenChange = mock.fn();
     const Controlled = defineComponent({
       components: { Collapsible, CollapsibleTrigger, CollapsibleContent },
       setup() {
@@ -62,7 +76,7 @@ describe("@zealakit/disclosure-vue", () => {
         return { open, onOpenChange };
       },
       template: `
-        <Collapsible v-model:open="open" :animated="false" @open-change="onOpenChange">
+        <Collapsible v-model:open="open" :animation="false" @open-change="onOpenChange">
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Panel</CollapsibleContent>
         </Collapsible>
@@ -70,25 +84,25 @@ describe("@zealakit/disclosure-vue", () => {
     });
 
     render(Controlled);
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
-    expect(onOpenChange).toHaveBeenCalledWith(true);
+    await click(getByRole("button", { name: "Toggle" }));
+    assertCalledWith(onOpenChange, true);
   });
 
   test("does not toggle when disabled", async () => {
     render({
       components: { Collapsible, CollapsibleTrigger, CollapsibleContent },
       template: `
-        <Collapsible disabled :animated="false">
+        <Collapsible disabled :animation="false">
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Panel</CollapsibleContent>
         </Collapsible>
       `,
     });
 
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
-    expect(trigger).toBeDisabled();
-    expect(screen.queryByText("Panel")).toBeNull();
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
+    assertDisabled(trigger);
+    assert.equal(queryByText("Panel"), null);
   });
 
   test("animates by default and keeps content mounted while closing", async () => {
@@ -102,25 +116,23 @@ describe("@zealakit/disclosure-vue", () => {
       `,
     });
 
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
+    await click(getByRole("button", { name: "Toggle" }));
     await waitFor(() => {
-      expect(screen.getByText("Panel")).toBeInTheDocument();
+      assertConnected(getByText("Panel"));
     });
 
-    const content = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]');
-    expect(content).toHaveAttribute("data-animated");
+    const content = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    );
+    assertAttr(content, "data-animated");
 
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
-    expect(screen.getByText("Panel")).toBeInTheDocument();
-    expect(content).toHaveAttribute("data-state", "closed");
+    await click(getByRole("button", { name: "Toggle" }));
+    assertConnected(getByText("Panel"));
+    assertAttr(content, "data-state", "closed");
 
-    await fireEvent.transitionEnd(content as HTMLElement, {
-      propertyName: "grid-template-rows",
-    });
+    await fireTransitionEnd(content as HTMLElement, "grid-template-rows");
     await waitFor(() => {
-      expect(screen.queryByText("Panel")).toBeNull();
+      assert.equal(queryByText("Panel"), null);
     });
   });
 
@@ -128,20 +140,20 @@ describe("@zealakit/disclosure-vue", () => {
     render({
       components: { Collapsible, CollapsibleTrigger, CollapsibleContent },
       template: `
-        <Collapsible :animated="false">
+        <Collapsible :animation="false">
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent force-mount>Panel</CollapsibleContent>
         </Collapsible>
       `,
     });
 
-    const content = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]');
-    expect(content).toHaveAttribute("hidden");
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
+    const content = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    );
+    assertAttr(content, "hidden");
+    await click(getByRole("button", { name: "Toggle" }));
     await waitFor(() => {
-      expect(content).not.toHaveAttribute("hidden");
+      assertNoAttr(content, "hidden");
     });
   });
 
@@ -158,22 +170,22 @@ describe("@zealakit/disclosure-vue", () => {
       `,
     });
 
-    await fireEvent.click(screen.getByRole("button", { name: "Toggle" }));
+    await click(getByRole("button", { name: "Toggle" }));
     await waitFor(() => {
-      expect(screen.getByText("Panel")).toBeInTheDocument();
+      assertConnected(getByText("Panel"));
     });
 
-    const viewport = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+    const viewport = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
     const wrapper = viewport.querySelector(
       "[data-collapsible-content-wrapper]",
     ) as HTMLElement;
 
-    expect(viewport).toHaveAttribute("data-animated");
-    expect(viewport.className).not.toContain("panel-chrome");
-    expect(wrapper.className).toContain("panel-chrome");
-    expect(wrapper.getAttribute("style")).toContain("border-left");
+    assertAttr(viewport, "data-animated");
+    assert.ok(!viewport.className.includes("panel-chrome"));
+    assert.ok(wrapper.className.includes("panel-chrome"));
+    assert.ok((wrapper.getAttribute("style") ?? "").includes("border-left"));
   });
 
   test("applies animation configuration CSS variables", async () => {
@@ -182,9 +194,7 @@ describe("@zealakit/disclosure-vue", () => {
       template: `
         <Collapsible
           :default-open="true"
-          animation-timing-function="linear"
-          :animation-duration="320"
-          :animation-delay="40"
+          :animation="{ easing: 'linear', duration: 320, delay: 40 }"
         >
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Panel</CollapsibleContent>
@@ -192,18 +202,21 @@ describe("@zealakit/disclosure-vue", () => {
       `,
     });
 
-    const content = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
-    expect(
+    const content = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
+    assert.equal(
       content.style.getPropertyValue("--collapsible-animation-easing"),
-    ).toBe("linear");
-    expect(
+      "linear",
+    );
+    assert.equal(
       content.style.getPropertyValue("--collapsible-animation-duration"),
-    ).toBe("320ms");
-    expect(
+      "320ms",
+    );
+    assert.equal(
       content.style.getPropertyValue("--collapsible-animation-delay"),
-    ).toBe("40ms");
+      "40ms",
+    );
   });
 
   test("ignores stale close transition after reopen", async () => {
@@ -217,27 +230,25 @@ describe("@zealakit/disclosure-vue", () => {
       `,
     });
 
-    const trigger = screen.getByRole("button", { name: "Toggle" });
-    await fireEvent.click(trigger);
+    const trigger = getByRole("button", { name: "Toggle" });
+    await click(trigger);
     await waitFor(() => {
-      expect(screen.getByText("Panel")).toBeInTheDocument();
+      assertConnected(getByText("Panel"));
     });
 
-    const viewport = screen
-      .getByText("Panel")
-      .closest('[data-slot="collapsible-content"]') as HTMLElement;
+    const viewport = getByText("Panel").closest(
+      '[data-slot="collapsible-content"]',
+    ) as HTMLElement;
 
-    await fireEvent.click(trigger);
-    expect(viewport).toHaveAttribute("data-state", "closed");
+    await click(trigger);
+    assertAttr(viewport, "data-state", "closed");
 
-    await fireEvent.click(trigger);
+    await click(trigger);
     await waitFor(() => {
-      expect(viewport).toHaveAttribute("data-state", "open");
+      assertAttr(viewport, "data-state", "open");
     });
 
-    await fireEvent.transitionEnd(viewport, {
-      propertyName: "grid-template-rows",
-    });
-    expect(screen.getByText("Panel")).toBeInTheDocument();
+    await fireTransitionEnd(viewport, "grid-template-rows");
+    assertConnected(getByText("Panel"));
   });
 });

@@ -1,20 +1,9 @@
 import { getContext, setContext } from "svelte";
-import type {
-  AnimationTimingFunction,
-  ResolvedAnimationConfig,
-} from "./animation.js";
+import type { ResolvedAnimationConfig } from "./animation.js";
 
 export type AccordionContextValue = {
   get type(): "single" | "multiple";
   get animation(): ResolvedAnimationConfig;
-  /** @deprecated Use `animation.enabled`. */
-  get animated(): boolean;
-  /** @deprecated Use `animation.easing`. */
-  get animationTimingFunction(): AnimationTimingFunction;
-  /** @deprecated Use `animation.duration`. */
-  get animationDuration(): number;
-  /** @deprecated Use `animation.delay`. */
-  get animationDelay(): number;
   get disabled(): boolean;
   get collapsible(): boolean;
   isItemOpen: (value: string) => boolean;

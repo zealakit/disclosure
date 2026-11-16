@@ -1,38 +1,10 @@
-import type { DefineComponent } from "vue";
-import AccordionComponent from "./accordion.vue";
-import AccordionContentComponent from "./accordion-content.vue";
-import AccordionItemComponent from "./accordion-item.vue";
-import AccordionTriggerComponent from "./accordion-trigger.vue";
-import type {
-  AccordionContentProps,
-  AccordionItemProps,
-  AccordionProps,
-  AccordionTriggerProps,
-} from "./accordion.types";
-import CollapsibleComponent from "./collapsible.vue";
-import CollapsibleContentComponent from "./collapsible-content.vue";
-import CollapsibleTriggerComponent from "./collapsible-trigger.vue";
-import type {
-  CollapsibleContentProps,
-  CollapsibleProps,
-  CollapsibleTriggerProps,
-} from "./collapsible.types";
-
-export const Collapsible =
-  CollapsibleComponent as DefineComponent<CollapsibleProps>;
-export const CollapsibleTrigger =
-  CollapsibleTriggerComponent as DefineComponent<CollapsibleTriggerProps>;
-export const CollapsibleContent =
-  CollapsibleContentComponent as DefineComponent<CollapsibleContentProps>;
-
-export const Accordion = AccordionComponent as DefineComponent<AccordionProps>;
-export const AccordionItem =
-  AccordionItemComponent as DefineComponent<AccordionItemProps>;
-export const AccordionTrigger =
-  AccordionTriggerComponent as DefineComponent<AccordionTriggerProps>;
-export const AccordionContent =
-  AccordionContentComponent as DefineComponent<AccordionContentProps>;
-
+export { Accordion } from "./accordion.js";
+export { AccordionContent } from "./accordion-content.js";
+export { AccordionItem } from "./accordion-item.js";
+export { AccordionTrigger } from "./accordion-trigger.js";
+export { Collapsible } from "./collapsible.js";
+export { CollapsibleContent } from "./collapsible-content.js";
+export { CollapsibleTrigger } from "./collapsible-trigger.js";
 export type {
   AccordionContentProps,
   AccordionItemProps,
@@ -40,35 +12,31 @@ export type {
   AccordionProps,
   AccordionSingleProps,
   AccordionTriggerProps,
-} from "./accordion.types";
+} from "./accordion-types.js";
 export type {
   AnimationConfig,
   AnimationEasing,
   AnimationSetting,
   AnimationTimingFunction,
-  CollapsibleAnimationProps,
   ResolvedAnimationConfig,
-} from "./animation";
+} from "./animation.js";
 export {
   DEFAULT_ANIMATION_DELAY,
-  DEFAULT_ANIMATION_DELAY_MS,
   DEFAULT_ANIMATION_DURATION,
-  DEFAULT_ANIMATION_DURATION_MS,
   DEFAULT_ANIMATION_EASING,
-  DEFAULT_ANIMATION_TIMING_FUNCTION,
-} from "./animation";
+} from "./animation.js";
 export type {
   CollapsibleContentProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
-} from "./collapsible.types";
-export type { CollapsibleContextValue } from "./collapsible-context";
-export { CollapsibleContextKey } from "./collapsible-context";
+} from "./collapsible-types.js";
+export type { CollapsibleContextValue } from "./collapsible-context.js";
+export { CollapsibleContextKey } from "./collapsible-context.js";
 export type {
   AccordionContextValue,
   AccordionItemContextValue,
-} from "./accordion-context";
+} from "./accordion-context.js";
 export {
   AccordionContextKey,
   AccordionItemContextKey,
-} from "./accordion-context";
+} from "./accordion-context.js";

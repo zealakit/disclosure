@@ -9,7 +9,6 @@ Headless Collapsible and Accordion for vanilla JavaScript and static HTML. Provi
 Author semantic HTML with `data-*` attributes, then call `createDisclosure()` once. Put padding, borders, and backgrounds on the content element’s class (moved onto `[data-collapsible-content-wrapper]` at init) so exit animations collapse cleanly.
 
 > **Note**
->
 > Disclosure is not a replacement for a full UI library. Use it when Accordion or Collapsible in your kit is hard to restyle — or when you only need that one primitive and don’t want to pull in a large design system.
 
 ## Install
@@ -27,22 +26,18 @@ No peer dependencies. Works with a bundler (Vite, esbuild, …) or a browser imp
 
 Pin a published version in production. Do **not** use unversioned `latest` CDN URLs.
 
-Published browser artifacts:
+Published artifacts (ESM only):
 
 | File | Use |
 | --- | --- |
 | `dist/index.js` | ESM (bundlers, import maps, jsDelivr `/+esm`, esm.sh) |
 | `dist/index.d.ts` | TypeScript declarations |
-| `dist/index.global.js` | IIFE script tag (readable) |
-| `dist/index.global.min.js` | IIFE script tag (minified, preferred for CDN) |
 
-Global namespace for the IIFE build: **`ZealakitDisclosure`**.
-
-#### 1. Native ESM CDN
+#### Native ESM CDN
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/+esm";
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2.0.0/+esm";
 
   const disclosure = createDisclosure();
 </script>
@@ -52,40 +47,27 @@ Also works with esm.sh:
 
 ```html
 <script type="module">
-  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@1.0.0";
+  import { createDisclosure } from "https://esm.sh/@zealakit/disclosure-vanilla@2.0.0";
 
   const disclosure = createDisclosure();
 </script>
 ```
 
-#### 2. Direct script CDN (IIFE)
+### Migrating from 1.x
+
+The IIFE build (`dist/index.global*.js`, the `ZealakitDisclosure` global and the `unpkg` / `jsdelivr` / `./global*` entries) was removed in 2.0.0. Import the ESM build instead:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1.0.0/dist/index.global.min.js"></script>
+<!-- 1.x -->
+<script src="https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@1/dist/index.global.min.js"></script>
 <script>
-  const disclosure = ZealakitDisclosure.createDisclosure();
+  ZealakitDisclosure.createDisclosure();
 </script>
-```
 
-Unminified IIFE (debugging): `…/dist/index.global.js`.
-
-## Quick start
-
-```html
-<div data-disclosure>
-  <button type="button" data-disclosure-trigger aria-expanded="false">
-    Toggle content
-  </button>
-  <div id="content-1" data-disclosure-content hidden>
-    Content
-  </div>
-</div>
-
+<!-- 2.x -->
 <script type="module">
-  import { createDisclosure } from "@zealakit/disclosure-vanilla";
-  const disclosure = createDisclosure();
-  // disclosure.refresh() after inserting new markup
-  // disclosure.destroy() when tearing down
+  import { createDisclosure } from "https://cdn.jsdelivr.net/npm/@zealakit/disclosure-vanilla@2/+esm";
+  createDisclosure();
 </script>
 ```
 
@@ -98,9 +80,11 @@ Unminified IIFE (debugging): `…/dist/index.global.js`.
 | `DisclosureController.destroy()` | Remove listeners and restore content nodes |
 | `DisclosureController.refresh()` | Destroy + re-scan (for dynamically inserted markup) |
 | `DEFAULT_ANIMATION_DURATION` / `_DELAY` / `_EASING` | Same animation defaults as framework packages |
-| `normalizeAnimationConfig` / `getAnimationStyle` | Shared animation helpers (`resolveAnimationConfig` / `getCollapsibleAnimationStyle` and `DEFAULT_ANIMATION_*_MS` are deprecated aliases) |
+| `normalizeAnimationConfig` / `getAnimationStyle` | Shared animation helpers |
 
-## Collapsible markup
+## Markup
+
+### Collapsible markup
 
 | Attribute | On | Description |
 | --- | --- | --- |
@@ -115,11 +99,9 @@ Unminified IIFE (debugging): `…/dist/index.global.js`.
 | `data-animation-delay` | root | Delay ms (default `0`) |
 | `data-animation-easing` | root | `ease-in-out`, `linear`, or any CSS timing function (default `ease-in-out`) |
 
-Deprecated (still read until 2.0.0, warns once in development; the new attribute wins): `data-animated="false"` → `data-animation="false"`, `data-animation-timing-function` → `data-animation-easing`.
-
 Root attributes after init: `data-slot="collapsible"`, `data-state="open" \| "closed"`, `data-disabled` when disabled. Triggers get `aria-expanded` / `aria-controls`.
 
-## Accordion markup
+### Accordion markup
 
 ```html
 <div data-accordion data-accordion-type="single" data-collapsible>
@@ -150,7 +132,7 @@ Root attributes after init: `data-slot="collapsible"`, `data-state="open" \| "cl
 
 Keyboard (enabled triggers): `ArrowDown` / `ArrowUp` / `Home` / `End`. Nested accordions are independent.
 
-## Animation
+### Animation
 
 Height animation uses CSS `grid-template-rows` (`minmax(0, 0fr)` ↔ `minmax(0, 1fr)`), enabled by default (Overlay: off; default duration 200ms vs 160ms; no `type` / `direction`). `prefers-reduced-motion: reduce` disables motion. Content stays mounted through the exit transition, then detaches unless `data-force-mount` is set.
 
@@ -160,15 +142,27 @@ CSS variables on the content viewport:
 - `--collapsible-animation-easing`
 - `--collapsible-animation-delay`
 
-## Styling
+## Usage
 
-Headless — no themes or icons. Style via your CSS and:
+### Quick start
 
-- `data-slot` — `collapsible`, `collapsible-trigger`, `collapsible-content`, `accordion`, `accordion-item`, `accordion-heading`, `accordion-trigger`, `accordion-content`
-- `data-state` — `open` \| `closed`
-- `data-disabled`
+```html
+<div data-disclosure>
+  <button type="button" data-disclosure-trigger aria-expanded="false">
+    Toggle content
+  </button>
+  <div id="content-1" data-disclosure-content hidden>
+    Content
+  </div>
+</div>
 
-Put chrome on the content element’s class/style (applied to `[data-collapsible-content-wrapper]`).
+<script type="module">
+  import { createDisclosure } from "@zealakit/disclosure-vanilla";
+  const disclosure = createDisclosure();
+  // disclosure.refresh() after inserting new markup
+  // disclosure.destroy() when tearing down
+</script>
+```
 
 ## Lifecycle
 
@@ -184,7 +178,17 @@ disclosure.destroy();
 
 Calling `createDisclosure()` twice on the same roots does not register duplicate listeners. Use `refresh()` or `destroy()` + `createDisclosure()` when markup changes.
 
-## Agent skill
+## Styling hooks
+
+Headless — no themes or icons. Style via your CSS and:
+
+- `data-slot` — `collapsible`, `collapsible-trigger`, `collapsible-content`, `accordion`, `accordion-item`, `accordion-heading`, `accordion-trigger`, `accordion-content`
+- `data-state` — `open` \| `closed`
+- `data-disabled`
+
+Put chrome on the content element’s class/style (applied to `[data-collapsible-content-wrapper]`).
+
+## Agent Skill
 
 Practical agent instructions: [skills/disclosure-vanilla.md](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vanilla.md)
 

@@ -9,10 +9,9 @@
 通过 `CollapsibleContent` / `AccordionContent` 上的 `class`（或 `[data-collapsible-content-wrapper]`）来设置内边距、边框和背景。这些样式会作用在被裁剪的内容面板上，从而让收起动画平滑收拢。
 
 > **Note**
->
 > Disclosure 不是完整 UI 库的替代品。适合在组件库里的 Accordion/Collapsible 难以定制时使用 — 或者你只需要这一个基础组件，而不想引入整套大型设计系统。
 
-## 安装
+## Install
 
 ```bash
 npm i @zealakit/disclosure-svelte
@@ -23,7 +22,7 @@ Peer dependency：`svelte`（^5）。
 
 ## Collapsible
 
-### 快速开始
+### Quick start
 
 ```svelte
 <script lang="ts">
@@ -72,7 +71,7 @@ Peer dependency：`svelte`（^5）。
 
 请把边框/内边距放在内容包装层上，而不要只放在带动画的 viewport 上。
 
-### 受控用法
+### Controlled usage
 
 ```svelte
 <script lang="ts">
@@ -91,7 +90,7 @@ Peer dependency：`svelte`（^5）。
 </Collapsible>
 ```
 
-### 动画配置
+### Animation configuration
 
 ```svelte
 <Collapsible
@@ -117,16 +116,9 @@ Peer dependency：`svelte`（^5）。
 | `easing` | `string` | `"ease-in-out"` | `ease-in-out`、`linear` 或任意 CSS timing function。 |
 | `...` | — | — | 传 `true` 使用默认值，传 `false` 关闭。 |
 
-动画**默认开启**（Overlay 默认关闭），默认时长 200ms（Overlay 为 160ms），且没有 `type` / `direction`：Disclosure 只有一种内置高度过渡。同时传入时以 `animation` 为准，已弃用的 prop 会被忽略。
+动画**默认开启**（Overlay 默认关闭），默认时长 200ms（Overlay 为 160ms），且没有 `type` / `direction`：Disclosure 只有一种内置高度过渡。
 
 关闭动画时，展开/收起会立即更新，duration/delay 将被忽略。`prefers-reduced-motion: reduce` 同样会禁用动画。
-
-| 已弃用（2.0.0 前仍可用，开发环境仅警告一次） | 改用 |
-| --- | --- |
-| `animated={false}` | `animation={false}` |
-| `animationDuration={320}` | `animation={{ duration: 320 }}` |
-| `animationDelay={120}` | `animation={{ delay: 120 }}` |
-| `animationTimingFunction="linear"` | `animation={{ easing: "linear" }}` |
 
 内容 viewport 上的 CSS 变量：
 
@@ -144,7 +136,7 @@ Peer dependency：`svelte`（^5）。
 
 ## Accordion
 
-### 快速开始
+### Quick start
 
 ```svelte
 <script lang="ts">
@@ -168,7 +160,7 @@ Peer dependency：`svelte`（^5）。
 </Accordion>
 ```
 
-### `Accordion` props（通用）
+### `Accordion` props (shared)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -179,7 +171,7 @@ Peer dependency：`svelte`（^5）。
 
 动画相关 props 由 Accordion 根组件持有，并被所有项目继承。
 
-### `Accordion` props（`type="single"`）
+### `Accordion` props (`type="single"`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -188,7 +180,7 @@ Peer dependency：`svelte`（^5）。
 | `collapsible` | `boolean` | `false` | 允许关闭已展开的项目 |
 | `onValueChange` | `(value: string \| null) => void` | — | 值变更回调 |
 
-### `Accordion` props（`type="multiple"`）
+### `Accordion` props (`type="multiple"`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -223,7 +215,7 @@ Peer dependency：`svelte`（^5）。
 | `class` / `style` | — | — | 应用于内部被裁剪的包装层 |
 | other attrs | — | — | 透传给内部包装层 |
 
-### Multiple 模式示例
+### Multiple mode example
 
 ```svelte
 <Accordion type="multiple" defaultValue={["general"]}>
@@ -238,7 +230,7 @@ Peer dependency：`svelte`（^5）。
 </Accordion>
 ```
 
-### 自定义动画的 Accordion
+### Animation configuration
 
 ```svelte
 <Accordion
@@ -250,7 +242,7 @@ Peer dependency：`svelte`（^5）。
 </Accordion>
 ```
 
-## 样式钩子
+## Styling hooks
 
 | Attribute | Where | Purpose |
 | --- | --- | --- |
@@ -260,10 +252,10 @@ Peer dependency：`svelte`（^5）。
 | `data-collapsible-content-wrapper` | 内部面板 | 边框、内边距、背景 |
 | `data-animated` | 内容 viewport | 高度动画生效时存在 |
 
-## AI Agent Skill
+## Agent Skill
 
 面向 AI coding agent 的 Svelte 实战说明：[disclosure-svelte skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-svelte.md)。
 
-## 许可证
+## License
 
 MIT © Zealakit

@@ -6,19 +6,18 @@ import {
   type CSSProperties,
   type MouseEvent,
 } from "react";
-import { getAnimationStyle, resolveAnimationSetting } from "./animation";
+import { getAnimationStyle, normalizeAnimationConfig } from "./animation.js";
 import {
   CollapsibleContext,
-  type CollapsibleContextValue,
   useCollapsibleContext,
-} from "./collapsible-context";
-import { ensureCollapsibleStyles } from "./collapsible-styles";
+} from "./collapsible-context.js";
+import { ensureCollapsibleStyles } from "./styles.js";
 import type {
   CollapsibleContentProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
-} from "./collapsible-types";
-import { usePresence } from "./use-presence";
+} from "./collapsible-types.js";
+import { usePresence } from "./use-presence.js";
 
 export type {
   CollapsibleContentProps,
@@ -28,9 +27,8 @@ export type {
   AnimationEasing,
   AnimationSetting,
   AnimationTimingFunction,
-  CollapsibleAnimationProps,
   ResolvedAnimationConfig,
-} from "./collapsible-types";
+} from "./collapsible-types.js";
 
 function CollapsibleRoot({
   defaultOpen = false,
@@ -38,23 +36,13 @@ function CollapsibleRoot({
   onOpenChange,
   disabled = false,
   animation: animationProp,
-  animated,
-  animationTimingFunction,
-  animationDuration,
-  animationDelay,
   children,
   ...props
 }: CollapsibleProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : uncontrolledOpen;
-  const animation = resolveAnimationSetting({
-    animation: animationProp,
-    animated,
-    animationTimingFunction,
-    animationDuration,
-    animationDelay,
-  });
+  const animation = normalizeAnimationConfig(animationProp);
 
   const reactId = useId();
   const triggerId = `collapsible-trigger-${reactId}`;
@@ -76,11 +64,6 @@ function CollapsibleRoot({
         open,
         disabled,
         animation,
-        animated: animation.enabled,
-        animationTimingFunction:
-          animation.easing as CollapsibleContextValue["animationTimingFunction"],
-        animationDuration: animation.duration,
-        animationDelay: animation.delay,
         contentId,
         triggerId,
         setOpen,

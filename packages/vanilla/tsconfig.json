@@ -1,14 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "types": ["vitest/globals", "@testing-library/jest-dom"]
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "noEmit": false
   },
-  "include": [
-    "src",
-    "tests",
-    "rslib.config.ts",
-    "vitest.config.ts",
-    "vitest.setup.ts"
-  ]
+  "include": ["src"]
 }

@@ -9,10 +9,9 @@ Collapsible và Accordion headless cho Vue 3. Animation chiều cao tích hợp 
 Áp dụng padding, border và background thông qua `class` trên `CollapsibleContent` / `AccordionContent` (hoặc `[data-collapsible-content-wrapper]`). Các style này nằm trên panel nội dung bị cắt (clip), nhờ đó animation đóng sẽ thu gọn mượt mà.
 
 > **Note**
->
 > Disclosure không thay thế một UI library đầy đủ. Dùng khi Accordion/Collapsible trong kit khó custom — hoặc khi bạn chỉ cần một primitive đó và không muốn kéo cả design system lớn.
 
-## Cài đặt
+## Install
 
 ```bash
 npm i @zealakit/disclosure-vue
@@ -23,7 +22,7 @@ Peer dependency: `vue` (^3.5).
 
 ## Collapsible
 
-### Bắt đầu nhanh
+### Quick start
 
 ```vue
 <script setup lang="ts">
@@ -42,7 +41,7 @@ import {
 </template>
 ```
 
-### Props của `Collapsible`
+### `Collapsible` props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -51,7 +50,7 @@ import {
 | `disabled` | `boolean` | `false` | Vô hiệu hóa toàn bộ collapsible |
 | `animation` | `boolean \| AnimationConfig` | `true` | Animation mở/đóng theo chiều cao. `false` để tắt; truyền object để tùy chỉnh |
 
-### Events của `Collapsible`
+### `Collapsible` events
 
 | Event | Payload | Description |
 | --- | --- | --- |
@@ -60,7 +59,7 @@ import {
 
 Thuộc tính trên root: `data-slot="collapsible"`, `data-state="open" | "closed"`, `data-disabled` khi bị vô hiệu hóa.
 
-### Props của `CollapsibleTrigger`
+### `CollapsibleTrigger` props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -68,7 +67,7 @@ Thuộc tính trên root: `data-slot="collapsible"`, `data-state="open" | "close
 
 Thiết lập `aria-expanded`, `aria-controls`, `data-slot="collapsible-trigger"` và `data-state`. Các attribute bổ sung sẽ được chuyển xuống `<button>` gốc.
 
-### Props của `CollapsibleContent`
+### `CollapsibleContent` props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -76,7 +75,7 @@ Thiết lập `aria-expanded`, `aria-controls`, `data-slot="collapsible-trigger"
 
 `class` / `style` và các attr khác được áp dụng cho wrapper nội dung **bên trong** (bị clip khi animation). Nên đặt border/padding ở đó.
 
-### Sử dụng controlled
+### Controlled usage
 
 ```vue
 <script setup lang="ts">
@@ -98,7 +97,7 @@ const open = ref(false);
 </template>
 ```
 
-### Cấu hình animation
+### Animation configuration
 
 ```vue
 <Collapsible
@@ -124,16 +123,9 @@ const open = ref(false);
 | `easing` | `string` | `"ease-in-out"` | `ease-in-out`, `linear`, hoặc bất kỳ CSS timing function nào. |
 | `...` | — | — | Truyền `true` để dùng mặc định, `false` để tắt. |
 
-Animation **bật mặc định** (Overlay: tắt), duration mặc định 200ms (Overlay: 160ms), và không có `type` / `direction`: Disclosure chỉ có một chuyển động chiều cao dựng sẵn. Khi truyền cả hai, `animation` được ưu tiên và các prop deprecated bị bỏ qua.
+Animation **bật mặc định** (Overlay: tắt), duration mặc định 200ms (Overlay: 160ms), và không có `type` / `direction`: Disclosure chỉ có một chuyển động chiều cao dựng sẵn.
 
 Khi tắt animation, việc mở/đóng được cập nhật ngay lập tức và duration/delay bị bỏ qua. `prefers-reduced-motion: reduce` cũng sẽ tắt chuyển động.
-
-| Đã deprecated (vẫn hoạt động đến 2.0.0, cảnh báo một lần ở môi trường dev) | Thay bằng |
-| --- | --- |
-| `:animated="false"` | `:animation="false"` |
-| `:animation-duration="320"` | `:animation="{ duration: 320 }"` |
-| `:animation-delay="120"` | `:animation="{ delay: 120 }"` |
-| `animation-timing-function="linear"` | `:animation="{ easing: 'linear' }"` |
 
 Các CSS variable trên content viewport:
 
@@ -151,7 +143,7 @@ Các CSS variable trên content viewport:
 
 ## Accordion
 
-### Bắt đầu nhanh
+### Quick start
 
 ```vue
 <script setup lang="ts">
@@ -177,7 +169,7 @@ import {
 </template>
 ```
 
-### Props của `Accordion` (dùng chung)
+### `Accordion` props (shared)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -187,7 +179,7 @@ import {
 
 Các prop animation do root Accordion quản lý và được mọi item kế thừa.
 
-### Props của `Accordion` (`type="single"`)
+### `Accordion` props (`type="single"`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -195,7 +187,7 @@ Các prop animation do root Accordion quản lý và được mọi item kế th
 | `defaultValue` | `string \| null` | `null` | Item ban đầu (uncontrolled) |
 | `collapsible` | `boolean` | `false` | Cho phép đóng item đang mở |
 
-### Props của `Accordion` (`type="multiple"`)
+### `Accordion` props (`type="multiple"`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -204,21 +196,21 @@ Các prop animation do root Accordion quản lý và được mọi item kế th
 
 `collapsible` không áp dụng ở chế độ multiple.
 
-### Events của `Accordion`
+### `Accordion` events
 
 | Event | Payload | Description |
 | --- | --- | --- |
 | `update:value` | `string \| null \| string[]` | Cập nhật `v-model:value` |
 | `valueChange` | `string \| null \| string[]` | Callback khi giá trị thay đổi |
 
-### Props của `AccordionItem`
+### `AccordionItem` props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `value` | `string` | **required** | ID ổn định của item |
 | `disabled` | `boolean` | `false` | Vô hiệu hóa item này |
 
-### Props của `AccordionTrigger`
+### `AccordionTrigger` props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -226,7 +218,7 @@ Các prop animation do root Accordion quản lý và được mọi item kế th
 
 Bàn phím: Arrow Up/Down, Home, End.
 
-### Props của `AccordionContent`
+### `AccordionContent` props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -234,7 +226,7 @@ Bàn phím: Arrow Up/Down, Home, End.
 
 `class` / `style` được áp dụng cho wrapper bên trong bị clip.
 
-### Ví dụ chế độ multiple
+### Multiple mode example
 
 ```vue
 <Accordion type="multiple" :default-value="['general']">
@@ -249,7 +241,7 @@ Bàn phím: Arrow Up/Down, Home, End.
 </Accordion>
 ```
 
-### Accordion với animation tùy chỉnh
+### Animation configuration
 
 ```vue
 <Accordion
@@ -271,10 +263,10 @@ Bàn phím: Arrow Up/Down, Home, End.
 | `data-collapsible-content-wrapper` | panel bên trong | Border, padding, background |
 | `data-animated` | content viewport | Có mặt khi animation chiều cao đang hoạt động |
 
-## AI Agent Skill
+## Agent Skill
 
 Hướng dẫn Vue thực chiến cho AI coding agent: [disclosure-vue skill](https://github.com/zealakit/disclosure/blob/main/skills/disclosure-vue.md).
 
-## Giấy phép
+## License
 
 MIT © Zealakit

@@ -1,6 +1,6 @@
 {
   "name": "@zealakit/disclosure-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Accessible, zero-dependency headless disclosure primitives for React",
   "keywords": [
     "disclosure",
@@ -21,11 +21,19 @@
     "url": "git+https://github.com/zealakit/disclosure.git",
     "directory": "packages/react"
   },
+  "homepage": "https://github.com/zealakit/disclosure#readme",
+  "bugs": {
+    "url": "https://github.com/zealakit/disclosure/issues"
+  },
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "sideEffects": false,
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -35,32 +43,31 @@
     },
     "./package.json": "./package.json"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
-  },
-  "scripts": {
-    "build": "rm -rf dist && rslib build",
-    "dev": "rslib build --watch",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
-    "@rsbuild/plugin-react": "^1.4.0",
-    "@rslib/core": "^0.16.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "happy-dom": "^20.0.10",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "happy-dom": "^21.0.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tests/tsconfig.json --noEmit",
+    "test": "pnpm build && node --import ./tests/setup.ts --test tests/*.test.ts",
+    "test:watch": "node --import ./tests/setup.ts --test --watch tests/*.test.ts",
+    "clean": "rm -rf dist",
+    "prepack": "pnpm run build"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
   }
 }

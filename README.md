@@ -1,4 +1,4 @@
-# Disclosure
+# Zealakit Disclosure
 
 [English](https://github.com/zealakit/disclosure/blob/main/README.md) | [Tiếng Việt](https://github.com/zealakit/disclosure/blob/main/README_VI.md) | [中文](https://github.com/zealakit/disclosure/blob/main/README_CN.md)
 
@@ -14,7 +14,6 @@ Headless disclosure primitives for modern UI frameworks.
 Behavior and accessibility only — no colors, icons, or layout. Height animation is built in and enabled by default. Style with your own CSS via `data-slot` and `data-state`.
 
 > **Note**
->
 > Disclosure is not a replacement for a full UI library. Use it when Accordion or Collapsible in your kit is hard to restyle — or when you only need that one primitive and don’t want to pull in a large design system.
 
 ## Packages
@@ -54,17 +53,7 @@ pnpm dev:vanilla
 pnpm dev:nextjs
 ```
 
-## Dependency monitoring
-
-Local UI for root + `packages/*` dependency versions (`examples/` excluded):
-
-```bash
-pnpm monitor
-```
-
-Open http://127.0.0.1:4177 — see [monitor/README.md](https://github.com/zealakit/disclosure/blob/main/monitor/README.md).
-
-## AI Agent Skills
+## Agent Skills
 
 Framework-specific instructions for AI coding agents:
 

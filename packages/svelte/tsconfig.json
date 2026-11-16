@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "moduleResolution": "bundler",
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
-    "verbatimModuleSyntax": true
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "noEmit": false
   },
-  "include": ["src", "tests", "vitest.config.ts", "vitest.setup.ts"]
+  "include": ["src"]
 }
