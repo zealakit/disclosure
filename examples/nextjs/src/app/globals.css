@@ -41,7 +41,7 @@ h1 {
   color: #44546a;
 }
 
-section {
+section:not([data-slot]) {
   margin-bottom: 2rem;
 }
 

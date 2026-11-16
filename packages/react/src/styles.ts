@@ -5,6 +5,8 @@ const STYLES = `
 [data-slot="accordion-content"][data-animated] {
   display: grid;
   overflow: hidden;
+  /* margins on the animated viewport cannot animate; keep them out of the layout */
+  margin: 0;
   transition: grid-template-rows var(--collapsible-animation-duration, 200ms)
     var(--collapsible-animation-easing, ease-in-out)
     var(--collapsible-animation-delay, 0ms);
